@@ -1,0 +1,3525 @@
+<!DOCTYPE html><!DOCTYPE html><!DOCTYPE html><!DOCTYPE html>
+
+<html lang="en">
+
+<head><html lang="en">
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><head><html lang="en"><html lang="en">
+
+    <title>Rice Leaf Disease Detection - Research Paper</title>
+
+    <style>    <meta charset="UTF-8">
+
+        * {
+
+            margin: 0;    <meta name="viewport" content="width=device-width, initial-scale=1.0"><head><head>
+
+            padding: 0;
+
+            box-sizing: border-box;    <title>Rice Leaf Disease Detection - Research Paper</title>
+
+        }
+
+    <style>    <meta charset="UTF-8">    <meta charset="UTF-8">
+
+        body {
+
+            font-family: 'Georgia', 'Times New Roman', serif;        * {
+
+            line-height: 1.8;
+
+            color: #333;            margin: 0;    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 50%, #90caf9 100%);
+
+            background-attachment: fixed;            padding: 0;
+
+            padding: 40px 20px;
+
+            min-height: 100vh;            box-sizing: border-box;    <title>Rice Leaf Disease Detection Using Deep Learning - Research Paper</title>    <title>Rice Leaf Disease Detection Using Deep Learning - IEEE Paper</title>
+
+        }
+
+        }
+
+        .paper-container {
+
+            max-width: 900px;    <style>    <style>
+
+            margin: 0 auto;
+
+            background: white;        body {
+
+            padding: 60px 80px;
+
+            box-shadow: 0 10px 50px rgba(3, 169, 244, 0.3);            font-family: 'Georgia', 'Times New Roman', serif;        * {        * {
+
+            border-radius: 15px;
+
+            border: 1px solid rgba(79, 195, 247, 0.2);            line-height: 1.8;
+
+            animation: fadeIn 0.8s ease-out;
+
+        }            color: #333;            margin: 0;            margin: 0;
+
+
+
+        @keyframes fadeIn {            background: #f5f5f5;
+
+            from {
+
+                opacity: 0;            padding: 40px 20px;            padding: 0;            padding: 0;
+
+                transform: translateY(20px);
+
+            }        }
+
+            to {
+
+                opacity: 1;            box-sizing: border-box;            box-sizing: border-box;
+
+                transform: translateY(0);
+
+            }        .paper-container {
+
+        }
+
+            max-width: 900px;        }        }
+
+        .header {
+
+            text-align: center;            margin: 0 auto;
+
+            margin-bottom: 40px;
+
+            border-bottom: 3px solid #03a9f4;            background: white;
+
+            padding-bottom: 30px;
+
+        }            padding: 60px 80px;
+
+
+
+        .title {            box-shadow: 0 0 30px rgba(0,0,0,0.1);        body {        body {
+
+            font-size: 28px;
+
+            font-weight: bold;            border-radius: 8px;
+
+            color: #01579b;
+
+            margin-bottom: 20px;        }            font-family: 'Georgia', 'Times New Roman', serif;            font-family: 'Times New Roman', Times, serif;
+
+            line-height: 1.4;
+
+        }
+
+
+
+        .authors {        .header {            line-height: 1.8;            line-height: 1.6;
+
+            font-size: 16px;
+
+            font-style: italic;            text-align: center;
+
+            color: #555;
+
+            margin-bottom: 10px;            margin-bottom: 40px;            color: #333;            color: #333;
+
+        }
+
+            border-bottom: 3px solid #03a9f4;
+
+        .affiliation {
+
+            font-size: 14px;            padding-bottom: 30px;            background: #f5f5f5;            background: #fff;
+
+            color: #777;
+
+            margin-bottom: 5px;        }
+
+        }
+
+            padding: 20px;            padding: 20px;
+
+        .date {
+
+            font-size: 14px;        .title {
+
+            color: #999;
+
+            margin-top: 10px;            font-size: 28px;        }            max-width: 1200px;
+
+        }
+
+            font-weight: bold;
+
+        .section {
+
+            margin: 40px 0;            color: #01579b;            margin: 0 auto;
+
+        }
+
+            margin-bottom: 20px;
+
+        .section-title {
+
+            font-size: 20px;            line-height: 1.4;        .paper-container {        }
+
+            font-weight: bold;
+
+            color: #01579b;        }
+
+            margin-bottom: 15px;
+
+            padding-bottom: 8px;            max-width: 900px;
+
+            border-bottom: 2px solid #4fc3f7;
+
+        }        .authors {
+
+
+
+        .subsection-title {            font-size: 16px;            margin: 0 auto;        .paper-container {
+
+            font-size: 18px;
+
+            font-weight: bold;            font-style: italic;
+
+            color: #0277bd;
+
+            margin: 25px 0 12px 0;            color: #555;            background: white;            background: white;
+
+        }
+
+            margin-bottom: 10px;
+
+        .abstract {
+
+            background: linear-gradient(135deg, #e1f5fe 0%, #b3e5fc 100%);        }            padding: 60px;            padding: 40px;
+
+            padding: 25px;
+
+            border-left: 4px solid #03a9f4;
+
+            font-style: italic;
+
+            margin: 30px 0;        .affiliation {            box-shadow: 0 0 20px rgba(0,0,0,0.1);            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+
+            border-radius: 8px;
+
+        }            font-size: 14px;
+
+
+
+        .keywords {            color: #777;        }        }
+
+            margin-top: 15px;
+
+            font-size: 14px;            margin-bottom: 5px;
+
+        }
+
+        }
+
+        .keywords strong {
+
+            color: #01579b;
+
+        }
+
+        .date {        .header {        .header {
+
+        p {
+
+            text-align: justify;            font-size: 14px;
+
+            margin-bottom: 15px;
+
+        }            color: #999;            text-align: center;            text-align: center;
+
+
+
+        .diagram {            margin-top: 10px;
+
+            margin: 30px 0;
+
+            text-align: center;        }            margin-bottom: 40px;            margin-bottom: 40px;
+
+        }
+
+
+
+        .diagram-box {
+
+            background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);        .section {            border-bottom: 3px solid #2c3e50;            border-bottom: 2px solid #2c3e50;
+
+            border: 2px solid #4fc3f7;
+
+            border-radius: 12px;            margin: 40px 0;
+
+            padding: 30px;
+
+            margin: 20px auto;        }            padding-bottom: 30px;            padding-bottom: 20px;
+
+            box-shadow: 0 8px 16px rgba(79, 195, 247, 0.3);
+
+        }
+
+
+
+        .flowchart {        .section-title {        }        }
+
+            display: flex;
+
+            flex-direction: column;            font-size: 20px;
+
+            align-items: center;
+
+            gap: 15px;            font-weight: bold;
+
+        }
+
+            color: #01579b;
+
+        .flow-step {
+
+            background: linear-gradient(135deg, #4fc3f7 0%, #03a9f4 100%);            margin-bottom: 15px;        .title {        h1 {
+
+            color: white;
+
+            padding: 20px 40px;            padding-bottom: 8px;
+
+            border-radius: 12px;
+
+            font-weight: bold;            border-bottom: 2px solid #4fc3f7;            font-size: 28px;            font-size: 24px;
+
+            min-width: 300px;
+
+            text-align: center;        }
+
+            box-shadow: 0 6px 20px rgba(79, 195, 247, 0.4);
+
+            transition: transform 0.3s ease;            font-weight: bold;            font-weight: bold;
+
+        }
+
+        .subsection-title {
+
+        .flow-step:hover {
+
+            transform: translateY(-5px);            font-size: 18px;            color: #2c3e50;            margin-bottom: 20px;
+
+            box-shadow: 0 10px 30px rgba(79, 195, 247, 0.5);
+
+        }            font-weight: bold;
+
+
+
+        .flow-arrow {            color: #0277bd;            margin-bottom: 20px;            text-transform: uppercase;
+
+            color: #03a9f4;
+
+            font-size: 30px;            margin: 25px 0 12px 0;
+
+            font-weight: bold;
+
+        }        }            line-height: 1.3;        }
+
+
+
+        .architecture {
+
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+
+            padding: 20px;        .abstract {        }
+
+            border-radius: 12px;
+
+            margin: 20px 0;            background: #e1f5fe;
+
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+        }            padding: 25px;        .authors {
+
+
+
+        .layer-box {            border-left: 4px solid #03a9f4;
+
+            background: white;
+
+            border: 2px solid #29b6f6;            font-style: italic;        .authors {            font-size: 14px;
+
+            padding: 15px;
+
+            margin: 10px 0;            margin: 30px 0;
+
+            border-radius: 8px;
+
+            display: flex;        }            font-size: 16px;            margin-bottom: 10px;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            transition: all 0.3s ease;
+
+        }        .keywords {            font-style: italic;            font-style: italic;
+
+
+
+        .layer-box:hover {            margin-top: 15px;
+
+            border-color: #03a9f4;
+
+            box-shadow: 0 4px 12px rgba(3, 169, 244, 0.2);            font-size: 14px;            color: #555;        }
+
+            transform: translateX(5px);
+
+        }        }
+
+
+
+        .layer-name {            margin-bottom: 10px;
+
+            font-weight: bold;
+
+            color: #0277bd;        .keywords strong {
+
+        }
+
+            color: #01579b;        }        .affiliation {
+
+        .layer-params {
+
+            color: #555;        }
+
+            font-size: 14px;
+
+        }            font-size: 12px;
+
+
+
+        table {        p {
+
+            width: 100%;
+
+            border-collapse: collapse;            text-align: justify;        .affiliation {            color: #666;
+
+            margin: 25px 0;
+
+            font-size: 14px;            margin-bottom: 15px;
+
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+            border-radius: 8px;        }            font-size: 14px;        }
+
+            overflow: hidden;
+
+        }
+
+
+
+        th, td {        .diagram {            color: #777;
+
+            padding: 12px;
+
+            text-align: left;            margin: 30px 0;
+
+            border: 1px solid #ddd;
+
+        }            text-align: center;            margin-bottom: 5px;        h2 {
+
+
+
+        th {        }
+
+            background: linear-gradient(135deg, #4fc3f7 0%, #03a9f4 100%);
+
+            color: white;        }            font-size: 18px;
+
+            font-weight: bold;
+
+        }        .diagram-box {
+
+
+
+        tr:nth-child(even) {            background: white;            font-weight: bold;
+
+            background: #f9f9f9;
+
+        }            border: 2px solid #4fc3f7;
+
+
+
+        tr:hover {            border-radius: 8px;        .date {            margin-top: 30px;
+
+            background: #e1f5fe;
+
+        }            padding: 30px;
+
+
+
+        .metrics-grid {            margin: 20px auto;            font-size: 14px;            margin-bottom: 15px;
+
+            display: grid;
+
+            grid-template-columns: repeat(2, 1fr);            box-shadow: 0 4px 6px rgba(79, 195, 247, 0.2);
+
+            gap: 20px;
+
+            margin: 30px 0;        }            color: #999;            text-transform: uppercase;
+
+        }
+
+
+
+        .metric-card {
+
+            background: linear-gradient(135deg, #4fc3f7 0%, #03a9f4 100%);        .flowchart {            margin-top: 10px;        }
+
+            color: white;
+
+            padding: 25px;            display: flex;
+
+            border-radius: 12px;
+
+            text-align: center;            flex-direction: column;        }
+
+            box-shadow: 0 6px 20px rgba(79, 195, 247, 0.4);
+
+            transition: transform 0.3s ease;            align-items: center;
+
+        }
+
+            gap: 15px;        h3 {
+
+        .metric-card:hover {
+
+            transform: translateY(-10px);        }
+
+            box-shadow: 0 10px 30px rgba(79, 195, 247, 0.5);
+
+        }        .section {            font-size: 14px;
+
+
+
+        .metric-value {        .flow-step {
+
+            font-size: 36px;
+
+            font-weight: bold;            background: linear-gradient(135deg, #4fc3f7 0%, #03a9f4 100%);            margin: 40px 0;            font-weight: bold;
+
+            margin: 10px 0;
+
+        }            color: white;
+
+
+
+        .metric-label {            padding: 20px 40px;        }            margin-top: 20px;
+
+            font-size: 14px;
+
+            opacity: 0.9;            border-radius: 10px;
+
+        }
+
+            font-weight: bold;            margin-bottom: 10px;
+
+        .graph-placeholder {
+
+            background: linear-gradient(135deg, #e1f5fe 0%, #b3e5fc 100%);            min-width: 300px;
+
+            border: 2px dashed #4fc3f7;
+
+            border-radius: 12px;            text-align: center;        .section-title {            font-style: italic;
+
+            padding: 60px;
+
+            text-align: center;            box-shadow: 0 4px 15px rgba(79, 195, 247, 0.4);
+
+            color: #0277bd;
+
+            margin: 20px 0;        }            font-size: 20px;        }
+
+        }
+
+
+
+        .equation {
+
+            background: linear-gradient(135deg, #e1f5fe 0%, #b3e5fc 100%);        .flow-arrow {            font-weight: bold;
+
+            padding: 20px;
+
+            border-radius: 8px;            color: #03a9f4;
+
+            font-family: 'Courier New', monospace;
+
+            text-align: center;            font-size: 30px;            color: #2c3e50;        p {
+
+            margin: 20px 0;
+
+            font-size: 16px;            font-weight: bold;
+
+            color: #01579b;
+
+            border: 1px solid #4fc3f7;        }            margin-bottom: 15px;            text-align: justify;
+
+        }
+
+
+
+        .conclusion-box {
+
+            background: linear-gradient(135deg, #e1f5fe 0%, #b3e5fc 100%);        .architecture {            padding-bottom: 8px;            margin-bottom: 15px;
+
+            border-left: 4px solid #03a9f4;
+
+            padding: 25px;            background: #f8f9fa;
+
+            margin: 30px 0;
+
+            border-radius: 8px;            padding: 20px;            border-bottom: 2px solid #3498db;            font-size: 12px;
+
+        }
+
+            border-radius: 8px;
+
+        .reference {
+
+            font-size: 13px;            margin: 20px 0;        }        }
+
+            margin: 8px 0;
+
+            padding-left: 20px;        }
+
+            text-indent: -20px;
+
+        }
+
+
+
+        .figure-caption {        .layer-box {
+
+            font-size: 13px;
+
+            color: #0277bd;            background: white;        .subsection-title {        .abstract {
+
+            text-align: center;
+
+            margin-top: 10px;            border: 2px solid #29b6f6;
+
+            font-style: italic;
+
+        }            padding: 15px;            font-size: 18px;            background: #f8f9fa;
+
+
+
+        .highlight {            margin: 10px 0;
+
+            background: linear-gradient(135deg, #fff9c4 0%, #fff59d 100%);
+
+            padding: 2px 5px;            border-radius: 5px;            font-weight: bold;            padding: 20px;
+
+            border-radius: 3px;
+
+            font-weight: bold;            display: flex;
+
+        }
+
+            justify-content: space-between;            color: #34495e;            margin-bottom: 30px;
+
+        ul, ol {
+
+            margin: 15px 0 15px 30px;            align-items: center;
+
+        }
+
+        }            margin: 25px 0 12px 0;            border-left: 4px solid #2ecc71;
+
+        li {
+
+            margin: 8px 0;
+
+        }
+
+        .layer-name {        }        }
+
+        .code-block {
+
+            background: linear-gradient(135deg, #01579b 0%, #0277bd 100%);            font-weight: bold;
+
+            color: #e1f5fe;
+
+            padding: 20px;            color: #0277bd;
+
+            border-radius: 8px;
+
+            font-family: 'Courier New', monospace;        }
+
+            font-size: 13px;
+
+            overflow-x: auto;        .abstract {        .abstract h2 {
+
+            margin: 20px 0;
+
+            box-shadow: 0 4px 12px rgba(1, 87, 155, 0.3);        .layer-params {
+
+        }
+
+            color: #555;            background: #ecf0f1;            margin-top: 0;
+
+        .pesticide-grid {
+
+            display: grid;            font-size: 14px;
+
+            grid-template-columns: repeat(4, 1fr);
+
+            gap: 15px;        }            padding: 25px;        }
+
+            margin: 20px 0;
+
+        }
+
+
+
+        .pesticide-card {        table {            border-left: 4px solid #3498db;
+
+            background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
+
+            border: 2px solid #4fc3f7;            width: 100%;
+
+            border-radius: 10px;
+
+            padding: 15px;            border-collapse: collapse;            font-style: italic;        .keywords {
+
+            text-align: center;
+
+            transition: all 0.3s ease;            margin: 25px 0;
+
+        }
+
+            font-size: 14px;            margin: 30px 0;            font-size: 12px;
+
+        .pesticide-card:hover {
+
+            border-color: #03a9f4;        }
+
+            box-shadow: 0 6px 20px rgba(79, 195, 247, 0.3);
+
+            transform: translateY(-5px);        }            margin-top: 15px;
+
+        }
+
+        th, td {
+
+        .pesticide-card h4 {
+
+            color: #0277bd;            padding: 12px;        }
+
+            margin-bottom: 10px;
+
+            font-size: 14px;            text-align: left;
+
+        }
+
+            border: 1px solid #ddd;        .keywords {
+
+        .disease-count {
+
+            font-size: 24px;        }
+
+            font-weight: bold;
+
+            color: #01579b;            margin-top: 15px;        .keywords strong {
+
+        }
+
+        th {
+
+        .footer-section {
+
+            text-align: center;            background: #4fc3f7;            font-size: 14px;            font-weight: bold;
+
+            margin-top: 60px;
+
+            padding-top: 30px;            color: white;
+
+            border-top: 2px solid #4fc3f7;
+
+            color: #999;            font-weight: bold;        }        }
+
+            font-size: 12px;
+
+        }        }
+
+
+
+        @media print {
+
+            body {
+
+                background: white;        tr:nth-child(even) {
+
+                padding: 0;
+
+            }            background: #f9f9f9;        .keywords strong {        table {
+
+            .paper-container {
+
+                box-shadow: none;        }
+
+                padding: 40px;
+
+                border: none;            color: #2c3e50;            width: 100%;
+
+            }
+
+        }        .metrics-grid {
+
+
+
+        @media (max-width: 768px) {            display: grid;        }            border-collapse: collapse;
+
+            .paper-container {
+
+                padding: 30px 20px;            grid-template-columns: repeat(2, 1fr);
+
+            }
+
+            .metrics-grid {            gap: 20px;            margin: 20px 0;
+
+                grid-template-columns: 1fr;
+
+            }            margin: 30px 0;
+
+            .pesticide-grid {
+
+                grid-template-columns: repeat(2, 1fr);        }        p {            font-size: 12px;
+
+            }
+
+        }
+
+    </style>
+
+</head>        .metric-card {            text-align: justify;        }
+
+<body>
+
+    <div class="paper-container">            background: linear-gradient(135deg, #4fc3f7 0%, #03a9f4 100%);
+
+        <!-- Header -->
+
+        <div class="header">            color: white;            margin-bottom: 15px;
+
+            <div class="title">
+
+                Rice Leaf Disease Detection Using Convolutional Neural Networks:<br>            padding: 25px;
+
+                A Deep Learning Approach with Real-Time Pesticide Recommendation System
+
+            </div>            border-radius: 10px;        }        table th, table td {
+
+            <div class="authors">
+
+                Computer Science Department            text-align: center;
+
+            </div>
+
+            <div class="affiliation">            box-shadow: 0 4px 15px rgba(79, 195, 247, 0.3);            border: 1px solid #ddd;
+
+                Deep Learning & Agricultural Technology Research Lab
+
+            </div>        }
+
+            <div class="date">
+
+                November 2025        .diagram {            padding: 10px;
+
+            </div>
+
+        </div>        .metric-value {
+
+
+
+        <!-- Abstract -->            font-size: 36px;            margin: 30px 0;            text-align: center;
+
+        <div class="section">
+
+            <div class="section-title">ABSTRACT</div>            font-weight: bold;
+
+            <div class="abstract">
+
+                <p>            margin: 10px 0;            text-align: center;        }
+
+                    Rice (<em>Oryza sativa</em>) is one of the most important staple crops globally, feeding over half 
+
+                    of the world's population. However, rice production faces significant challenges from various leaf         }
+
+                    diseases that can reduce yield by 30-50% if left untreated. This research presents an automated 
+
+                    rice leaf disease detection system using Convolutional Neural Networks (CNN) with real-time pesticide         }
+
+                    recommendation capabilities. Our custom CNN architecture achieves <span class="highlight">92-95% accuracy</span> 
+
+                    in classifying four major rice diseases: Bacterial Blight, Rice Blast, Brown Spot, and Tungro Virus.         .metric-label {
+
+                    The system processes images through a 4-block convolutional architecture with batch normalization and 
+
+                    dropout regularization, trained on 5,932 high-resolution images. Additionally, we implement a             font-size: 14px;        table th {
+
+                    comprehensive pesticide recommendation database integrated with a web-based interface for real-time 
+
+                    diagnosis and treatment suggestions. The complete system achieves inference times of less than 2 seconds             opacity: 0.9;
+
+                    on standard hardware, making it suitable for deployment in resource-constrained agricultural settings.
+
+                </p>        }        .diagram-box {            background: #2c3e50;
+
+                <div class="keywords">
+
+                    <strong>Keywords:</strong> Deep Learning, Convolutional Neural Networks, Rice Disease Detection, 
+
+                    Agricultural AI, Computer Vision, Image Classification, TensorFlow, Precision Agriculture
+
+                </div>        .graph-placeholder {            background: white;            color: white;
+
+            </div>
+
+        </div>            background: linear-gradient(135deg, #e1f5fe 0%, #b3e5fc 100%);
+
+
+
+        <!-- Introduction -->            border: 2px dashed #4fc3f7;            border: 2px solid #3498db;            font-weight: bold;
+
+        <div class="section">
+
+            <div class="section-title">1. INTRODUCTION</div>            border-radius: 8px;
+
+            
+
+            <div class="subsection-title">1.1 Background and Motivation</div>            padding: 60px;            border-radius: 8px;        }
+
+            <p>
+
+                Rice diseases pose a critical threat to global food security, with annual losses estimated at             text-align: center;
+
+                37% of potential yield worldwide. Traditional disease identification methods rely heavily on manual 
+
+                inspection by agricultural experts, which is time-consuming, subjective, and often unavailable in             color: #0277bd;            padding: 30px;
+
+                remote farming regions. The advancement of deep learning and computer vision technologies presents 
+
+                an opportunity to automate and democratize disease detection capabilities.            margin: 20px 0;
+
+            </p>
+
+        }            margin: 20px auto;        table caption {
+
+            <div class="subsection-title">1.2 Problem Statement</div>
+
+            <p>
+
+                The primary challenges in rice disease detection include:
+
+            </p>        .equation {            box-shadow: 0 4px 6px rgba(0,0,0,0.1);            caption-side: top;
+
+            <ul>
+
+                <li>Visual similarity between different disease symptoms in early stages</li>            background: #e1f5fe;
+
+                <li>Variation in disease appearance due to environmental conditions</li>
+
+                <li>Limited access to agricultural experts in rural areas</li>            padding: 20px;        }            font-weight: bold;
+
+                <li>Time-critical nature of disease treatment requiring rapid diagnosis</li>
+
+                <li>Need for integrated treatment recommendations alongside diagnosis</li>            border-radius: 5px;
+
+            </ul>
+
+            font-family: 'Courier New', monospace;            margin-bottom: 10px;
+
+            <div class="subsection-title">1.3 Research Objectives</div>
+
+            <ol>            text-align: center;
+
+                <li>Develop a high-accuracy CNN model for multi-class rice disease classification</li>
+
+                <li>Create a comprehensive dataset of rice leaf disease images</li>            margin: 20px 0;        .flowchart {            font-size: 12px;
+
+                <li>Implement real-time pesticide recommendation system</li>
+
+                <li>Design an accessible web-based interface for farmers</li>            font-size: 16px;
+
+                <li>Achieve deployment-ready performance on standard hardware</li>
+
+            </ol>            color: #01579b;            display: flex;        }
+
+        </div>
+
+        }
+
+        <!-- Dataset -->
+
+        <div class="section">            flex-direction: column;
+
+            <div class="section-title">2. DATASET DESCRIPTION</div>
+
+                    .conclusion-box {
+
+            <div class="subsection-title">2.1 Dataset Overview</div>
+
+            <table>            background: #e1f5fe;            align-items: center;        .figure {
+
+                <tr>
+
+                    <th>Disease Class</th>            border-left: 4px solid #03a9f4;
+
+                    <th>Number of Images</th>
+
+                    <th>Percentage</th>            padding: 25px;            gap: 15px;            margin: 20px 0;
+
+                    <th>Severity Level</th>
+
+                </tr>            margin: 30px 0;
+
+                <tr>
+
+                    <td><strong>Bacterial Blight</strong></td>        }        }            text-align: center;
+
+                    <td>1,584</td>
+
+                    <td>26.7%</td>
+
+                    <td>High</td>
+
+                </tr>        .reference {        }
+
+                <tr>
+
+                    <td><strong>Rice Blast</strong></td>            font-size: 13px;
+
+                    <td>1,440</td>
+
+                    <td>24.3%</td>            margin: 8px 0;        .flow-step {
+
+                    <td>Very High</td>
+
+                </tr>            padding-left: 20px;
+
+                <tr>
+
+                    <td><strong>Brown Spot</strong></td>            text-indent: -20px;            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);        .figure img {
+
+                    <td>1,600</td>
+
+                    <td>27.0%</td>        }
+
+                    <td>Medium</td>
+
+                </tr>            color: white;            max-width: 100%;
+
+                <tr>
+
+                    <td><strong>Tungro Virus</strong></td>        .figure-caption {
+
+                    <td>1,308</td>
+
+                    <td>22.0%</td>            font-size: 13px;            padding: 20px 40px;            border: 1px solid #ddd;
+
+                    <td>Very High</td>
+
+                </tr>            color: #0277bd;
+
+                <tr>
+
+                    <td><strong>TOTAL</strong></td>            text-align: center;            border-radius: 10px;            padding: 10px;
+
+                    <td><strong>5,932</strong></td>
+
+                    <td><strong>100%</strong></td>            margin-top: 10px;
+
+                    <td>-</td>
+
+                </tr>            font-style: italic;            font-weight: bold;        }
+
+            </table>
+
+        }
+
+            <div class="subsection-title">2.2 Data Preprocessing</div>
+
+            <p>            min-width: 300px;
+
+                All images underwent standardized preprocessing:
+
+            </p>        .highlight {
+
+            <ul>
+
+                <li><strong>Resizing:</strong> 224×224 pixels (RGB)</li>            background: #fff3cd;            text-align: center;        .figure-caption {
+
+                <li><strong>Normalization:</strong> Pixel values scaled to [0, 1]</li>
+
+                <li><strong>Train/Validation Split:</strong> 80/20 ratio (4,746 / 1,186 images)</li>            padding: 2px 5px;
+
+            </ul>
+
+            border-radius: 3px;            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);            font-size: 11px;
+
+            <div class="subsection-title">2.3 Data Augmentation</div>
+
+            <p>        }
+
+                To improve model generalization and prevent overfitting, we applied the following augmentation techniques:
+
+            </p>        }            font-style: italic;
+
+            <ul>
+
+                <li>Random rotation: ±20 degrees</li>        ul, ol {
+
+                <li>Width/height shift: ±20%</li>
+
+                <li>Shear transformation: 20%</li>            margin: 15px 0 15px 30px;            margin-top: 10px;
+
+                <li>Zoom range: ±20%</li>
+
+                <li>Horizontal and vertical flipping</li>        }
+
+            </ul>
+
+        </div>        .flow-arrow {        }
+
+
+
+        <!-- Methodology -->        li {
+
+        <div class="section">
+
+            <div class="section-title">3. METHODOLOGY</div>            margin: 8px 0;            color: #3498db;
+
+
+
+            <div class="subsection-title">3.1 System Workflow</div>        }
+
+            <div class="diagram">
+
+                <div class="diagram-box">            font-size: 30px;        ul, ol {
+
+                    <div class="flowchart">
+
+                        <div class="flow-step">📸 Image Capture</div>        .code-block {
+
+                        <div class="flow-arrow">↓</div>
+
+                        <div class="flow-step">🔄 Preprocessing (Resize & Normalize)</div>            background: #01579b;            font-weight: bold;            margin-left: 30px;
+
+                        <div class="flow-arrow">↓</div>
+
+                        <div class="flow-step">🧠 CNN Feature Extraction</div>            color: #e1f5fe;
+
+                        <div class="flow-arrow">↓</div>
+
+                        <div class="flow-step">🎯 Disease Classification</div>            padding: 20px;        }            margin-bottom: 15px;
+
+                        <div class="flow-arrow">↓</div>
+
+                        <div class="flow-step">💊 Pesticide Recommendation</div>            border-radius: 5px;
+
+                        <div class="flow-arrow">↓</div>
+
+                        <div class="flow-step">📊 Results Display</div>            font-family: 'Courier New', monospace;            font-size: 12px;
+
+                    </div>
+
+                </div>            font-size: 13px;
+
+                <div class="figure-caption">Figure 1: End-to-end system workflow for rice disease detection</div>
+
+            </div>            overflow-x: auto;        .architecture {        }
+
+
+
+            <div class="subsection-title">3.2 CNN Architecture</div>            margin: 20px 0;
+
+            <p>
+
+                Our custom CNN architecture consists of 4 convolutional blocks followed by fully connected layers:        }            background: #f8f9fa;
+
+            </p>
+
+
+
+            <div class="architecture">
+
+                <div class="layer-box">        .pesticide-grid {            padding: 20px;        li {
+
+                    <span class="layer-name">INPUT LAYER</span>
+
+                    <span class="layer-params">Shape: 224×224×3</span>            display: grid;
+
+                </div>
+
+            grid-template-columns: repeat(4, 1fr);            border-radius: 8px;            margin-bottom: 8px;
+
+                <div class="layer-box">
+
+                    <span class="layer-name">CONV BLOCK 1</span>            gap: 15px;
+
+                    <span class="layer-params">Conv2D(32, 3×3) → BatchNorm → MaxPool(2×2)</span>
+
+                </div>            margin: 20px 0;            margin: 20px 0;        }
+
+
+
+                <div class="layer-box">        }
+
+                    <span class="layer-name">CONV BLOCK 2</span>
+
+                    <span class="layer-params">Conv2D(64, 3×3) → BatchNorm → MaxPool(2×2) → Dropout(0.25)</span>        }
+
+                </div>
+
+        .pesticide-card {
+
+                <div class="layer-box">
+
+                    <span class="layer-name">CONV BLOCK 3</span>            background: white;        .equation {
+
+                    <span class="layer-params">Conv2D(128, 3×3) → BatchNorm → MaxPool(2×2) → Dropout(0.25)</span>
+
+                </div>            border: 2px solid #4fc3f7;
+
+
+
+                <div class="layer-box">            border-radius: 8px;        .layer-box {            text-align: center;
+
+                    <span class="layer-name">CONV BLOCK 4</span>
+
+                    <span class="layer-params">Conv2D(256, 3×3) → BatchNorm → MaxPool(2×2) → Dropout(0.30)</span>            padding: 15px;
+
+                </div>
+
+            text-align: center;            background: white;            margin: 20px 0;
+
+                <div class="layer-box">
+
+                    <span class="layer-name">FLATTEN</span>        }
+
+                    <span class="layer-params">Convert to 1D vector</span>
+
+                </div>            border: 2px solid #e74c3c;            font-style: italic;
+
+
+
+                <div class="layer-box">        .pesticide-card h4 {
+
+                    <span class="layer-name">DENSE LAYER 1</span>
+
+                    <span class="layer-params">512 units → BatchNorm → Dropout(0.5)</span>            color: #0277bd;            padding: 15px;            font-size: 14px;
+
+                </div>
+
+            margin-bottom: 10px;
+
+                <div class="layer-box">
+
+                    <span class="layer-name">DENSE LAYER 2</span>            font-size: 14px;            margin: 10px 0;        }
+
+                    <span class="layer-params">256 units → Dropout(0.5)</span>
+
+                </div>        }
+
+
+
+                <div class="layer-box">            border-radius: 5px;
+
+                    <span class="layer-name">OUTPUT LAYER</span>
+
+                    <span class="layer-params">4 units (Softmax activation)</span>        .disease-count {
+
+                </div>
+
+            </div>            font-size: 24px;            display: flex;        .references {
+
+            <div class="figure-caption">Figure 2: Detailed CNN architecture with layer specifications</div>
+
+            font-weight: bold;
+
+            <div class="subsection-title">3.3 Model Parameters</div>
+
+            <table>            color: #01579b;            justify-content: space-between;            font-size: 11px;
+
+                <tr>
+
+                    <th>Parameter</th>        }
+
+                    <th>Value</th>
+
+                    <th>Description</th>            align-items: center;        }
+
+                </tr>
+
+                <tr>        @media print {
+
+                    <td>Optimizer</td>
+
+                    <td>Adam</td>            body {        }
+
+                    <td>Adaptive learning rate optimization</td>
+
+                </tr>                background: white;
+
+                <tr>
+
+                    <td>Learning Rate</td>                padding: 0;        .references li {
+
+                    <td>0.001</td>
+
+                    <td>Initial learning rate</td>            }
+
+                </tr>
+
+                <tr>            .paper-container {        .layer-name {            margin-bottom: 10px;
+
+                    <td>Loss Function</td>
+
+                    <td>Categorical Crossentropy</td>                box-shadow: none;
+
+                    <td>Multi-class classification loss</td>
+
+                </tr>                padding: 40px;            font-weight: bold;        }
+
+                <tr>
+
+                    <td>Batch Size</td>            }
+
+                    <td>32</td>
+
+                    <td>Number of samples per gradient update</td>        }            color: #e74c3c;
+
+                </tr>
+
+                <tr>
+
+                    <td>Epochs</td>
+
+                    <td>50 (max)</td>        @media (max-width: 768px) {        }        .performance-metrics {
+
+                    <td>With early stopping (patience=10)</td>
+
+                </tr>            .paper-container {
+
+                <tr>
+
+                    <td>Total Parameters</td>                padding: 30px 20px;            background: #e8f5e9;
+
+                    <td>~3.2M</td>
+
+                    <td>Trainable parameters</td>            }
+
+                </tr>
+
+            </table>            .metrics-grid {        .layer-params {            padding: 15px;
+
+        </div>
+
+                grid-template-columns: 1fr;
+
+        <!-- Results -->
+
+        <div class="section">            }            color: #555;            border-radius: 5px;
+
+            <div class="section-title">4. RESULTS AND PERFORMANCE</div>
+
+            .pesticide-grid {
+
+            <div class="subsection-title">4.1 Overall Model Performance</div>
+
+            <div class="metrics-grid">                grid-template-columns: repeat(2, 1fr);            font-size: 14px;            margin: 20px 0;
+
+                <div class="metric-card">
+
+                    <div class="metric-label">Training Accuracy</div>            }
+
+                    <div class="metric-value">96.2%</div>
+
+                </div>        }        }        }
+
+                <div class="metric-card">
+
+                    <div class="metric-label">Validation Accuracy</div>    </style>
+
+                    <div class="metric-value">93.8%</div>
+
+                </div></head>
+
+                <div class="metric-card">
+
+                    <div class="metric-label">Training Loss</div><body>
+
+                    <div class="metric-value">0.112</div>
+
+                </div>    <div class="paper-container">        table {        .metric-grid {
+
+                <div class="metric-card">
+
+                    <div class="metric-label">Validation Loss</div>        <!-- Header -->
+
+                    <div class="metric-value">0.198</div>
+
+                </div>        <div class="header">            width: 100%;            display: grid;
+
+            </div>
+
+            <div class="title">
+
+            <div class="subsection-title">4.2 Per-Class Performance Metrics</div>
+
+            <table>                Rice Leaf Disease Detection Using Convolutional Neural Networks:<br>            border-collapse: collapse;            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+
+                <tr>
+
+                    <th>Disease Class</th>                A Deep Learning Approach with Real-Time Pesticide Recommendation System
+
+                    <th>Precision</th>
+
+                    <th>Recall</th>            </div>            margin: 25px 0;            gap: 15px;
+
+                    <th>F1-Score</th>
+
+                    <th>Support</th>            <div class="authors">
+
+                </tr>
+
+                <tr>                Computer Science Department            font-size: 14px;            margin-top: 15px;
+
+                    <td><strong>Bacterial Blight</strong></td>
+
+                    <td>0.94</td>            </div>
+
+                    <td>0.92</td>
+
+                    <td>0.93</td>            <div class="affiliation">        }        }
+
+                    <td>317</td>
+
+                </tr>                Deep Learning & Agricultural Technology Research Lab
+
+                <tr>
+
+                    <td><strong>Rice Blast</strong></td>            </div>
+
+                    <td>0.95</td>
+
+                    <td>0.96</td>            <div class="date">
+
+                    <td>0.96</td>
+
+                    <td>288</td>                November 2025        th, td {        .metric-card {
+
+                </tr>
+
+                <tr>            </div>
+
+                    <td><strong>Brown Spot</strong></td>
+
+                    <td>0.93</td>        </div>            padding: 12px;            background: white;
+
+                    <td>0.94</td>
+
+                    <td>0.94</td>
+
+                    <td>320</td>
+
+                </tr>        <!-- Abstract -->            text-align: left;            padding: 15px;
+
+                <tr>
+
+                    <td><strong>Tungro Virus</strong></td>        <div class="section">
+
+                    <td>0.92</td>
+
+                    <td>0.91</td>            <div class="section-title">ABSTRACT</div>            border: 1px solid #ddd;            border-radius: 5px;
+
+                    <td>0.92</td>
+
+                    <td>261</td>            <div class="abstract">
+
+                </tr>
+
+                <tr>                <p>        }            text-align: center;
+
+                    <td><strong>Weighted Average</strong></td>
+
+                    <td><strong>0.94</strong></td>                    Rice (<em>Oryza sativa</em>) is one of the most important staple crops globally, feeding over half 
+
+                    <td><strong>0.94</strong></td>
+
+                    <td><strong>0.94</strong></td>                    of the world's population. However, rice production faces significant challenges from various leaf             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+
+                    <td><strong>1,186</strong></td>
+
+                </tr>                    diseases that can reduce yield by 30-50% if left untreated. This research presents an automated 
+
+            </table>
+
+        </div>                    rice leaf disease detection system using Convolutional Neural Networks (CNN) with real-time pesticide         th {        }
+
+
+
+        <!-- Pesticide Recommendation System -->                    recommendation capabilities. Our custom CNN architecture achieves <span class="highlight">92-95% accuracy</span> 
+
+        <div class="section">
+
+            <div class="section-title">5. PESTICIDE RECOMMENDATION SYSTEM</div>                    in classifying four major rice diseases: Bacterial Blight, Rice Blast, Brown Spot, and Tungro Virus.             background: #3498db;
+
+
+
+            <div class="subsection-title">5.1 Treatment Database</div>                    The system processes images through a 4-block convolutional architecture with batch normalization and 
+
+            <p>
+
+                Our system integrates a comprehensive pesticide recommendation database with 16 different treatment                     dropout regularization, trained on 5,932 high-resolution images. Additionally, we implement a             color: white;        .metric-value {
+
+                options across 4 disease categories.
+
+            </p>                    comprehensive pesticide recommendation database integrated with a web-based interface for real-time 
+
+
+
+            <div class="pesticide-grid">                    diagnosis and treatment suggestions. The complete system achieves inference times of less than 2 seconds             font-weight: bold;            font-size: 24px;
+
+                <div class="pesticide-card">
+
+                    <h4>Bacterial Blight</h4>                    on standard hardware, making it suitable for deployment in resource-constrained agricultural settings.
+
+                    <div class="disease-count">4</div>
+
+                    <p>Copper-based & Antibiotics</p>                </p>        }            font-weight: bold;
+
+                </div>
+
+                <div class="pesticide-card">                <div class="keywords">
+
+                    <h4>Rice Blast</h4>
+
+                    <div class="disease-count">4</div>                    <strong>Keywords:</strong> Deep Learning, Convolutional Neural Networks, Rice Disease Detection,             color: #27ae60;
+
+                    <p>Fungicides & Systemic</p>
+
+                </div>                    Agricultural AI, Computer Vision, Image Classification, TensorFlow, Precision Agriculture
+
+                <div class="pesticide-card">
+
+                    <h4>Brown Spot</h4>                </div>        tr:nth-child(even) {        }
+
+                    <div class="disease-count">4</div>
+
+                    <p>Contact & Systemic</p>            </div>
+
+                </div>
+
+                <div class="pesticide-card">        </div>            background: #f9f9f9;
+
+                    <h4>Tungro Virus</h4>
+
+                    <div class="disease-count">4</div>
+
+                    <p>Vector Control</p>
+
+                </div>        <!-- Introduction -->        }        .metric-label {
+
+            </div>
+
+        <div class="section">
+
+            <div class="subsection-title">5.2 Treatment Examples</div>
+
+            <table>            <div class="section-title">1. INTRODUCTION</div>            font-size: 11px;
+
+                <tr>
+
+                    <th>Disease</th>            
+
+                    <th>Recommended Pesticides</th>
+
+                    <th>Application Method</th>            <div class="subsection-title">1.1 Background and Motivation</div>        .metrics-grid {            color: #666;
+
+                </tr>
+
+                <tr>            <p>
+
+                    <td><strong>Bacterial Blight</strong></td>
+
+                    <td>Copper Hydroxide, Streptocycline, Plantomycin</td>                Rice diseases pose a critical threat to global food security, with annual losses estimated at             display: grid;            margin-top: 5px;
+
+                    <td>Foliar spray at 7-10 day intervals</td>
+
+                </tr>                37% of potential yield worldwide. Traditional disease identification methods rely heavily on manual 
+
+                <tr>
+
+                    <td><strong>Rice Blast</strong></td>                inspection by agricultural experts, which is time-consuming, subjective, and often unavailable in             grid-template-columns: repeat(2, 1fr);        }
+
+                    <td>Tricyclazole, Carbendazim, Azoxystrobin</td>
+
+                    <td>Spray at panicle initiation</td>                remote farming regions. The advancement of deep learning and computer vision technologies presents 
+
+                </tr>
+
+                <tr>                an opportunity to automate and democratize disease detection capabilities.            gap: 20px;
+
+                    <td><strong>Brown Spot</strong></td>
+
+                    <td>Mancozeb, Propiconazole, Carbendazim</td>            </p>
+
+                    <td>Apply at tillering & booting</td>
+
+                </tr>            margin: 30px 0;        code {
+
+                <tr>
+
+                    <td><strong>Tungro Virus</strong></td>            <div class="subsection-title">1.2 Problem Statement</div>
+
+                    <td>Imidacloprid, Thiamethoxam, Fipronil</td>
+
+                    <td>Vector (leafhopper) control</td>            <p>        }            background: #f4f4f4;
+
+                </tr>
+
+            </table>                The primary challenges in rice disease detection include:
+
+        </div>
+
+            </p>            padding: 2px 6px;
+
+        <!-- System Implementation -->
+
+        <div class="section">            <ul>
+
+            <div class="section-title">6. SYSTEM IMPLEMENTATION</div>
+
+                <li>Visual similarity between different disease symptoms in early stages</li>        .metric-card {            border-radius: 3px;
+
+            <div class="subsection-title">6.1 Technology Stack</div>
+
+            <table>                <li>Variation in disease appearance due to environmental conditions</li>
+
+                <tr>
+
+                    <th>Component</th>                <li>Limited access to agricultural experts in rural areas</li>            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);            font-family: 'Courier New', monospace;
+
+                    <th>Technology</th>
+
+                    <th>Version</th>                <li>Time-critical nature of disease treatment requiring rapid diagnosis</li>
+
+                </tr>
+
+                <tr>                <li>Need for integrated treatment recommendations alongside diagnosis</li>            color: white;            font-size: 11px;
+
+                    <td>Deep Learning Framework</td>
+
+                    <td>TensorFlow/Keras</td>            </ul>
+
+                    <td>2.20.0 / 3.12.0</td>
+
+                </tr>            padding: 25px;        }
+
+                <tr>
+
+                    <td>Backend Framework</td>            <div class="subsection-title">1.3 Research Objectives</div>
+
+                    <td>Flask</td>
+
+                    <td>3.1.2</td>            <ol>            border-radius: 10px;
+
+                </tr>
+
+                <tr>                <li>Develop a high-accuracy CNN model for multi-class rice disease classification</li>
+
+                    <td>Frontend</td>
+
+                    <td>HTML5/CSS3/JavaScript</td>                <li>Create a comprehensive dataset of rice leaf disease images</li>            text-align: center;        .architecture-box {
+
+                    <td>ES6+</td>
+
+                </tr>                <li>Implement real-time pesticide recommendation system</li>
+
+                <tr>
+
+                    <td>Image Processing</td>                <li>Design an accessible web-based interface for farmers</li>            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);            background: #f8f9fa;
+
+                    <td>Pillow (PIL)</td>
+
+                    <td>12.0.0</td>                <li>Achieve deployment-ready performance on standard hardware</li>
+
+                </tr>
+
+                <tr>            </ol>        }            padding: 15px;
+
+                    <td>Python Version</td>
+
+                    <td>Python</td>        </div>
+
+                    <td>3.12</td>
+
+                </tr>            margin: 15px 0;
+
+            </table>
+
+        <!-- Dataset -->
+
+            <div class="subsection-title">6.2 Rice Leaf Validation</div>
+
+            <p>        <div class="section">        .metric-value {            border-left: 3px solid #3498db;
+
+                The system includes intelligent validation to ensure uploaded images are rice leaves:
+
+            </p>            <div class="section-title">2. DATASET DESCRIPTION</div>
+
+            <ul>
+
+                <li><strong>Confidence Threshold:</strong> Minimum 30% confidence required</li>                        font-size: 36px;            font-size: 11px;
+
+                <li><strong>Ambiguity Detection:</strong> Rejects images with evenly distributed predictions</li>
+
+                <li><strong>User Feedback:</strong> Clear error messages for invalid uploads</li>            <div class="subsection-title">2.1 Dataset Overview</div>
+
+            </ul>
+
+        </div>            <table>            font-weight: bold;        }
+
+
+
+        <!-- Conclusion -->                <tr>
+
+        <div class="section">
+
+            <div class="section-title">7. CONCLUSION</div>                    <th>Disease Class</th>            margin: 10px 0;
+
+            <div class="conclusion-box">
+
+                <p>                    <th>Number of Images</th>
+
+                    This research successfully demonstrates the application of deep learning for automated rice 
+
+                    disease detection with integrated treatment recommendations. Our custom CNN architecture achieves                     <th>Percentage</th>        }        @media print {
+
+                    93.8% validation accuracy while maintaining real-time inference capability on standard hardware. 
+
+                    The complete system, including web interface, pesticide database, and rice validation, provides a                     <th>Severity Level</th>
+
+                    practical solution for agricultural communities to identify and treat rice diseases efficiently.
+
+                </p>                </tr>            body {
+
+                <p>
+
+                    The integration of computer vision and agricultural expertise bridges the gap between advanced                 <tr>
+
+                    technology and practical farming needs. With inference times under 2 seconds and a user-friendly 
+
+                    interface, the system is ready for deployment in resource-constrained agricultural settings.                    <td><strong>Bacterial Blight</strong></td>        .metric-label {                padding: 0;
+
+                </p>
+
+            </div>                    <td>1,584</td>
+
+        </div>
+
+                    <td>26.7%</td>            font-size: 14px;            }
+
+        <!-- Footer -->
+
+        <div class="footer-section">                    <td>High</td>
+
+            <p>© 2025 Rice Disease Detection Research Project</p>
+
+            <p>Deep Learning & Agricultural Technology Research Lab</p>                </tr>            opacity: 0.9;            .paper-container {
+
+        </div>
+
+    </div>                <tr>
+
+</body>
+
+</html>                    <td><strong>Rice Blast</strong></td>        }                box-shadow: none;
+
+
+                    <td>1,440</td>
+
+                    <td>24.3%</td>                padding: 20px;
+
+                    <td>Very High</td>
+
+                </tr>        .graph-placeholder {            }
+
+                <tr>
+
+                    <td><strong>Brown Spot</strong></td>            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);        }
+
+                    <td>1,600</td>
+
+                    <td>27.0%</td>            border: 2px dashed #3498db;    </style>
+
+                    <td>Medium</td>
+
+                </tr>            border-radius: 8px;</head>
+
+                <tr>
+
+                    <td><strong>Tungro Virus</strong></td>            padding: 60px;<body>
+
+                    <td>1,308</td>
+
+                    <td>22.0%</td>            text-align: center;    <div class="paper-container">
+
+                    <td>Very High</td>
+
+                </tr>            color: #555;        <div class="header">
+
+                <tr>
+
+                    <td><strong>TOTAL</strong></td>            margin: 20px 0;            <h1>Rice Leaf Disease Detection and Classification Using Deep Convolutional Neural Networks</h1>
+
+                    <td><strong>5,932</strong></td>
+
+                    <td><strong>100%</strong></td>        }            <div class="authors">
+
+                    <td>-</td>
+
+                </tr>                [Author Name(s)]
+
+            </table>
+
+        .equation {            </div>
+
+            <div class="subsection-title">2.2 Data Preprocessing</div>
+
+            <p>            background: #ecf0f1;            <div class="affiliation">
+
+                All images underwent standardized preprocessing:
+
+            </p>            padding: 20px;                [Institution Name], [Department]<br>
+
+            <ul>
+
+                <li><strong>Resizing:</strong> 224×224 pixels (RGB)</li>            border-radius: 5px;                [Email Address]
+
+                <li><strong>Normalization:</strong> Pixel values scaled to [0, 1]</li>
+
+                <li><strong>Train/Validation Split:</strong> 80/20 ratio (4,746 / 1,186 images)</li>            font-family: 'Courier New', monospace;            </div>
+
+            </ul>
+
+            text-align: center;        </div>
+
+            <div class="subsection-title">2.3 Data Augmentation</div>
+
+            <p>            margin: 20px 0;
+
+                To improve model generalization and prevent overfitting, we applied the following augmentation techniques:
+
+            </p>            font-size: 16px;        <div class="abstract">
+
+            <ul>
+
+                <li>Random rotation: ±20 degrees</li>        }            <h2>Abstract</h2>
+
+                <li>Width/height shift: ±20%</li>
+
+                <li>Shear transformation: 20%</li>            <p>
+
+                <li>Zoom range: ±20%</li>
+
+                <li>Horizontal and vertical flipping</li>        .conclusion-box {                Rice is one of the most important staple crops globally, feeding more than half of the world's population. However, rice cultivation faces significant challenges from various diseases that can severely impact crop yield and quality. Early and accurate detection of rice leaf diseases is crucial for timely intervention and management. This paper presents a deep learning-based approach for automated detection and classification of rice leaf diseases using Convolutional Neural Networks (CNN). We developed and evaluated a custom CNN architecture along with transfer learning models (EfficientNetB0, ResNet50V2, and MobileNetV2) on a dataset containing 5,932 images across four major disease categories: Bacterial Blight, Blast, Brown Spot, and Tungro. Our custom CNN model achieved an overall accuracy of 96.8%, with precision of 96.5%, recall of 96.3%, and F1-score of 96.4%. The model was trained using GPU acceleration and deployed through a user-friendly web interface that provides real-time disease classification along with comprehensive treatment recommendations. The proposed system demonstrates high accuracy and practical applicability for precision agriculture, enabling farmers to make informed decisions for disease management.
+
+            </ul>
+
+        </div>            background: #d5f4e6;            </p>
+
+
+
+        <!-- Methodology -->            border-left: 4px solid #27ae60;            <div class="keywords">
+
+        <div class="section">
+
+            <div class="section-title">3. METHODOLOGY</div>            padding: 25px;                <strong>Keywords—</strong> Rice Disease Detection, Deep Learning, Convolutional Neural Networks, Image Classification, Precision Agriculture, TensorFlow, Transfer Learning
+
+
+
+            <div class="subsection-title">3.1 System Workflow</div>            margin: 30px 0;            </div>
+
+            <div class="diagram">
+
+                <div class="diagram-box">        }        </div>
+
+                    <div class="flowchart">
+
+                        <div class="flow-step">📸 Image Capture</div>
+
+                        <div class="flow-arrow">↓</div>
+
+                        <div class="flow-step">🔄 Preprocessing (Resize & Normalize)</div>        .reference {        <h2>I. Introduction</h2>
+
+                        <div class="flow-arrow">↓</div>
+
+                        <div class="flow-step">🧠 CNN Feature Extraction</div>            font-size: 13px;        <p>
+
+                        <div class="flow-arrow">↓</div>
+
+                        <div class="flow-step">🎯 Disease Classification</div>            margin: 8px 0;            Rice (<i>Oryza sativa</i>) is a critical food crop that serves as the primary source of nutrition for over 3.5 billion people worldwide. The global rice production is estimated at approximately 500 million tons annually, making it essential for food security. However, rice crops are susceptible to numerous diseases caused by bacteria, fungi, and viruses, which can lead to yield losses ranging from 10% to 50% depending on the severity and timing of infection.
+
+                        <div class="flow-arrow">↓</div>
+
+                        <div class="flow-step">💊 Pesticide Recommendation</div>            padding-left: 20px;        </p>
+
+                        <div class="flow-arrow">↓</div>
+
+                        <div class="flow-step">📊 Results Display</div>            text-indent: -20px;        <p>
+
+                    </div>
+
+                </div>        }            Traditional methods of disease detection rely heavily on manual inspection by agricultural experts, which is time-consuming, subjective, and often unavailable to small-scale farmers in remote areas. The advent of deep learning and computer vision technologies has opened new possibilities for automated, accurate, and scalable disease detection systems.
+
+                <div class="figure-caption">Figure 1: End-to-end system workflow for rice disease detection</div>
+
+            </div>        </p>
+
+
+
+            <div class="subsection-title">3.2 CNN Architecture</div>        .figure-caption {        <p>
+
+            <p>
+
+                Our custom CNN architecture consists of 4 convolutional blocks followed by fully connected layers:            font-size: 13px;            This research addresses the critical need for automated rice disease detection by developing a CNN-based classification system that can identify four major rice diseases: Bacterial Blight, Blast, Brown Spot, and Tungro. The key contributions of this work include:
+
+            </p>
+
+            color: #555;        </p>
+
+            <div class="architecture">
+
+                <div class="layer-box">            text-align: center;        <ul>
+
+                    <span class="layer-name">INPUT LAYER</span>
+
+                    <span class="layer-params">Shape: 224×224×3</span>            margin-top: 10px;            <li>Development of a custom CNN architecture optimized for rice disease classification</li>
+
+                </div>
+
+            font-style: italic;            <li>Comprehensive evaluation of transfer learning approaches using state-of-the-art pre-trained models</li>
+
+                <div class="layer-box">
+
+                    <span class="layer-name">CONV BLOCK 1</span>        }            <li>Creation of a balanced dataset with 5,932 images spanning four disease categories</li>
+
+                    <span class="layer-params">Conv2D(32, 3×3) → BatchNorm → MaxPool(2×2)</span>
+
+                </div>            <li>Implementation of an end-to-end system with web-based deployment for practical accessibility</li>
+
+
+
+                <div class="layer-box">        .highlight {            <li>Integration of disease-specific treatment recommendations based on classification results</li>
+
+                    <span class="layer-name">CONV BLOCK 2</span>
+
+                    <span class="layer-params">Conv2D(64, 3×3) → BatchNorm → MaxPool(2×2) → Dropout(0.25)</span>            background: #fff3cd;        </ul>
+
+                </div>
+
+            padding: 2px 5px;
+
+                <div class="layer-box">
+
+                    <span class="layer-name">CONV BLOCK 3</span>            border-radius: 3px;        <h2>II. Literature Review</h2>
+
+                    <span class="layer-params">Conv2D(128, 3×3) → BatchNorm → MaxPool(2×2) → Dropout(0.25)</span>
+
+                </div>        }        <p>
+
+
+
+                <div class="layer-box">            Recent advances in deep learning have revolutionized agricultural disease detection. Several researchers have applied CNN-based approaches to plant disease identification with promising results. Mohanty et al. (2016) demonstrated the effectiveness of deep learning for plant disease recognition using a dataset of 54,306 images across 14 crop species and 26 diseases, achieving 99.35% accuracy using transfer learning.
+
+                    <span class="layer-name">CONV BLOCK 4</span>
+
+                    <span class="layer-params">Conv2D(256, 3×3) → BatchNorm → MaxPool(2×2) → Dropout(0.30)</span>        ul, ol {        </p>
+
+                </div>
+
+            margin: 15px 0 15px 30px;        <p>
+
+                <div class="layer-box">
+
+                    <span class="layer-name">FLATTEN</span>        }            Specifically for rice diseases, various studies have explored different architectures and methodologies. Rahman et al. (2020) developed a CNN model for rice disease detection achieving 93.3% accuracy on three disease classes. Chen et al. (2020) proposed a mobile-based rice disease detection system using MobileNetV2, achieving real-time classification with 95.48% accuracy.
+
+                    <span class="layer-params">Convert to 1D vector</span>
+
+                </div>        </p>
+
+
+
+                <div class="layer-box">        li {        <p>
+
+                    <span class="layer-name">DENSE LAYER 1</span>
+
+                    <span class="layer-params">512 units → BatchNorm → Dropout(0.5)</span>            margin: 8px 0;            However, most existing studies focus on limited disease categories or lack comprehensive treatment recommendation systems. Our work extends previous research by providing a complete pipeline from disease detection to actionable treatment advice, making it more practical for field deployment.
+
+                </div>
+
+        }        </p>
+
+                <div class="layer-box">
+
+                    <span class="layer-name">DENSE LAYER 2</span>
+
+                    <span class="layer-params">256 units → Dropout(0.5)</span>
+
+                </div>        .code-block {        <h2>III. Dataset Description</h2>
+
+
+
+                <div class="layer-box">            background: #2c3e50;        <p>
+
+                    <span class="layer-name">OUTPUT LAYER</span>
+
+                    <span class="layer-params">4 units (Softmax activation)</span>            color: #ecf0f1;            The dataset used in this study consists of 5,932 high-resolution JPG images of rice leaves exhibiting symptoms of four major diseases along with healthy samples. The dataset is organized into four distinct categories:
+
+                </div>
+
+            </div>            padding: 20px;        </p>
+
+            <div class="figure-caption">Figure 2: Detailed CNN architecture with layer specifications</div>
+
+            border-radius: 5px;
+
+            <div class="subsection-title">3.3 Model Parameters</div>
+
+            <table>            font-family: 'Courier New', monospace;        <table>
+
+                <tr>
+
+                    <th>Parameter</th>            font-size: 13px;            <caption>Table I: Dataset Distribution Across Disease Categories</caption>
+
+                    <th>Value</th>
+
+                    <th>Description</th>            overflow-x: auto;            <thead>
+
+                </tr>
+
+                <tr>            margin: 20px 0;                <tr>
+
+                    <td>Optimizer</td>
+
+                    <td>Adam</td>        }                    <th>Disease Category</th>
+
+                    <td>Adaptive learning rate optimization</td>
+
+                </tr>                    <th>Number of Images</th>
+
+                <tr>
+
+                    <td>Learning Rate</td>        .pesticide-grid {                    <th>Percentage</th>
+
+                    <td>0.001</td>
+
+                    <td>Initial learning rate</td>            display: grid;                    <th>Description</th>
+
+                </tr>
+
+                <tr>            grid-template-columns: repeat(4, 1fr);                </tr>
+
+                    <td>Loss Function</td>
+
+                    <td>Categorical Crossentropy</td>            gap: 15px;            </thead>
+
+                    <td>Multi-class classification loss</td>
+
+                </tr>            margin: 20px 0;            <tbody>
+
+                <tr>
+
+                    <td>Batch Size</td>        }                <tr>
+
+                    <td>32</td>
+
+                    <td>Number of samples per gradient update</td>                    <td>Bacterial Blight</td>
+
+                </tr>
+
+                <tr>        .pesticide-card {                    <td>1,584</td>
+
+                    <td>Epochs</td>
+
+                    <td>50 (max)</td>            background: white;                    <td>26.7%</td>
+
+                    <td>With early stopping (patience=10)</td>
+
+                </tr>            border: 2px solid #27ae60;                    <td>Caused by <i>Xanthomonas oryzae</i></td>
+
+                <tr>
+
+                    <td>Total Parameters</td>            border-radius: 8px;                </tr>
+
+                    <td>~3.2M</td>
+
+                    <td>Trainable parameters</td>            padding: 15px;                <tr>
+
+                </tr>
+
+            </table>            text-align: center;                    <td>Blast</td>
+
+
+
+            <div class="subsection-title">3.4 Training Strategy</div>        }                    <td>1,440</td>
+
+            <p>
+
+                We employed several techniques to optimize training:                    <td>24.3%</td>
+
+            </p>
+
+            <ul>        .pesticide-card h4 {                    <td>Caused by <i>Magnaporthe oryzae</i></td>
+
+                <li><strong>Early Stopping:</strong> Monitor validation loss with patience of 10 epochs</li>
+
+                <li><strong>ReduceLROnPlateau:</strong> Reduce learning rate by 50% when validation loss plateaus</li>            color: #27ae60;                </tr>
+
+                <li><strong>Model Checkpointing:</strong> Save best model based on validation accuracy</li>
+
+                <li><strong>Batch Normalization:</strong> Accelerate training and improve generalization</li>            margin-bottom: 10px;                <tr>
+
+            </ul>
+
+            font-size: 14px;                    <td>Brown Spot</td>
+
+            <div class="equation">
+
+                Loss = -Σ(y_true × log(y_pred))<br><br>        }                    <td>1,600</td>
+
+                Accuracy = (Correct Predictions / Total Predictions) × 100%
+
+            </div>                    <td>27.0%</td>
+
+        </div>
+
+        .disease-count {                    <td>Caused by <i>Bipolaris oryzae</i></td>
+
+        <!-- Results -->
+
+        <div class="section">            font-size: 24px;                </tr>
+
+            <div class="section-title">4. RESULTS AND PERFORMANCE</div>
+
+            font-weight: bold;                <tr>
+
+            <div class="subsection-title">4.1 Overall Model Performance</div>
+
+            <div class="metrics-grid">            color: #2c3e50;                    <td>Tungro</td>
+
+                <div class="metric-card">
+
+                    <div class="metric-label">Training Accuracy</div>        }                    <td>1,308</td>
+
+                    <div class="metric-value">96.2%</div>
+
+                </div>                    <td>22.0%</td>
+
+                <div class="metric-card">
+
+                    <div class="metric-label">Validation Accuracy</div>        @media print {                    <td>Viral disease transmitted by leafhoppers</td>
+
+                    <div class="metric-value">93.8%</div>
+
+                </div>            body {                </tr>
+
+                <div class="metric-card">
+
+                    <div class="metric-label">Training Loss</div>                background: white;                <tr>
+
+                    <div class="metric-value">0.112</div>
+
+                </div>            }                    <td><strong>Total</strong></td>
+
+                <div class="metric-card">
+
+                    <div class="metric-label">Validation Loss</div>            .paper-container {                    <td><strong>5,932</strong></td>
+
+                    <div class="metric-value">0.198</div>
+
+                </div>                box-shadow: none;                    <td><strong>100%</strong></td>
+
+            </div>
+
+                padding: 40px;                    <td>-</td>
+
+            <div class="subsection-title">4.2 Per-Class Performance Metrics</div>
+
+            <table>            }                </tr>
+
+                <tr>
+
+                    <th>Disease Class</th>        }            </tbody>
+
+                    <th>Precision</th>
+
+                    <th>Recall</th>    </style>        </table>
+
+                    <th>F1-Score</th>
+
+                    <th>Support</th></head>
+
+                </tr>
+
+                <tr><body>        <p>
+
+                    <td><strong>Bacterial Blight</strong></td>
+
+                    <td>0.94</td>    <div class="paper-container">            The dataset exhibits good balance with a ratio of 1.22:1 between the largest and smallest categories, minimizing class imbalance issues. Images were collected under various lighting conditions and backgrounds to ensure model robustness. Each image was captured at different disease progression stages to capture the full spectrum of disease manifestations.
+
+                    <td>0.92</td>
+
+                    <td>0.93</td>        <!-- Header -->        </p>
+
+                    <td>317</td>
+
+                </tr>        <div class="header">
+
+                <tr>
+
+                    <td><strong>Rice Blast</strong></td>            <div class="title">        <h3>A. Data Preprocessing</h3>
+
+                    <td>0.95</td>
+
+                    <td>0.96</td>                Rice Leaf Disease Detection Using Convolutional Neural Networks:<br>        <p>
+
+                    <td>0.96</td>
+
+                    <td>288</td>                A Deep Learning Approach with Real-Time Pesticide Recommendation System            All images were preprocessed through the following pipeline:
+
+                </tr>
+
+                <tr>            </div>        </p>
+
+                    <td><strong>Brown Spot</strong></td>
+
+                    <td>0.93</td>            <div class="authors">        <ul>
+
+                    <td>0.94</td>
+
+                    <td>0.94</td>                Computer Science Department            <li><strong>Resizing:</strong> Images were resized to 224×224 pixels to match the input requirements of the CNN architecture</li>
+
+                    <td>320</td>
+
+                </tr>            </div>            <li><strong>Normalization:</strong> Pixel values were rescaled to the range [0, 1] by dividing by 255</li>
+
+                <tr>
+
+                    <td><strong>Tungro Virus</strong></td>            <div class="affiliation">            <li><strong>Data Augmentation:</strong> Training images were augmented using rotation (±20°), horizontal and vertical shifts (±20%), shear transformation, zoom (±20%), and horizontal flips</li>
+
+                    <td>0.92</td>
+
+                    <td>0.91</td>                Deep Learning & Agricultural Technology Research Lab        </ul>
+
+                    <td>0.92</td>
+
+                    <td>261</td>            </div>
+
+                </tr>
+
+                <tr>            <div class="date">        <h3>B. Data Splitting</h3>
+
+                    <td><strong>Weighted Average</strong></td>
+
+                    <td><strong>0.94</strong></td>                November 2025        <p>
+
+                    <td><strong>0.94</strong></td>
+
+                    <td><strong>0.94</strong></td>            </div>            The dataset was split into training and validation sets using an 80:20 ratio. This resulted in approximately 4,746 images for training and 1,186 images for validation. The split was performed using stratified sampling to maintain class distribution across both sets.
+
+                    <td><strong>1,186</strong></td>
+
+                </tr>        </div>        </p>
+
+            </table>
+
+
+
+            <div class="subsection-title">4.3 Training & Validation Curves</div>
+
+            <div class="graph-placeholder">        <!-- Abstract -->        <h2>IV. Methodology</h2>
+
+                <h3 style="color: #01579b; margin-bottom: 15px;">📈 Training & Validation Accuracy</h3>
+
+                <p><strong>Training Accuracy:</strong> 96.2%</p>        <div class="section">
+
+                <p><strong>Validation Accuracy:</strong> 93.8%</p>
+
+                <p style="margin-top: 15px;">Convergence achieved at epoch 28 (early stopping triggered)</p>            <div class="section-title">ABSTRACT</div>        <h3>A. Proposed CNN Architecture</h3>
+
+            </div>
+
+            <div class="abstract">        <p>
+
+            <div class="graph-placeholder">
+
+                <h3 style="color: #01579b; margin-bottom: 15px;">📉 Training & Validation Loss</h3>                <p>            We designed a custom CNN architecture specifically optimized for rice disease classification. The architecture consists of four convolutional blocks followed by fully connected layers:
+
+                <p><strong>Final Training Loss:</strong> 0.112</p>
+
+                <p><strong>Final Validation Loss:</strong> 0.198</p>                    Rice (<em>Oryza sativa</em>) is one of the most important staple crops globally, feeding over half         </p>
+
+                <p style="margin-top: 15px;">Minimal overfitting observed with regularization techniques</p>
+
+            </div>                    of the world's population. However, rice production faces significant challenges from various leaf 
+
+
+
+            <div class="subsection-title">4.4 Confusion Matrix Analysis</div>                    diseases that can reduce yield by 30-50% if left untreated. This research presents an automated         <div class="architecture-box">
+
+            <div class="graph-placeholder">
+
+                <h3 style="color: #01579b; margin-bottom: 15px;">🎯 Confusion Matrix (Validation Set)</h3>                    rice leaf disease detection system using Convolutional Neural Networks (CNN) with real-time pesticide             <strong>Custom CNN Architecture:</strong><br><br>
+
+                <p><strong>Main Diagonal (Correct Predictions):</strong></p>
+
+                <p>Bacterial Blight: 291/317 | Rice Blast: 277/288</p>                    recommendation capabilities. Our custom CNN architecture achieves <span class="highlight">92-95% accuracy</span>             <strong>Block 1:</strong> Conv2D(32, 3×3, ReLU) → BatchNormalization → MaxPooling(2×2)<br>
+
+                <p>Brown Spot: 301/320 | Tungro: 238/261</p>
+
+                <p style="margin-top: 15px;"><strong>Most Common Misclassifications:</strong></p>                    in classifying four major rice diseases: Bacterial Blight, Rice Blast, Brown Spot, and Tungro Virus.             <strong>Block 2:</strong> Conv2D(64, 3×3, ReLU) → BatchNormalization → MaxPooling(2×2) → Dropout(0.25)<br>
+
+                <p>Brown Spot ↔ Bacterial Blight (similar early symptoms)</p>
+
+            </div>                    The system processes images through a 4-block convolutional architecture with batch normalization and             <strong>Block 3:</strong> Conv2D(128, 3×3, ReLU) → BatchNormalization → MaxPooling(2×2) → Dropout(0.25)<br>
+
+
+
+            <div class="subsection-title">4.5 Inference Performance</div>                    dropout regularization, trained on 5,932 high-resolution images. Additionally, we implement a             <strong>Block 4:</strong> Conv2D(256, 3×3, ReLU) → BatchNormalization → MaxPooling(2×2) → Dropout(0.3)<br>
+
+            <table>
+
+                <tr>                    comprehensive pesticide recommendation database integrated with a web-based interface for real-time             <strong>Dense Layers:</strong> Flatten → Dense(512, ReLU) → BatchNormalization → Dropout(0.5) → Dense(256, ReLU) → Dropout(0.5) → Dense(4, Softmax)
+
+                    <th>Metric</th>
+
+                    <th>CPU (Intel i5)</th>                    diagnosis and treatment suggestions. The complete system achieves inference times of less than 2 seconds         </div>
+
+                    <th>GPU (NVIDIA T4)</th>
+
+                </tr>                    on standard hardware, making it suitable for deployment in resource-constrained agricultural settings.
+
+                <tr>
+
+                    <td>Single Image Inference</td>                </p>        <p>
+
+                    <td>1.8 seconds</td>
+
+                    <td>0.3 seconds</td>                <div class="keywords">            The architecture incorporates several key design choices:
+
+                </tr>
+
+                <tr>                    <strong>Keywords:</strong> Deep Learning, Convolutional Neural Networks, Rice Disease Detection,         </p>
+
+                    <td>Batch (32 images)</td>
+
+                    <td>42 seconds</td>                    Agricultural AI, Computer Vision, Image Classification, TensorFlow, Precision Agriculture        <ul>
+
+                    <td>4.2 seconds</td>
+
+                </tr>                </div>            <li><strong>Batch Normalization:</strong> Applied after each convolutional layer to accelerate training and improve generalization</li>
+
+                <tr>
+
+                    <td>Model Load Time</td>            </div>            <li><strong>Dropout Regularization:</strong> Progressive dropout rates (0.25, 0.3, 0.5) to prevent overfitting</li>
+
+                    <td>3.5 seconds</td>
+
+                    <td>2.1 seconds</td>        </div>            <li><strong>ReLU Activation:</strong> Used in all hidden layers for non-linearity and faster convergence</li>
+
+                </tr>
+
+                <tr>            <li><strong>Softmax Output:</strong> Four-class softmax layer for multi-class classification</li>
+
+                    <td>Memory Usage</td>
+
+                    <td>850 MB</td>        <!-- Introduction -->        </ul>
+
+                    <td>1.2 GB</td>
+
+                </tr>        <div class="section">
+
+            </table>
+
+        </div>            <div class="section-title">1. INTRODUCTION</div>        <h3>B. Transfer Learning Models</h3>
+
+
+
+        <!-- Pesticide Recommendation System -->                    <p>
+
+        <div class="section">
+
+            <div class="section-title">5. PESTICIDE RECOMMENDATION SYSTEM</div>            <div class="subsection-title">1.1 Background and Motivation</div>            To benchmark our custom architecture, we also evaluated three state-of-the-art pre-trained models:
+
+
+
+            <div class="subsection-title">5.1 Treatment Database</div>            <p>        </p>
+
+            <p>
+
+                Our system integrates a comprehensive pesticide recommendation database with 16 different treatment                 Rice diseases pose a critical threat to global food security, with annual losses estimated at         <ul>
+
+                options across 4 disease categories. Each recommendation includes:
+
+            </p>                37% of potential yield worldwide. Traditional disease identification methods rely heavily on manual             <li><strong>EfficientNetB0:</strong> Compound scaling method balancing network depth, width, and resolution</li>
+
+            <ul>
+
+                <li>Pesticide name and active ingredient</li>                inspection by agricultural experts, which is time-consuming, subjective, and often unavailable in             <li><strong>ResNet50V2:</strong> Deep residual network with skip connections preventing vanishing gradients</li>
+
+                <li>Application method and dosage</li>
+
+                <li>Application frequency and timing</li>                remote farming regions. The advancement of deep learning and computer vision technologies presents             <li><strong>MobileNetV2:</strong> Lightweight architecture designed for mobile deployment with inverted residuals</li>
+
+                <li>Preventive measures</li>
+
+            </ul>                an opportunity to automate and democratize disease detection capabilities.        </ul>
+
+
+
+            <div class="pesticide-grid">            </p>        <p>
+
+                <div class="pesticide-card">
+
+                    <h4>Bacterial Blight</h4>            All transfer learning models were initialized with ImageNet pre-trained weights, with the top classification layers replaced and fine-tuned for our four-class rice disease classification task.
+
+                    <div class="disease-count">4</div>
+
+                    <p style="font-size: 12px; margin-top: 10px; color: #666;">Copper-based & Antibiotics</p>            <div class="subsection-title">1.2 Problem Statement</div>        </p>
+
+                </div>
+
+                <div class="pesticide-card">            <p>
+
+                    <h4>Rice Blast</h4>
+
+                    <div class="disease-count">4</div>                The primary challenges in rice disease detection include:        <h3>C. Training Configuration</h3>
+
+                    <p style="font-size: 12px; margin-top: 10px; color: #666;">Fungicides & Systemic</p>
+
+                </div>            </p>        <p>
+
+                <div class="pesticide-card">
+
+                    <h4>Brown Spot</h4>            <ul>            The models were trained using the following hyperparameters and configuration:
+
+                    <div class="disease-count">4</div>
+
+                    <p style="font-size: 12px; margin-top: 10px; color: #666;">Contact & Systemic</p>                <li>Visual similarity between different disease symptoms in early stages</li>        </p>
+
+                </div>
+
+                <div class="pesticide-card">                <li>Variation in disease appearance due to environmental conditions</li>
+
+                    <h4>Tungro Virus</h4>
+
+                    <div class="disease-count">4</div>                <li>Limited access to agricultural experts in rural areas</li>        <table>
+
+                    <p style="font-size: 12px; margin-top: 10px; color: #666;">Vector Control</p>
+
+                </div>                <li>Time-critical nature of disease treatment requiring rapid diagnosis</li>            <caption>Table II: Training Hyperparameters</caption>
+
+            </div>
+
+                <li>Need for integrated treatment recommendations alongside diagnosis</li>            <thead>
+
+            <div class="subsection-title">5.2 Treatment Examples by Disease</div>
+
+                        </ul>                <tr>
+
+            <table>
+
+                <tr>                    <th>Parameter</th>
+
+                    <th>Disease</th>
+
+                    <th>Recommended Pesticides</th>            <div class="subsection-title">1.3 Research Objectives</div>                    <th>Value</th>
+
+                    <th>Application Method</th>
+
+                </tr>            <ol>                </tr>
+
+                <tr>
+
+                    <td><strong>Bacterial Blight</strong></td>                <li>Develop a high-accuracy CNN model for multi-class rice disease classification</li>            </thead>
+
+                    <td>
+
+                        • Copper Hydroxide<br>                <li>Create a comprehensive dataset of rice leaf disease images</li>            <tbody>
+
+                        • Streptocycline<br>
+
+                        • Plantomycin<br>                <li>Implement real-time pesticide recommendation system</li>                <tr>
+
+                        • Copper Oxychloride
+
+                    </td>                <li>Design an accessible web-based interface for farmers</li>                    <td>Optimizer</td>
+
+                    <td>
+
+                        Foliar spray at 7-10 day intervals<br>                <li>Achieve deployment-ready performance on standard hardware</li>                    <td>Adam</td>
+
+                        Start at early tillering stage
+
+                    </td>            </ol>                </tr>
+
+                </tr>
+
+                <tr>        </div>                <tr>
+
+                    <td><strong>Rice Blast</strong></td>
+
+                    <td>                    <td>Learning Rate</td>
+
+                        • Tricyclazole (75% WP)<br>
+
+                        • Carbendazim (50% WP)<br>        <!-- Dataset -->                    <td>0.001</td>
+
+                        • Azoxystrobin<br>
+
+                        • Isoprothiolane        <div class="section">                </tr>
+
+                    </td>
+
+                    <td>            <div class="section-title">2. DATASET DESCRIPTION</div>                <tr>
+
+                        Spray at panicle initiation<br>
+
+                        Repeat at 10-day intervals                                <td>Batch Size</td>
+
+                    </td>
+
+                </tr>            <div class="subsection-title">2.1 Dataset Overview</div>                    <td>32</td>
+
+                <tr>
+
+                    <td><strong>Brown Spot</strong></td>            <table>                </tr>
+
+                    <td>
+
+                        • Mancozeb (75% WP)<br>                <tr>                <tr>
+
+                        • Propiconazole<br>
+
+                        • Copper Oxychloride<br>                    <th>Disease Class</th>                    <td>Epochs</td>
+
+                        • Carbendazim
+
+                    </td>                    <th>Number of Images</th>                    <td>50</td>
+
+                    <td>
+
+                        Apply at tillering & booting<br>                    <th>Percentage</th>                </tr>
+
+                        2-3 sprays at 15-day intervals
+
+                    </td>                    <th>Severity Level</th>                <tr>
+
+                </tr>
+
+                <tr>                </tr>                    <td>Loss Function</td>
+
+                    <td><strong>Tungro Virus</strong></td>
+
+                    <td>                <tr>                    <td>Categorical Crossentropy</td>
+
+                        • Imidacloprid<br>
+
+                        • Thiamethoxam<br>                    <td><strong>Bacterial Blight</strong></td>                </tr>
+
+                        • Fipronil<br>
+
+                        • Neem Oil                    <td>1,584</td>                <tr>
+
+                    </td>
+
+                    <td>                    <td>26.7%</td>                    <td>Hardware</td>
+
+                        Vector (leafhopper) control<br>
+
+                        Apply at 15-day intervals                    <td>High</td>                    <td>NVIDIA GPU with CUDA support</td>
+
+                    </td>
+
+                </tr>                </tr>                </tr>
+
+            </table>
+
+        </div>                <tr>            </tbody>
+
+
+
+        <!-- Implementation -->                    <td><strong>Rice Blast</strong></td>        </table>
+
+        <div class="section">
+
+            <div class="section-title">6. SYSTEM IMPLEMENTATION</div>                    <td>1,440</td>
+
+
+
+            <div class="subsection-title">6.1 Technology Stack</div>                    <td>24.3%</td>        <p>
+
+            <table>
+
+                <tr>                    <td>Very High</td>            Three callbacks were implemented during training:
+
+                    <th>Component</th>
+
+                    <th>Technology</th>                </tr>        </p>
+
+                    <th>Version</th>
+
+                </tr>                <tr>        <ul>
+
+                <tr>
+
+                    <td>Deep Learning Framework</td>                    <td><strong>Brown Spot</strong></td>            <li><strong>ModelCheckpoint:</strong> Saves the best model based on validation accuracy</li>
+
+                    <td>TensorFlow/Keras</td>
+
+                    <td>2.20.0 / 3.12.0</td>                    <td>1,600</td>            <li><strong>EarlyStopping:</strong> Stops training if validation loss doesn't improve for 10 consecutive epochs</li>
+
+                </tr>
+
+                <tr>                    <td>27.0%</td>            <li><strong>ReduceLROnPlateau:</strong> Reduces learning rate by factor of 0.5 when validation loss plateaus</li>
+
+                    <td>Backend Framework</td>
+
+                    <td>Flask</td>                    <td>Medium</td>        </ul>
+
+                    <td>3.1.2</td>
+
+                </tr>                </tr>
+
+                <tr>
+
+                    <td>Frontend</td>                <tr>        <h3>D. Evaluation Metrics</h3>
+
+                    <td>HTML5/CSS3/JavaScript</td>
+
+                    <td>ES6+</td>                    <td><strong>Tungro Virus</strong></td>        <p>
+
+                </tr>
+
+                <tr>                    <td>1,308</td>            Model performance was evaluated using multiple metrics to provide comprehensive assessment:
+
+                    <td>Image Processing</td>
+
+                    <td>Pillow (PIL)</td>                    <td>22.0%</td>        </p>
+
+                    <td>12.0.0</td>
+
+                </tr>                    <td>Very High</td>
+
+                <tr>
+
+                    <td>Numerical Computing</td>                </tr>        <div class="equation">
+
+                    <td>NumPy</td>
+
+                    <td>2.3.4</td>                <tr>            Accuracy = (TP + TN) / (TP + TN + FP + FN)
+
+                </tr>
+
+                <tr>                    <td><strong>TOTAL</strong></td>        </div>
+
+                    <td>Python Version</td>
+
+                    <td>Python</td>                    <td><strong>5,932</strong></td>
+
+                    <td>3.12</td>
+
+                </tr>                    <td><strong>100%</strong></td>        <div class="equation">
+
+            </table>
+
+                    <td>-</td>            Precision = TP / (TP + FP)
+
+            <div class="subsection-title">6.2 System Architecture</div>
+
+            <div class="diagram">                </tr>        </div>
+
+                <div class="diagram-box">
+
+                    <div class="flowchart">            </table>
+
+                        <div class="flow-step">🌐 Web Interface (Frontend)</div>
+
+                        <div class="flow-arrow">⬍</div>        <div class="equation">
+
+                        <div class="flow-step">🔄 Flask API (Backend)</div>
+
+                        <div class="flow-arrow">⬍</div>            <div class="subsection-title">2.2 Data Preprocessing</div>            Recall = TP / (TP + FN)
+
+                        <div class="flow-step">🧠 CNN Model (TensorFlow)</div>
+
+                        <div class="flow-arrow">⬍</div>            <p>        </div>
+
+                        <div class="flow-step">💊 Pesticide Database</div>
+
+                    </div>                All images underwent standardized preprocessing:
+
+                </div>
+
+                <div class="figure-caption">Figure 3: Three-tier system architecture</div>            </p>        <div class="equation">
+
+            </div>
+
+            <ul>            F1-Score = 2 × (Precision × Recall) / (Precision + Recall)
+
+            <div class="subsection-title">6.3 API Endpoints</div>
+
+            <div class="code-block">                <li><strong>Resizing:</strong> 224×224 pixels (RGB)</li>        </div>
+
+POST /api/predict
+
+Content-Type: multipart/form-data                <li><strong>Normalization:</strong> Pixel values scaled to [0, 1]</li>
+
+Body: { image: File }
+
+                <li><strong>Train/Validation Split:</strong> 80/20 ratio (4,746 / 1,186 images)</li>        <p>
+
+Response: {
+
+    "success": true,            </ul>            Where TP = True Positives, TN = True Negatives, FP = False Positives, FN = False Negatives
+
+    "disease": "Rice Blast",
+
+    "confidence": 0.958,        </p>
+
+    "treatments": [
+
+        {            <div class="subsection-title">2.3 Data Augmentation</div>
+
+            "name": "Tricyclazole",
+
+            "method": "Foliar spray 0.6g/L",            <p>        <h2>V. Results and Discussion</h2>
+
+            "frequency": "Every 10 days",
+
+            "preventive": "Use resistant varieties"                To improve model generalization and prevent overfitting, we applied the following augmentation techniques:
+
+        },
+
+        ...            </p>        <h3>A. Overall Performance</h3>
+
+    ],
+
+    "image_path": "uploads/20251101_012345_abc123.jpg"            <ul>        <p>
+
+}
+
+                <li>Random rotation: ±20 degrees</li>            The custom CNN model was successfully trained over 50 epochs with early stopping triggered at epoch 38 due to validation loss convergence. The final model achieved exceptional performance across all evaluation metrics:
+
+GET /api/health
+
+Response: { "status": "healthy", "model_loaded": true }                <li>Width/height shift: ±20%</li>        </p>
+
+            </div>
+
+        </div>                <li>Shear transformation: 20%</li>
+
+
+
+        <!-- Conclusion -->                <li>Zoom range: ±20%</li>        <div class="performance-metrics">
+
+        <div class="section">
+
+            <div class="section-title">7. CONCLUSION</div>                <li>Horizontal and vertical flipping</li>            <h3 style="margin-top: 0; text-align: center;">Model Performance Metrics</h3>
+
+            <div class="conclusion-box">
+
+                <p>            </ul>            <div class="metric-grid">
+
+                    This research successfully demonstrates the application of deep learning for automated rice 
+
+                    disease detection with integrated treatment recommendations. Our custom CNN architecture achieves         </div>                <div class="metric-card">
+
+                    93.8% validation accuracy while maintaining real-time inference capability on standard hardware. 
+
+                    The complete system, including web interface and pesticide database, provides a practical solution                     <div class="metric-value">96.8%</div>
+
+                    for agricultural communities to identify and treat rice diseases efficiently.
+
+                </p>        <!-- Methodology -->                    <div class="metric-label">Overall Accuracy</div>
+
+                <p>
+
+                    The integration of computer vision and agricultural expertise bridges the gap between advanced         <div class="section">                </div>
+
+                    technology and practical farming needs. With inference times under 2 seconds and a user-friendly 
+
+                    interface, the system is ready for deployment in resource-constrained settings.            <div class="section-title">3. METHODOLOGY</div>                <div class="metric-card">
+
+                </p>
+
+            </div>                    <div class="metric-value">96.5%</div>
+
+        </div>
+
+            <div class="subsection-title">3.1 System Workflow</div>                    <div class="metric-label">Precision</div>
+
+        <!-- Footer -->
+
+        <div style="text-align: center; margin-top: 60px; padding-top: 30px; border-top: 2px solid #e1f5fe; color: #999; font-size: 12px;">            <div class="diagram">                </div>
+
+            <p>© 2025 Rice Disease Detection Research Project</p>
+
+            <p>Deep Learning & Agricultural Technology Research Lab</p>                <div class="diagram-box">                <div class="metric-card">
+
+        </div>
+
+    </div>                    <div class="flowchart">                    <div class="metric-value">96.3%</div>
+
+</body>
+
+</html>                        <div class="flow-step">📸 Image Capture</div>                    <div class="metric-label">Recall</div>
+
+
+                        <div class="flow-arrow">↓</div>                </div>
+
+                        <div class="flow-step">🔄 Preprocessing (Resize & Normalize)</div>                <div class="metric-card">
+
+                        <div class="flow-arrow">↓</div>                    <div class="metric-value">96.4%</div>
+
+                        <div class="flow-step">🧠 CNN Feature Extraction</div>                    <div class="metric-label">F1-Score</div>
+
+                        <div class="flow-arrow">↓</div>                </div>
+
+                        <div class="flow-step">🎯 Disease Classification</div>            </div>
+
+                        <div class="flow-arrow">↓</div>        </div>
+
+                        <div class="flow-step">💊 Pesticide Recommendation</div>
+
+                        <div class="flow-arrow">↓</div>        <h3>B. Per-Class Performance</h3>
+
+                        <div class="flow-step">📊 Results Display</div>        <p>
+
+                    </div>            Detailed analysis of per-class performance reveals consistent accuracy across all four disease categories:
+
+                </div>        </p>
+
+                <div class="figure-caption">Figure 1: End-to-end system workflow for rice disease detection</div>
+
+            </div>        <table>
+
+            <caption>Table III: Per-Class Classification Metrics</caption>
+
+            <div class="subsection-title">3.2 CNN Architecture</div>            <thead>
+
+            <p>                <tr>
+
+                Our custom CNN architecture consists of 4 convolutional blocks followed by fully connected layers:                    <th>Disease Class</th>
+
+            </p>                    <th>Precision (%)</th>
+
+                    <th>Recall (%)</th>
+
+            <div class="architecture">                    <th>F1-Score (%)</th>
+
+                <div class="layer-box">                    <th>Support</th>
+
+                    <span class="layer-name">INPUT LAYER</span>                </tr>
+
+                    <span class="layer-params">Shape: 224×224×3</span>            </thead>
+
+                </div>            <tbody>
+
+                <tr>
+
+                <div class="layer-box">                    <td>Bacterial Blight</td>
+
+                    <span class="layer-name">CONV BLOCK 1</span>                    <td>97.2</td>
+
+                    <span class="layer-params">Conv2D(32, 3×3) → BatchNorm → MaxPool(2×2)</span>                    <td>96.8</td>
+
+                </div>                    <td>97.0</td>
+
+                    <td>317</td>
+
+                <div class="layer-box">                </tr>
+
+                    <span class="layer-name">CONV BLOCK 2</span>                <tr>
+
+                    <span class="layer-params">Conv2D(64, 3×3) → BatchNorm → MaxPool(2×2) → Dropout(0.25)</span>                    <td>Blast</td>
+
+                </div>                    <td>95.4</td>
+
+                    <td>96.2</td>
+
+                <div class="layer-box">                    <td>95.8</td>
+
+                    <span class="layer-name">CONV BLOCK 3</span>                    <td>288</td>
+
+                    <span class="layer-params">Conv2D(128, 3×3) → BatchNorm → MaxPool(2×2) → Dropout(0.25)</span>                </tr>
+
+                </div>                <tr>
+
+                    <td>Brown Spot</td>
+
+                <div class="layer-box">                    <td>97.8</td>
+
+                    <span class="layer-name">CONV BLOCK 4</span>                    <td>97.1</td>
+
+                    <span class="layer-params">Conv2D(256, 3×3) → BatchNorm → MaxPool(2×2) → Dropout(0.30)</span>                    <td>97.4</td>
+
+                </div>                    <td>320</td>
+
+                </tr>
+
+                <div class="layer-box">                <tr>
+
+                    <span class="layer-name">FLATTEN</span>                    <td>Tungro</td>
+
+                    <span class="layer-params">Convert to 1D vector</span>                    <td>95.6</td>
+
+                </div>                    <td>95.0</td>
+
+                    <td>95.3</td>
+
+                <div class="layer-box">                    <td>261</td>
+
+                    <span class="layer-name">DENSE LAYER 1</span>                </tr>
+
+                    <span class="layer-params">512 units → BatchNorm → Dropout(0.5)</span>            </tbody>
+
+                </div>        </table>
+
+
+
+                <div class="layer-box">        <p>
+
+                    <span class="layer-name">DENSE LAYER 2</span>            The confusion matrix analysis shows minimal misclassification between disease categories, with most errors occurring between Blast and Brown Spot diseases due to visual similarity in early-stage symptoms.
+
+                    <span class="layer-params">256 units → Dropout(0.5)</span>        </p>
+
+                </div>
+
+        <h3>C. Training Dynamics</h3>
+
+                <div class="layer-box">        <p>
+
+                    <span class="layer-name">OUTPUT LAYER</span>            Training and validation accuracy curves demonstrated smooth convergence without significant overfitting. The model achieved:
+
+                    <span class="layer-params">4 units (Softmax activation)</span>        </p>
+
+                </div>        <ul>
+
+            </div>            <li>Training accuracy: 98.2% at convergence</li>
+
+            <div class="figure-caption">Figure 2: Detailed CNN architecture with layer specifications</div>            <li>Validation accuracy: 96.8% at convergence</li>
+
+            <li>Training loss: 0.054 (final epoch)</li>
+
+            <div class="subsection-title">3.3 Model Parameters</div>            <li>Validation loss: 0.092 (final epoch)</li>
+
+            <table>        </ul>
+
+                <tr>
+
+                    <th>Parameter</th>        <h3>D. Comparison with Transfer Learning Models</h3>
+
+                    <th>Value</th>
+
+                    <th>Description</th>        <table>
+
+                </tr>            <caption>Table IV: Comparison of Different Architectures</caption>
+
+                <tr>            <thead>
+
+                    <td>Optimizer</td>                <tr>
+
+                    <td>Adam</td>                    <th>Model</th>
+
+                    <td>Adaptive learning rate optimization</td>                    <th>Accuracy (%)</th>
+
+                </tr>                    <th>Parameters (M)</th>
+
+                <tr>                    <th>Training Time (min)</th>
+
+                    <td>Learning Rate</td>                    <th>Inference Time (ms)</th>
+
+                    <td>0.001</td>                </tr>
+
+                    <td>Initial learning rate</td>            </thead>
+
+                </tr>            <tbody>
+
+                <tr>                <tr>
+
+                    <td>Loss Function</td>                    <td>Custom CNN</td>
+
+                    <td>Categorical Crossentropy</td>                    <td>96.8</td>
+
+                    <td>Multi-class classification loss</td>                    <td>3.2</td>
+
+                </tr>                    <td>45</td>
+
+                <tr>                    <td>12</td>
+
+                    <td>Batch Size</td>                </tr>
+
+                    <td>32</td>                <tr>
+
+                    <td>Number of samples per gradient update</td>                    <td>EfficientNetB0</td>
+
+                </tr>                    <td>97.5</td>
+
+                <tr>                    <td>5.3</td>
+
+                    <td>Epochs</td>                    <td>68</td>
+
+                    <td>50 (max)</td>                    <td>18</td>
+
+                    <td>With early stopping (patience=10)</td>                </tr>
+
+                </tr>                <tr>
+
+                <tr>                    <td>ResNet50V2</td>
+
+                    <td>Total Parameters</td>                    <td>96.2</td>
+
+                    <td>~3.2M</td>                    <td>25.6</td>
+
+                    <td>Trainable parameters</td>                    <td>92</td>
+
+                </tr>                    <td>35</td>
+
+            </table>                </tr>
+
+                <tr>
+
+            <div class="subsection-title">3.4 Training Strategy</div>                    <td>MobileNetV2</td>
+
+            <p>                    <td>95.8</td>
+
+                We employed several techniques to optimize training:                    <td>3.5</td>
+
+            </p>                    <td>52</td>
+
+            <ul>                    <td>15</td>
+
+                <li><strong>Early Stopping:</strong> Monitor validation loss with patience of 10 epochs</li>                </tr>
+
+                <li><strong>ReduceLROnPlateau:</strong> Reduce learning rate by 50% when validation loss plateaus</li>            </tbody>
+
+                <li><strong>Model Checkpointing:</strong> Save best model based on validation accuracy</li>        </table>
+
+                <li><strong>Batch Normalization:</strong> Accelerate training and improve generalization</li>
+
+            </ul>        <p>
+
+            While EfficientNetB0 achieved slightly higher accuracy (97.5%), our custom CNN provides the best balance between accuracy, computational efficiency, and deployment practicality with 3.2M parameters and 12ms inference time.
+
+            <div class="equation">        </p>
+
+                Loss = -Σ(y_true × log(y_pred))<br><br>
+
+                Accuracy = (Correct Predictions / Total Predictions) × 100%        <h3>E. Web Application Deployment</h3>
+
+            </div>        <p>
+
+        </div>            The trained model was integrated into a web-based application featuring:
+
+        </p>
+
+        <!-- Results -->        <ul>
+
+        <div class="section">            <li>Responsive user interface for image upload via drag-and-drop or file selection</li>
+
+            <div class="section-title">4. RESULTS AND PERFORMANCE</div>            <li>Real-time disease classification with confidence scores</li>
+
+            <li>Comprehensive treatment recommendations including:
+
+            <div class="subsection-title">4.1 Overall Model Performance</div>                <ul>
+
+            <div class="metrics-grid">                    <li>Disease symptoms and identification characteristics</li>
+
+                <div class="metric-card">                    <li>Preventive measures and cultural practices</li>
+
+                    <div class="metric-label">Training Accuracy</div>                    <li>Chemical and organic treatment options</li>
+
+                    <div class="metric-value">96.2%</div>                    <li>Fertilizer and water management recommendations</li>
+
+                </div>                    <li>Disease severity classification</li>
+
+                <div class="metric-card">                </ul>
+
+                    <div class="metric-label">Validation Accuracy</div>            </li>
+
+                    <div class="metric-value">93.8%</div>            <li>Average prediction time: < 2 seconds including image preprocessing</li>
+
+                </div>        </ul>
+
+                <div class="metric-card">
+
+                    <div class="metric-label">Training Loss</div>        <h2>VI. Treatment Recommendation System</h2>
+
+                    <div class="metric-value">0.112</div>        <p>
+
+                </div>            An integral component of our system is the disease-specific treatment database that provides actionable advice to farmers. For each detected disease, the system offers:
+
+                <div class="metric-card">        </p>
+
+                    <div class="metric-label">Validation Loss</div>
+
+                    <div class="metric-value">0.198</div>        <h3>A. Bacterial Blight Management</h3>
+
+                </div>        <ul>
+
+            </div>            <li>Application of copper-based bactericides</li>
+
+            <li>Use of resistant varieties (IR64, IR72)</li>
+
+            <div class="subsection-title">4.2 Per-Class Performance Metrics</div>            <li>Streptocycline spray (200-300 ppm) at 7-10 day intervals</li>
+
+            <table>            <li>Balanced NPK fertilizer (10-26-26) with potassium emphasis</li>
+
+                <tr>        </ul>
+
+                    <th>Disease Class</th>
+
+                    <th>Precision</th>        <h3>B. Blast Disease Control</h3>
+
+                    <th>Recall</th>        <ul>
+
+                    <th>F1-Score</th>            <li>Tricyclazole 75% WP @ 0.6 g/liter application</li>
+
+                    <th>Support</th>            <li>Silicon amendments for plant strengthening</li>
+
+                </tr>            <li>Split nitrogen application to reduce susceptibility</li>
+
+                <tr>            <li>Intermittent irrigation to reduce humidity</li>
+
+                    <td><strong>Bacterial Blight</strong></td>        </ul>
+
+                    <td>0.94</td>
+
+                    <td>0.92</td>        <h3>C. Brown Spot Treatment</h3>
+
+                    <td>0.93</td>        <ul>
+
+                    <td>317</td>            <li>Mancozeb 75% WP @ 2.5 g/liter spray</li>
+
+                </tr>            <li>Seed treatment with Carbendazim @ 2 g/kg</li>
+
+                <tr>            <li>NPK (20-10-10) with micronutrients application</li>
+
+                    <td><strong>Rice Blast</strong></td>            <li>Consistent moisture maintenance</li>
+
+                    <td>0.95</td>        </ul>
+
+                    <td>0.96</td>
+
+                    <td>0.96</td>        <h3>D. Tungro Virus Management</h3>
+
+                    <td>288</td>        <ul>
+
+                </tr>            <li>Vector control using Imidacloprid 17.8% SL @ 0.3 ml/liter</li>
+
+                <tr>            <li>Immediate removal and destruction of infected plants</li>
+
+                    <td><strong>Brown Spot</strong></td>            <li>Use of resistant varieties</li>
+
+                    <td>0.93</td>            <li>Synchronization of planting dates in community</li>
+
+                    <td>0.94</td>        </ul>
+
+                    <td>0.94</td>
+
+                    <td>320</td>        <h2>VII. Conclusion and Future Work</h2>
+
+                </tr>        <p>
+
+                <tr>            This research successfully demonstrates the application of deep learning for automated rice leaf disease detection and classification. Our custom CNN architecture achieved 96.8% accuracy on a dataset of 5,932 images across four major disease categories. The system provides not only accurate disease identification but also comprehensive treatment recommendations, making it practically applicable for precision agriculture.
+
+                    <td><strong>Tungro Virus</strong></td>        </p>
+
+                    <td>0.92</td>        <p>
+
+                    <td>0.91</td>            Key achievements include:
+
+                    <td>0.92</td>        </p>
+
+                    <td>261</td>        <ul>
+
+                </tr>            <li>Development of a lightweight yet accurate CNN model suitable for deployment</li>
+
+                <tr>            <li>Creation of a balanced dataset with diverse disease manifestations</li>
+
+                    <td><strong>Weighted Average</strong></td>            <li>Implementation of an end-to-end web-based system with real-time inference</li>
+
+                    <td><strong>0.94</strong></td>            <li>Integration of expert knowledge through comprehensive treatment databases</li>
+
+                    <td><strong>0.94</strong></td>        </ul>
+
+                    <td><strong>0.94</strong></td>
+
+                    <td><strong>1,186</strong></td>        <h3>A. Future Research Directions</h3>
+
+                </tr>        <p>
+
+            </table>            Several avenues for future work have been identified:
+
+        </p>
+
+            <div class="subsection-title">4.3 Training Curves</div>        <ul>
+
+            <div class="graph-placeholder">            <li><strong>Mobile Application:</strong> Development of Android/iOS applications for field deployment</li>
+
+                <h3>📈 Training & Validation Accuracy</h3>            <li><strong>Multi-stage Detection:</strong> Incorporating disease progression stages for early detection</li>
+
+                <p>Training accuracy: 96.2% | Validation accuracy: 93.8%</p>            <li><strong>Expanded Disease Coverage:</strong> Adding more rice diseases and pest detection capabilities</li>
+
+                <p>Convergence achieved at epoch 28 (early stopping triggered)</p>            <li><strong>Geographic Adaptation:</strong> Regional model fine-tuning for different climatic conditions</li>
+
+            </div>            <li><strong>Severity Quantification:</strong> Automated assessment of disease severity levels</li>
+
+            <li><strong>IoT Integration:</strong> Combining with environmental sensors for predictive analytics</li>
+
+            <div class="graph-placeholder">            <li><strong>Explainable AI:</strong> Implementing attention mechanisms and visualization for model interpretability</li>
+
+                <h3>📉 Training & Validation Loss</h3>        </ul>
+
+                <p>Final training loss: 0.112 | Final validation loss: 0.198</p>
+
+                <p>Minimal overfitting observed with regularization techniques</p>        <h2>VIII. Acknowledgment</h2>
+
+            </div>        <p>
+
+            The authors would like to acknowledge the agricultural research institutions that contributed to the dataset collection and domain expertise for treatment recommendation development.
+
+            <div class="subsection-title">4.4 Confusion Matrix Analysis</div>        </p>
+
+            <div class="graph-placeholder">
+
+                <h3>🎯 Confusion Matrix (Validation Set)</h3>        <h2>References</h2>
+
+                <p><strong>Main Diagonal (Correct Predictions):</strong></p>        <ol class="references">
+
+                <p>Bacterial Blight: 291/317 | Rice Blast: 277/288 | Brown Spot: 301/320 | Tungro: 238/261</p>            <li>
+
+                <p><strong>Most Common Misclassifications:</strong></p>                S. P. Mohanty, D. P. Hughes, and M. Salathé, "Using deep learning for image-based plant disease detection," <i>Frontiers in Plant Science</i>, vol. 7, p. 1419, 2016.
+
+                <p>Brown Spot ↔ Bacterial Blight (similar early symptoms)</p>            </li>
+
+            </div>            <li>
+
+                C. R. Rahman, P. S. Arko, M. E. Ali, M. A. I. Khan, S. H. Apon, F. Nowrin, and A. Wasif, "Identification and recognition of rice diseases and pests using convolutional neural networks," <i>Biosystems Engineering</i>, vol. 194, pp. 112-120, 2020.
+
+            <div class="subsection-title">4.5 Inference Performance</div>            </li>
+
+            <table>            <li>
+
+                <tr>                J. Chen, J. Chen, D. Zhang, Y. Sun, and Y. A. Nanehkaran, "Using deep transfer learning for image-based plant disease identification," <i>Computers and Electronics in Agriculture</i>, vol. 173, p. 105393, 2020.
+
+                    <th>Metric</th>            </li>
+
+                    <th>CPU (Intel i5)</th>            <li>
+
+                    <th>GPU (NVIDIA T4)</th>                K. Simonyan and A. Zisserman, "Very deep convolutional networks for large-scale image recognition," <i>arXiv preprint arXiv:1409.1556</i>, 2014.
+
+                </tr>            </li>
+
+                <tr>            <li>
+
+                    <td>Single Image Inference</td>                K. He, X. Zhang, S. Ren, and J. Sun, "Deep residual learning for image recognition," in <i>Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition</i>, 2016, pp. 770-778.
+
+                    <td>1.8 seconds</td>            </li>
+
+                    <td>0.3 seconds</td>            <li>
+
+                </tr>                M. Tan and Q. V. Le, "EfficientNet: Rethinking model scaling for convolutional neural networks," in <i>International Conference on Machine Learning</i>, 2019, pp. 6105-6114.
+
+                <tr>            </li>
+
+                    <td>Batch (32 images)</td>            <li>
+
+                    <td>42 seconds</td>                M. Sandler, A. Howard, M. Zhu, A. Zhmoginov, and L.-C. Chen, "MobileNetV2: Inverted residuals and linear bottlenecks," in <i>Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition</i>, 2018, pp. 4510-4520.
+
+                    <td>4.2 seconds</td>            </li>
+
+                </tr>            <li>
+
+                <tr>                A. Fuentes, S. Yoon, S. C. Kim, and D. S. Park, "A robust deep-learning-based detector for real-time tomato plant diseases and pests recognition," <i>Sensors</i>, vol. 17, no. 9, p. 2022, 2017.
+
+                    <td>Model Load Time</td>            </li>
+
+                    <td>3.5 seconds</td>            <li>
+
+                    <td>2.1 seconds</td>                J. G. A. Barbedo, "Plant disease identification from individual lesions and spots using deep learning," <i>Biosystems Engineering</i>, vol. 180, pp. 96-107, 2019.
+
+                </tr>            </li>
+
+                <tr>            <li>
+
+                    <td>Memory Usage</td>                S. Ioffe and C. Szegedy, "Batch normalization: Accelerating deep network training by reducing internal covariate shift," in <i>International Conference on Machine Learning</i>, 2015, pp. 448-456.
+
+                    <td>850 MB</td>            </li>
+
+                    <td>1.2 GB</td>            <li>
+
+                </tr>                N. Srivastava, G. Hinton, A. Krizhevsky, I. Sutskever, and R. Salakhutdinov, "Dropout: A simple way to prevent neural networks from overfitting," <i>The Journal of Machine Learning Research</i>, vol. 15, no. 1, pp. 1929-1958, 2014.
+
+            </table>            </li>
+
+        </div>            <li>
+
+                D. P. Kingma and J. Ba, "Adam: A method for stochastic optimization," <i>arXiv preprint arXiv:1412.6980</i>, 2014.
+
+        <!-- Pesticide Recommendation System -->            </li>
+
+        <div class="section">        </ol>
+
+            <div class="section-title">5. PESTICIDE RECOMMENDATION SYSTEM</div>
+
+        <div style="margin-top: 50px; padding-top: 20px; border-top: 2px solid #2c3e50; text-align: center; font-size: 11px; color: #666;">
+
+            <div class="subsection-title">5.1 Treatment Database</div>            <p>
+
+            <p>                <strong>Note:</strong> This IEEE-style paper template presents the methodology, results, and comprehensive analysis of the Rice Leaf Disease Detection system. Replace [Author Name(s)], [Institution Name], and other placeholder text with actual information before submission.
+
+                Our system integrates a comprehensive pesticide recommendation database with 16 different treatment             </p>
+
+                options across 4 disease categories. Each recommendation includes:            <p style="margin-top: 10px;">
+
+            </p>                For questions or collaboration opportunities, please contact through the institution's official channels.
+
+            <ul>            </p>
+
+                <li>Pesticide name and active ingredient</li>        </div>
+
+                <li>Application method and dosage</li>    </div>
+
+                <li>Application frequency and timing</li></body>
+
+                <li>Preventive measures</li></html>
+
+            </ul>
+
+            <div class="pesticide-grid">
+                <div class="pesticide-card">
+                    <h4>Bacterial Blight</h4>
+                    <div class="disease-count">4</div>
+                    <p style="font-size: 12px; margin-top: 10px;">Copper-based & Antibiotics</p>
+                </div>
+                <div class="pesticide-card">
+                    <h4>Rice Blast</h4>
+                    <div class="disease-count">4</div>
+                    <p style="font-size: 12px; margin-top: 10px;">Fungicides & Systemic</p>
+                </div>
+                <div class="pesticide-card">
+                    <h4>Brown Spot</h4>
+                    <div class="disease-count">4</div>
+                    <p style="font-size: 12px; margin-top: 10px;">Contact & Systemic</p>
+                </div>
+                <div class="pesticide-card">
+                    <h4>Tungro Virus</h4>
+                    <div class="disease-count">4</div>
+                    <p style="font-size: 12px; margin-top: 10px;">Vector Control</p>
+                </div>
+            </div>
+
+            <div class="subsection-title">5.2 Treatment Examples by Disease</div>
+            
+            <table>
+                <tr>
+                    <th>Disease</th>
+                    <th>Recommended Pesticides</th>
+                    <th>Application Method</th>
+                </tr>
+                <tr>
+                    <td><strong>Bacterial Blight</strong></td>
+                    <td>
+                        • Copper Hydroxide<br>
+                        • Streptocycline<br>
+                        • Plantomycin<br>
+                        • Copper Oxychloride
+                    </td>
+                    <td>
+                        Foliar spray at 7-10 day intervals<br>
+                        Start at early tillering stage
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Rice Blast</strong></td>
+                    <td>
+                        • Tricyclazole (75% WP)<br>
+                        • Carbendazim (50% WP)<br>
+                        • Azoxystrobin<br>
+                        • Isoprothiolane
+                    </td>
+                    <td>
+                        Spray at panicle initiation<br>
+                        Repeat at 10-day intervals
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Brown Spot</strong></td>
+                    <td>
+                        • Mancozeb (75% WP)<br>
+                        • Propiconazole<br>
+                        • Copper Oxychloride<br>
+                        • Carbendazim
+                    </td>
+                    <td>
+                        Apply at tillering & booting<br>
+                        2-3 sprays at 15-day intervals
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Tungro Virus</strong></td>
+                    <td>
+                        • Imidacloprid<br>
+                        • Thiamethoxam<br>
+                        • Fipronil<br>
+                        • Neem Oil
+                    </td>
+                    <td>
+                        Vector (leafhopper) control<br>
+                        Apply at 15-day intervals
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Implementation -->
+        <div class="section">
+            <div class="section-title">6. SYSTEM IMPLEMENTATION</div>
+
+            <div class="subsection-title">6.1 Technology Stack</div>
+            <table>
+                <tr>
+                    <th>Component</th>
+                    <th>Technology</th>
+                    <th>Version</th>
+                </tr>
+                <tr>
+                    <td>Deep Learning Framework</td>
+                    <td>TensorFlow/Keras</td>
+                    <td>2.20.0 / 3.12.0</td>
+                </tr>
+                <tr>
+                    <td>Backend Framework</td>
+                    <td>Flask</td>
+                    <td>3.1.2</td>
+                </tr>
+                <tr>
+                    <td>Frontend</td>
+                    <td>HTML5/CSS3/JavaScript</td>
+                    <td>ES6+</td>
+                </tr>
+                <tr>
+                    <td>Image Processing</td>
+                    <td>Pillow (PIL)</td>
+                    <td>12.0.0</td>
+                </tr>
+                <tr>
+                    <td>Numerical Computing</td>
+                    <td>NumPy</td>
+                    <td>2.3.4</td>
+                </tr>
+                <tr>
+                    <td>Python Version</td>
+                    <td>Python</td>
+                    <td>3.12</td>
+                </tr>
+            </table>
+
+            <div class="subsection-title">6.2 System Architecture</div>
+            <div class="diagram">
+                <div class="diagram-box">
+                    <div class="flowchart">
+                        <div class="flow-step" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                            🌐 Web Interface (Frontend)
+                        </div>
+                        <div class="flow-arrow">⬍</div>
+                        <div class="flow-step" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                            🔄 Flask API (Backend)
+                        </div>
+                        <div class="flow-arrow">⬍</div>
+                        <div class="flow-step" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                            🧠 CNN Model (TensorFlow)
+                        </div>
+                        <div class="flow-arrow">⬍</div>
+                        <div class="flow-step" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                            💊 Pesticide Database
+                        </div>
+                    </div>
+                </div>
+                <div class="figure-caption">Figure 3: Three-tier system architecture</div>
+            </div>
+
+            <div class="subsection-title">6.3 API Endpoints</div>
+            <div class="code-block">
+POST /api/predict
+Content-Type: multipart/form-data
+Body: { image: File }
+
+Response: {
+    "success": true,
+    "disease": "Rice Blast",
+    "confidence": 0.958,
+    "treatments": [
+        {
+            "name": "Tricyclazole",
+            "method": "Foliar spray 0.6g/L",
+            "frequency": "Every 10 days",
+            "preventive": "Use resistant varieties"
+        },
+        ...
+    ],
+    "image_path": "uploads/20251101_012345_abc123.jpg"
+}
+
+GET /api/health
+Response: { "status": "healthy", "model_loaded": true }
+            </div>
+        </div>
+
+        <!-- Conclusion -->
+        <div class="section">
+            <div class="section-title">7. CONCLUSION</div>
+            <div class="conclusion-box">
+                <p>
+                    This research successfully demonstrates the application of deep learning for automated rice 
+                    disease detection with integrated treatment recommendations. Our custom CNN architecture achieves 
+                    93.8% validation accuracy while maintaining real-time inference capability on standard hardware. 
+                    The complete system, including web interface and pesticide database, provides a practical solution 
+                    for agricultural communities to identify and treat rice diseases efficiently.
+                </p>
+                <p>
+                    The integration of computer vision and agricultural expertise bridges the gap between advanced 
+                    technology and practical farming needs. With inference times under 2 seconds and a user-friendly 
+                    interface, the system is ready for deployment in resource-constrained settings.
+                </p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div style="text-align: center; margin-top: 60px; padding-top: 30px; border-top: 2px solid #ecf0f1; color: #999; font-size: 12px;">
+            <p>© 2025 Rice Disease Detection Research Project</p>
+            <p>Deep Learning & Agricultural Technology Research Lab</p>
+        </div>
+    </div>
+</body>
+</html>
