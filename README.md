@@ -1,6 +1,6 @@
-# Rice Leaf Disease Detection System
+# 🌾 Rice Leaf Disease Detection System
 
-A complete deep learning system for automated detection and classification of rice leaf diseases using Convolutional Neural Networks (CNN) and TensorFlow.
+An intelligent deep learning system for automated detection and classification of rice leaf diseases with **healthy leaf detection**, using Convolutional Neural Networks (CNN), TensorFlow, and Flask backend API.
 
 ## 📁 Project Structure
 
@@ -11,14 +11,25 @@ cap/
 │   ├── Blast/                       # 1,440 images
 │   ├── Brownspot/                   # 1,600 images
 │   └── Tungro/                      # 1,308 images
-├── website/                         # Web application
+├── website/                         # Web application frontend
 │   ├── index.html                   # Main website interface
 │   ├── style.css                    # Styling
-│   └── script.js                    # Functionality
-├── rice_disease_detection.ipynb    # Training notebook
+│   └── script.js                    # Frontend functionality
+├── models/                          # Trained models
+│   ├── rice_disease_model.h5       # CNN model
+│   └── class_indices.json          # Class mappings
+├── uploads/                         # User uploaded images
+├── app_simple.py                   # Flask backend API (✨ NEW)
+├── train_on_colab.ipynb            # Google Colab training (✨ UPDATED)
+├── rice_disease_detection.ipynb    # Local training notebook
+├── train_model.py                  # Training script
+├── train_simple.py                 # Simplified training
 ├── dataset_analysis.py             # Dataset analysis script
 ├── dataset_analysis.json           # Dataset statistics
+├── requirements.txt                # Python dependencies
+├── run_server.bat                  # Windows server launcher
 ├── paper.html                      # IEEE research paper
+├── .gitignore                      # Git ignore rules (✨ NEW)
 └── README.md                       # This file
 ```
 
@@ -37,7 +48,57 @@ cap/
 ### Prerequisites
 
 ```bash
-pip install tensorflow numpy pandas matplotlib seaborn scikit-learn pillow jupyter
+# Create virtual environment (recommended)
+python -m venv venv
+venv\Scripts\activate  # Windows
+# source venv/bin/activate  # Linux/Mac
+
+# Install dependencies
+pip install -r requirements.txt
+```
+
+**Requirements:**
+- Python 3.8+
+- TensorFlow 2.10+
+- Flask 2.3+
+- 8GB+ RAM
+- GPU (optional, for training)
+
+### Quick Start (Using Pre-trained Model)
+
+1. **Start the Flask Backend:**
+```bash
+# Windows
+run_server.bat
+
+# Or manually
+python app_simple.py
+```
+
+2. **Open your browser:**
+```
+http://localhost:5000
+```
+
+3. **Upload rice leaf images** and get instant results! ✨
+
+### Features
+
+✅ **Smart Detection System:**
+- ❌ Rejects non-rice plant images
+- ✅ Detects healthy rice leaves
+- 🔴 Identifies 4 rice diseases with 85%+ confidence
+- 💊 Provides treatment recommendations
+
+✅ **Validation Logic:**
+```
+Upload Image
+    ↓
+Is it a rice plant? → NO → Error: "NOT A RICE PLANT!"
+    ↓ YES
+Is it healthy? → YES → Show: "HEALTHY LEAF" + care tips
+    ↓ NO
+Detect disease → Show: Disease + Treatment + Pesticides
 ```
 
 ### Step 1: Analyze Dataset
@@ -50,7 +111,37 @@ python dataset_analysis.py
 
 This generates `dataset_analysis.json` with detailed statistics.
 
-### Step 2: Train the Model
+### Step 2: Train the Model (Google Colab - Recommended)
+
+**New Enhanced Training Notebook!** 🎉
+
+1. Open `train_on_colab.ipynb` in Google Colab
+2. Set runtime to GPU: `Runtime → Change runtime type → GPU`
+3. Run all cells (Ctrl+F9)
+4. Wait 10-15 minutes for training
+5. Download all generated files
+
+**New Features in train_on_colab.ipynb:**
+
+📊 **Comprehensive Visualizations:**
+- 6-panel detailed training analysis
+- Accuracy & loss graphs with moving averages
+- Overfitting detection graphs
+- Advanced performance metrics
+
+📋 **Detailed Tables:**
+- Table 1: Epoch-by-epoch training history (highlights best epoch)
+- Table 2: Model configuration & performance summary
+- Table 3: Per-class metrics (Precision, Recall, F1-Score)
+
+📥 **Auto-Downloads:**
+- Model files (.h5, .json)
+- 4 visualization PNGs
+- 4 CSV files with detailed metrics
+
+The notebook generates **10 files** total for complete analysis!
+
+### Alternative: Local Training
 
 Open and run the Jupyter notebook:
 
@@ -183,11 +274,46 @@ results/
 
 ## 🌐 Web Deployment
 
-### Current Setup (Static Demo)
-- Runs entirely in browser
-- Uses mock predictions
-- Instant response
-- No backend required
+### Current Setup ✅ (Flask Backend API)
+
+**The app is production-ready with a Flask backend!**
+
+```bash
+# Start server
+python app_simple.py
+
+# Server runs at http://localhost:5000
+```
+
+**Features:**
+- ✅ Real CNN model predictions (not mock data)
+- ✅ Non-rice plant rejection with strict validation
+- ✅ Healthy rice leaf detection
+- ✅ Disease detection with 85%+ confidence requirement
+- ✅ Comprehensive treatment recommendations
+- ✅ Image upload handling
+- ✅ CORS enabled for frontend
+- ✅ Beautiful UI with real-time results
+
+**API Endpoints:**
+```
+GET  /                     → Website interface
+GET  /api/health          → Health check
+POST /api/predict         → Disease prediction
+GET  /uploads/<filename>  → Uploaded images
+```
+
+**Response Format:**
+```json
+{
+  "success": true,
+  "healthy": false,
+  "disease": "Rice Blast",
+  "confidence": 97.5,
+  "pesticides": [...],
+  "preventive_measures": [...]
+}
+```
 
 ### Production Deployment Options
 
