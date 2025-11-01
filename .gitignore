@@ -1,0 +1,137 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environment
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.venv/
+
+# PyCharm
+.idea/
+*.iml
+*.iws
+.idea_modules/
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/*
+*.ipynb_checkpoints
+
+# TensorFlow/Keras
+*.h5
+*.hdf5
+*.pb
+*.pbtxt
+*.ckpt
+*.ckpt.data-*
+*.ckpt.index
+*.ckpt.meta
+saved_model/
+checkpoints/
+
+# Model files (except the main one you want to keep)
+models/*.h5
+!models/rice_disease_model.h5
+models/*.hdf5
+models/*.ckpt
+models/*.pb
+
+# Uploads folder (user uploaded images)
+uploads/*
+!uploads/.gitkeep
+
+# Dataset (large files)
+Rice\ Leaf\ Disease\ Images/
+*.zip
+*.tar
+*.tar.gz
+*.rar
+dataset/
+data/
+datasets/
+
+# Logs
+*.log
+logs/
+tensorboard/
+*.out
+*.err
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Test coverage
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Analysis files
+*.csv
+*.png
+!paper.html
+confusion_matrix.png
+training_curves.png
+detailed_training_analysis.png
+advanced_accuracy_analysis.png
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+.#*
+
+# Git
+*.orig
+
+# Package files
+*.whl
