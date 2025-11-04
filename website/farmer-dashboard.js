@@ -2,6 +2,11 @@
 const API_URL = 'http://127.0.0.1:5000';
 let map = null;
 let userLocation = null;
+let allMarkers = []; // Store all markers for search functionality
+let searchMarkers = []; // Store search result markers
+let userMarker = null;
+let userCircle = null;
+let watchId = null;
 
 // Check authentication on page load
 window.addEventListener('DOMContentLoaded', () => {
@@ -218,8 +223,17 @@ function initializeMap() {
         center: [defaultLat, defaultLng],
         zoom: 13,
         zoomControl: true,
-        scrollWheelZoom: true
+        scrollWheelZoom: true,
+        doubleClickZoom: true,
+        touchZoom: true,
+        boxZoom: true,
+        keyboard: true
     });
+
+    // Fix map display issues
+    setTimeout(() => {
+        map.invalidateSize();
+    }, 100);
 
     // Add multiple tile layer options
     const streetMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -230,7 +244,8 @@ function initializeMap() {
 
     const satelliteMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
         attribution: 'Tiles © Esri',
-        maxZoom: 19
+        maxZoom: 19,
+        minZoom: 5
     });
 
     // Add default layer
@@ -422,6 +437,14 @@ async function loadPesticideShops() {
                     icon: shopIcon
                 }).addTo(map);
                 
+                // Add permanent tooltip label
+                marker.bindTooltip(shop.name, {
+                    permanent: false,
+                    direction: 'top',
+                    className: 'map-label',
+                    offset: [0, -10]
+                });
+                
                 marker.bindPopup(`
                     <div style="min-width: 200px; text-align: left;">
                         <h4 style="margin: 0 0 10px 0; color: #2C5F7C;">${shop.name}</h4>
@@ -445,6 +468,15 @@ async function loadPesticideShops() {
                         </div>
                     </div>
                 `);
+                
+                // Store marker for search
+                allMarkers.push({
+                    marker: marker,
+                    name: shop.name,
+                    type: 'shop',
+                    lat: shop.location.latitude,
+                    lng: shop.location.longitude
+                });
                 
                 // Add connecting line from user location to shop if location available
                 if (userLocation) {
@@ -596,12 +628,29 @@ async function loadNearbyPlaces(lat, lng) {
                 
                 const marker = L.marker([element.lat, element.lon], { icon: placeIcon }).addTo(map);
                 
+                // Add permanent tooltip label
+                marker.bindTooltip(name, {
+                    permanent: false,
+                    direction: 'top',
+                    className: 'map-label',
+                    offset: [0, -10]
+                });
+                
                 marker.bindPopup(`
                     <div style="text-align: center;">
                         <strong>${iconInfo.icon} ${name}</strong><br>
                         <small>${amenity}</small>
                     </div>
                 `);
+                
+                // Store marker for search
+                allMarkers.push({
+                    marker: marker,
+                    name: name,
+                    type: amenity,
+                    lat: element.lat,
+                    lng: element.lon
+                });
             }
         });
         
@@ -678,6 +727,79 @@ function toRad(degrees) {
 
 function openDirections(lat, lng) {
     window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`, '_blank');
+}
+
+// Map Search Function
+function searchMap() {
+    const searchInput = document.getElementById('mapSearch');
+    const searchTerm = searchInput.value.trim().toLowerCase();
+    
+    if (!searchTerm) {
+        alert('Please enter a search term');
+        return;
+    }
+    
+    // Clear previous search results
+    searchMarkers.forEach(marker => map.removeLayer(marker));
+    searchMarkers = [];
+    
+    // Search in all markers
+    const results = allMarkers.filter(item => 
+        item.name.toLowerCase().includes(searchTerm) ||
+        item.type.toLowerCase().includes(searchTerm)
+    );
+    
+    if (results.length === 0) {
+        alert(`No results found for "${searchTerm}"`);
+        return;
+    }
+    
+    // If only one result, zoom to it and open popup
+    if (results.length === 1) {
+        const result = results[0];
+        map.setView([result.lat, result.lng], 16);
+        result.marker.openPopup();
+        
+        // Highlight the marker temporarily
+        const highlightCircle = L.circle([result.lat, result.lng], {
+            color: '#FFD700',
+            fillColor: '#FFD700',
+            fillOpacity: 0.3,
+            radius: 100
+        }).addTo(map);
+        searchMarkers.push(highlightCircle);
+        
+        setTimeout(() => {
+            map.removeLayer(highlightCircle);
+        }, 3000);
+    } else {
+        // Multiple results - fit bounds to show all
+        const bounds = L.latLngBounds(results.map(r => [r.lat, r.lng]));
+        map.fitBounds(bounds, { padding: [50, 50] });
+        
+        // Open all popups for results
+        results.forEach(result => {
+            result.marker.openPopup();
+            
+            // Add highlight circles
+            const highlightCircle = L.circle([result.lat, result.lng], {
+                color: '#FFD700',
+                fillColor: '#FFD700',
+                fillOpacity: 0.2,
+                radius: 80
+            }).addTo(map);
+            searchMarkers.push(highlightCircle);
+        });
+        
+        // Show results count
+        alert(`Found ${results.length} results for "${searchTerm}"`);
+        
+        // Remove highlights after 5 seconds
+        setTimeout(() => {
+            searchMarkers.forEach(marker => map.removeLayer(marker));
+            searchMarkers = [];
+        }, 5000);
+    }
 }
 
 // Logout
