@@ -1,1757 +1,880 @@
-<!DOCTYPE html><!DOCTYPE html><!DOCTYPE html><!DOCTYPE html>
+<!DOCTYPE html><!DOCTYPE html><!DOCTYPE html>
 
 <html lang="en">
 
-<head><html lang="en">
+<head><html lang="en"><html lang="en">
 
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"><head><html lang="en"><html lang="en">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><head><head>
 
     <title>Rice Leaf Disease Detection - Research Paper</title>
 
-    <style>    <meta charset="UTF-8">
+    <style>    <meta charset="UTF-8">    <meta charset="UTF-8">
 
         * {
 
-            margin: 0;    <meta name="viewport" content="width=device-width, initial-scale=1.0"><head><head>
+            margin: 0;    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
             padding: 0;
 
-            box-sizing: border-box;    <title>Rice Leaf Disease Detection - Research Paper</title>
+            box-sizing: border-box;    <title>Rice Leaf Disease Detection Using Deep Learning - Research Paper</title>    <title>Rice Leaf Disease Detection Using Deep Learning - IEEE Paper</title>
 
         }
 
-    <style>    <meta charset="UTF-8">    <meta charset="UTF-8">
+    <style>    <style>
 
         body {
 
-            font-family: 'Georgia', 'Times New Roman', serif;        * {
+            font-family: 'Georgia', 'Times New Roman', serif;        * {        * {
 
             line-height: 1.8;
 
-            color: #333;            margin: 0;    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            color: #333;            margin: 0;            margin: 0;
 
-            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 50%, #90caf9 100%);
+            background: #f5f5f5;
 
-            background-attachment: fixed;            padding: 0;
-
-            padding: 40px 20px;
-
-            min-height: 100vh;            box-sizing: border-box;    <title>Rice Leaf Disease Detection Using Deep Learning - Research Paper</title>    <title>Rice Leaf Disease Detection Using Deep Learning - IEEE Paper</title>
+            padding: 40px 20px;            padding: 0;            padding: 0;
 
         }
 
-        }
+            box-sizing: border-box;            box-sizing: border-box;
 
         .paper-container {
 
-            max-width: 900px;    <style>    <style>
+            max-width: 900px;        }        }
 
             margin: 0 auto;
 
-            background: white;        body {
+            background: white;
 
             padding: 60px 80px;
 
-            box-shadow: 0 10px 50px rgba(3, 169, 244, 0.3);            font-family: 'Georgia', 'Times New Roman', serif;        * {        * {
+            box-shadow: 0 0 30px rgba(0,0,0,0.1);        body {        body {
 
-            border-radius: 15px;
+            border-radius: 8px;
 
-            border: 1px solid rgba(79, 195, 247, 0.2);            line-height: 1.8;
-
-            animation: fadeIn 0.8s ease-out;
-
-        }            color: #333;            margin: 0;            margin: 0;
+        }            font-family: 'Georgia', 'Times New Roman', serif;            font-family: 'Times New Roman', Times, serif;
 
 
 
-        @keyframes fadeIn {            background: #f5f5f5;
+        .header {            line-height: 1.8;            line-height: 1.6;
 
-            from {
+            text-align: center;
 
-                opacity: 0;            padding: 40px 20px;            padding: 0;            padding: 0;
-
-                transform: translateY(20px);
-
-            }        }
-
-            to {
-
-                opacity: 1;            box-sizing: border-box;            box-sizing: border-box;
-
-                transform: translateY(0);
-
-            }        .paper-container {
-
-        }
-
-            max-width: 900px;        }        }
-
-        .header {
-
-            text-align: center;            margin: 0 auto;
-
-            margin-bottom: 40px;
-
-            border-bottom: 3px solid #03a9f4;            background: white;
-
-            padding-bottom: 30px;
-
-        }            padding: 60px 80px;
-
-
-
-        .title {            box-shadow: 0 0 30px rgba(0,0,0,0.1);        body {        body {
-
-            font-size: 28px;
-
-            font-weight: bold;            border-radius: 8px;
-
-            color: #01579b;
-
-            margin-bottom: 20px;        }            font-family: 'Georgia', 'Times New Roman', serif;            font-family: 'Times New Roman', Times, serif;
-
-            line-height: 1.4;
-
-        }
-
-
-
-        .authors {        .header {            line-height: 1.8;            line-height: 1.6;
-
-            font-size: 16px;
-
-            font-style: italic;            text-align: center;
-
-            color: #555;
-
-            margin-bottom: 10px;            margin-bottom: 40px;            color: #333;            color: #333;
-
-        }
+            margin-bottom: 40px;            color: #333;            color: #333;
 
             border-bottom: 3px solid #03a9f4;
 
-        .affiliation {
-
-            font-size: 14px;            padding-bottom: 30px;            background: #f5f5f5;            background: #fff;
-
-            color: #777;
-
-            margin-bottom: 5px;        }
+            padding-bottom: 30px;            background: #f5f5f5;            background: #fff;
 
         }
 
             padding: 20px;            padding: 20px;
 
-        .date {
+        .title {
 
-            font-size: 14px;        .title {
-
-            color: #999;
-
-            margin-top: 10px;            font-size: 28px;        }            max-width: 1200px;
-
-        }
+            font-size: 28px;        }            max-width: 1200px;
 
             font-weight: bold;
 
-        .section {
-
-            margin: 40px 0;            color: #01579b;            margin: 0 auto;
-
-        }
+            color: #01579b;            margin: 0 auto;
 
             margin-bottom: 20px;
 
-        .section-title {
-
-            font-size: 20px;            line-height: 1.4;        .paper-container {        }
-
-            font-weight: bold;
-
-            color: #01579b;        }
-
-            margin-bottom: 15px;
-
-            padding-bottom: 8px;            max-width: 900px;
-
-            border-bottom: 2px solid #4fc3f7;
-
-        }        .authors {
-
-
-
-        .subsection-title {            font-size: 16px;            margin: 0 auto;        .paper-container {
-
-            font-size: 18px;
-
-            font-weight: bold;            font-style: italic;
-
-            color: #0277bd;
-
-            margin: 25px 0 12px 0;            color: #555;            background: white;            background: white;
+            line-height: 1.4;        .paper-container {        }
 
         }
 
-            margin-bottom: 10px;
+            max-width: 900px;
 
-        .abstract {
+        .authors {
 
-            background: linear-gradient(135deg, #e1f5fe 0%, #b3e5fc 100%);        }            padding: 60px;            padding: 40px;
-
-            padding: 25px;
-
-            border-left: 4px solid #03a9f4;
+            font-size: 16px;            margin: 0 auto;        .paper-container {
 
             font-style: italic;
 
-            margin: 30px 0;        .affiliation {            box-shadow: 0 0 20px rgba(0,0,0,0.1);            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            color: #555;            background: white;            background: white;
 
-            border-radius: 8px;
+            margin-bottom: 10px;
 
-        }            font-size: 14px;
+        }            padding: 60px;            padding: 40px;
 
 
 
-        .keywords {            color: #777;        }        }
+        .affiliation {            box-shadow: 0 0 20px rgba(0,0,0,0.1);            box-shadow: 0 0 20px rgba(0,0,0,0.1);
 
-            margin-top: 15px;
+            font-size: 14px;
 
-            font-size: 14px;            margin-bottom: 5px;
+            color: #777;        }        }
 
-        }
-
-        }
-
-        .keywords strong {
-
-            color: #01579b;
+            margin-bottom: 5px;
 
         }
+
+
 
         .date {        .header {        .header {
 
-        p {
+            font-size: 14px;
 
-            text-align: justify;            font-size: 14px;
+            color: #999;            text-align: center;            text-align: center;
 
-            margin-bottom: 15px;
+            margin-top: 10px;
 
-        }            color: #999;            text-align: center;            text-align: center;
-
-
-
-        .diagram {            margin-top: 10px;
-
-            margin: 30px 0;
-
-            text-align: center;        }            margin-bottom: 40px;            margin-bottom: 40px;
-
-        }
+        }            margin-bottom: 40px;            margin-bottom: 40px;
 
 
 
-        .diagram-box {
+        .section {            border-bottom: 3px solid #2c3e50;            border-bottom: 2px solid #2c3e50;
 
-            background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);        .section {            border-bottom: 3px solid #2c3e50;            border-bottom: 2px solid #2c3e50;
+            margin: 40px 0;
 
-            border: 2px solid #4fc3f7;
-
-            border-radius: 12px;            margin: 40px 0;
-
-            padding: 30px;
-
-            margin: 20px auto;        }            padding-bottom: 30px;            padding-bottom: 20px;
-
-            box-shadow: 0 8px 16px rgba(79, 195, 247, 0.3);
-
-        }
+        }            padding-bottom: 30px;            padding-bottom: 20px;
 
 
 
-        .flowchart {        .section-title {        }        }
+        .section-title {        }        }
 
-            display: flex;
+            font-size: 20px;
 
-            flex-direction: column;            font-size: 20px;
-
-            align-items: center;
-
-            gap: 15px;            font-weight: bold;
-
-        }
+            font-weight: bold;
 
             color: #01579b;
 
-        .flow-step {
+            margin-bottom: 15px;        .title {        h1 {
 
-            background: linear-gradient(135deg, #4fc3f7 0%, #03a9f4 100%);            margin-bottom: 15px;        .title {        h1 {
+            padding-bottom: 8px;
 
-            color: white;
-
-            padding: 20px 40px;            padding-bottom: 8px;
-
-            border-radius: 12px;
-
-            font-weight: bold;            border-bottom: 2px solid #4fc3f7;            font-size: 28px;            font-size: 24px;
-
-            min-width: 300px;
-
-            text-align: center;        }
-
-            box-shadow: 0 6px 20px rgba(79, 195, 247, 0.4);
-
-            transition: transform 0.3s ease;            font-weight: bold;            font-weight: bold;
+            border-bottom: 2px solid #4fc3f7;            font-size: 28px;            font-size: 24px;
 
         }
+
+            font-weight: bold;            font-weight: bold;
 
         .subsection-title {
 
-        .flow-step:hover {
-
-            transform: translateY(-5px);            font-size: 18px;            color: #2c3e50;            margin-bottom: 20px;
-
-            box-shadow: 0 10px 30px rgba(79, 195, 247, 0.5);
-
-        }            font-weight: bold;
-
-
-
-        .flow-arrow {            color: #0277bd;            margin-bottom: 20px;            text-transform: uppercase;
-
-            color: #03a9f4;
-
-            font-size: 30px;            margin: 25px 0 12px 0;
+            font-size: 18px;            color: #2c3e50;            margin-bottom: 20px;
 
             font-weight: bold;
 
-        }        }            line-height: 1.3;        }
+            color: #0277bd;            margin-bottom: 20px;            text-transform: uppercase;
 
+            margin: 25px 0 12px 0;
 
+        }            line-height: 1.3;        }
 
-        .architecture {
 
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
 
-            padding: 20px;        .abstract {        }
-
-            border-radius: 12px;
-
-            margin: 20px 0;            background: #e1f5fe;
-
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-
-        }            padding: 25px;        .authors {
-
-
-
-        .layer-box {            border-left: 4px solid #03a9f4;
-
-            background: white;
-
-            border: 2px solid #29b6f6;            font-style: italic;        .authors {            font-size: 14px;
-
-            padding: 15px;
-
-            margin: 10px 0;            margin: 30px 0;
-
-            border-radius: 8px;
-
-            display: flex;        }            font-size: 16px;            margin-bottom: 10px;
-
-            justify-content: space-between;
-
-            align-items: center;
-
-            transition: all 0.3s ease;
-
-        }        .keywords {            font-style: italic;            font-style: italic;
-
-
-
-        .layer-box:hover {            margin-top: 15px;
-
-            border-color: #03a9f4;
-
-            box-shadow: 0 4px 12px rgba(3, 169, 244, 0.2);            font-size: 14px;            color: #555;        }
-
-            transform: translateX(5px);
-
-        }        }
-
-
-
-        .layer-name {            margin-bottom: 10px;
-
-            font-weight: bold;
-
-            color: #0277bd;        .keywords strong {
-
-        }
-
-            color: #01579b;        }        .affiliation {
-
-        .layer-params {
-
-            color: #555;        }
-
-            font-size: 14px;
-
-        }            font-size: 12px;
-
-
-
-        table {        p {
-
-            width: 100%;
-
-            border-collapse: collapse;            text-align: justify;        .affiliation {            color: #666;
-
-            margin: 25px 0;
-
-            font-size: 14px;            margin-bottom: 15px;
-
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-
-            border-radius: 8px;        }            font-size: 14px;        }
-
-            overflow: hidden;
-
-        }
-
-
-
-        th, td {        .diagram {            color: #777;
-
-            padding: 12px;
-
-            text-align: left;            margin: 30px 0;
-
-            border: 1px solid #ddd;
-
-        }            text-align: center;            margin-bottom: 5px;        h2 {
-
-
-
-        th {        }
-
-            background: linear-gradient(135deg, #4fc3f7 0%, #03a9f4 100%);
-
-            color: white;        }            font-size: 18px;
-
-            font-weight: bold;
-
-        }        .diagram-box {
-
-
-
-        tr:nth-child(even) {            background: white;            font-weight: bold;
-
-            background: #f9f9f9;
-
-        }            border: 2px solid #4fc3f7;
-
-
-
-        tr:hover {            border-radius: 8px;        .date {            margin-top: 30px;
+        .abstract {        }
 
             background: #e1f5fe;
 
-        }            padding: 30px;
-
-
-
-        .metrics-grid {            margin: 20px auto;            font-size: 14px;            margin-bottom: 15px;
-
-            display: grid;
-
-            grid-template-columns: repeat(2, 1fr);            box-shadow: 0 4px 6px rgba(79, 195, 247, 0.2);
-
-            gap: 20px;
-
-            margin: 30px 0;        }            color: #999;            text-transform: uppercase;
-
-        }
-
-
-
-        .metric-card {
-
-            background: linear-gradient(135deg, #4fc3f7 0%, #03a9f4 100%);        .flowchart {            margin-top: 10px;        }
-
-            color: white;
-
-            padding: 25px;            display: flex;
-
-            border-radius: 12px;
-
-            text-align: center;            flex-direction: column;        }
-
-            box-shadow: 0 6px 20px rgba(79, 195, 247, 0.4);
-
-            transition: transform 0.3s ease;            align-items: center;
-
-        }
-
-            gap: 15px;        h3 {
-
-        .metric-card:hover {
-
-            transform: translateY(-10px);        }
-
-            box-shadow: 0 10px 30px rgba(79, 195, 247, 0.5);
-
-        }        .section {            font-size: 14px;
-
-
-
-        .metric-value {        .flow-step {
-
-            font-size: 36px;
-
-            font-weight: bold;            background: linear-gradient(135deg, #4fc3f7 0%, #03a9f4 100%);            margin: 40px 0;            font-weight: bold;
-
-            margin: 10px 0;
-
-        }            color: white;
-
-
-
-        .metric-label {            padding: 20px 40px;        }            margin-top: 20px;
-
-            font-size: 14px;
-
-            opacity: 0.9;            border-radius: 10px;
-
-        }
-
-            font-weight: bold;            margin-bottom: 10px;
-
-        .graph-placeholder {
-
-            background: linear-gradient(135deg, #e1f5fe 0%, #b3e5fc 100%);            min-width: 300px;
-
-            border: 2px dashed #4fc3f7;
-
-            border-radius: 12px;            text-align: center;        .section-title {            font-style: italic;
-
-            padding: 60px;
-
-            text-align: center;            box-shadow: 0 4px 15px rgba(79, 195, 247, 0.4);
-
-            color: #0277bd;
-
-            margin: 20px 0;        }            font-size: 20px;        }
-
-        }
-
-
-
-        .equation {
-
-            background: linear-gradient(135deg, #e1f5fe 0%, #b3e5fc 100%);        .flow-arrow {            font-weight: bold;
-
-            padding: 20px;
-
-            border-radius: 8px;            color: #03a9f4;
-
-            font-family: 'Courier New', monospace;
-
-            text-align: center;            font-size: 30px;            color: #2c3e50;        p {
-
-            margin: 20px 0;
-
-            font-size: 16px;            font-weight: bold;
-
-            color: #01579b;
-
-            border: 1px solid #4fc3f7;        }            margin-bottom: 15px;            text-align: justify;
-
-        }
-
-
-
-        .conclusion-box {
-
-            background: linear-gradient(135deg, #e1f5fe 0%, #b3e5fc 100%);        .architecture {            padding-bottom: 8px;            margin-bottom: 15px;
+            padding: 25px;        .authors {
 
             border-left: 4px solid #03a9f4;
 
-            padding: 25px;            background: #f8f9fa;
+            font-style: italic;        .authors {            font-size: 14px;
 
             margin: 30px 0;
 
-            border-radius: 8px;            padding: 20px;            border-bottom: 2px solid #3498db;            font-size: 12px;
+        }            font-size: 16px;            margin-bottom: 10px;
+
+
+
+        .keywords {            font-style: italic;            font-style: italic;
+
+            margin-top: 15px;
+
+            font-size: 14px;            color: #555;        }
 
         }
-
-            border-radius: 8px;
-
-        .reference {
-
-            font-size: 13px;            margin: 20px 0;        }        }
-
-            margin: 8px 0;
-
-            padding-left: 20px;        }
-
-            text-indent: -20px;
-
-        }
-
-
-
-        .figure-caption {        .layer-box {
-
-            font-size: 13px;
-
-            color: #0277bd;            background: white;        .subsection-title {        .abstract {
-
-            text-align: center;
-
-            margin-top: 10px;            border: 2px solid #29b6f6;
-
-            font-style: italic;
-
-        }            padding: 15px;            font-size: 18px;            background: #f8f9fa;
-
-
-
-        .highlight {            margin: 10px 0;
-
-            background: linear-gradient(135deg, #fff9c4 0%, #fff59d 100%);
-
-            padding: 2px 5px;            border-radius: 5px;            font-weight: bold;            padding: 20px;
-
-            border-radius: 3px;
-
-            font-weight: bold;            display: flex;
-
-        }
-
-            justify-content: space-between;            color: #34495e;            margin-bottom: 30px;
-
-        ul, ol {
-
-            margin: 15px 0 15px 30px;            align-items: center;
-
-        }
-
-        }            margin: 25px 0 12px 0;            border-left: 4px solid #2ecc71;
-
-        li {
-
-            margin: 8px 0;
-
-        }
-
-        .layer-name {        }        }
-
-        .code-block {
-
-            background: linear-gradient(135deg, #01579b 0%, #0277bd 100%);            font-weight: bold;
-
-            color: #e1f5fe;
-
-            padding: 20px;            color: #0277bd;
-
-            border-radius: 8px;
-
-            font-family: 'Courier New', monospace;        }
-
-            font-size: 13px;
-
-            overflow-x: auto;        .abstract {        .abstract h2 {
-
-            margin: 20px 0;
-
-            box-shadow: 0 4px 12px rgba(1, 87, 155, 0.3);        .layer-params {
-
-        }
-
-            color: #555;            background: #ecf0f1;            margin-top: 0;
-
-        .pesticide-grid {
-
-            display: grid;            font-size: 14px;
-
-            grid-template-columns: repeat(4, 1fr);
-
-            gap: 15px;        }            padding: 25px;        }
-
-            margin: 20px 0;
-
-        }
-
-
-
-        .pesticide-card {        table {            border-left: 4px solid #3498db;
-
-            background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
-
-            border: 2px solid #4fc3f7;            width: 100%;
-
-            border-radius: 10px;
-
-            padding: 15px;            border-collapse: collapse;            font-style: italic;        .keywords {
-
-            text-align: center;
-
-            transition: all 0.3s ease;            margin: 25px 0;
-
-        }
-
-            font-size: 14px;            margin: 30px 0;            font-size: 12px;
-
-        .pesticide-card:hover {
-
-            border-color: #03a9f4;        }
-
-            box-shadow: 0 6px 20px rgba(79, 195, 247, 0.3);
-
-            transform: translateY(-5px);        }            margin-top: 15px;
-
-        }
-
-        th, td {
-
-        .pesticide-card h4 {
-
-            color: #0277bd;            padding: 12px;        }
 
             margin-bottom: 10px;
 
-            font-size: 14px;            text-align: left;
+        .keywords strong {
+
+            color: #01579b;        }        .affiliation {
 
         }
-
-            border: 1px solid #ddd;        .keywords {
-
-        .disease-count {
-
-            font-size: 24px;        }
-
-            font-weight: bold;
-
-            color: #01579b;            margin-top: 15px;        .keywords strong {
-
-        }
-
-        th {
-
-        .footer-section {
-
-            text-align: center;            background: #4fc3f7;            font-size: 14px;            font-weight: bold;
-
-            margin-top: 60px;
-
-            padding-top: 30px;            color: white;
-
-            border-top: 2px solid #4fc3f7;
-
-            color: #999;            font-weight: bold;        }        }
 
             font-size: 12px;
 
-        }        }
+        p {
+
+            text-align: justify;        .affiliation {            color: #666;
+
+            margin-bottom: 15px;
+
+        }            font-size: 14px;        }
 
 
 
-        @media print {
+        .diagram {            color: #777;
 
-            body {
+            margin: 30px 0;
 
-                background: white;        tr:nth-child(even) {
-
-                padding: 0;
-
-            }            background: #f9f9f9;        .keywords strong {        table {
-
-            .paper-container {
-
-                box-shadow: none;        }
-
-                padding: 40px;
-
-                border: none;            color: #2c3e50;            width: 100%;
-
-            }
-
-        }        .metrics-grid {
-
-
-
-        @media (max-width: 768px) {            display: grid;        }            border-collapse: collapse;
-
-            .paper-container {
-
-                padding: 30px 20px;            grid-template-columns: repeat(2, 1fr);
-
-            }
-
-            .metrics-grid {            gap: 20px;            margin: 20px 0;
-
-                grid-template-columns: 1fr;
-
-            }            margin: 30px 0;
-
-            .pesticide-grid {
-
-                grid-template-columns: repeat(2, 1fr);        }        p {            font-size: 12px;
-
-            }
+            text-align: center;            margin-bottom: 5px;        h2 {
 
         }
 
-    </style>
+        }            font-size: 18px;
 
-</head>        .metric-card {            text-align: justify;        }
+        .diagram-box {
 
-<body>
+            background: white;            font-weight: bold;
 
-    <div class="paper-container">            background: linear-gradient(135deg, #4fc3f7 0%, #03a9f4 100%);
+            border: 2px solid #4fc3f7;
 
-        <!-- Header -->
+            border-radius: 8px;        .date {            margin-top: 30px;
 
-        <div class="header">            color: white;            margin-bottom: 15px;
+            padding: 30px;
 
-            <div class="title">
+            margin: 20px auto;            font-size: 14px;            margin-bottom: 15px;
 
-                Rice Leaf Disease Detection Using Convolutional Neural Networks:<br>            padding: 25px;
+            box-shadow: 0 4px 6px rgba(79, 195, 247, 0.2);
 
-                A Deep Learning Approach with Real-Time Pesticide Recommendation System
+        }            color: #999;            text-transform: uppercase;
 
-            </div>            border-radius: 10px;        }        table th, table td {
 
-            <div class="authors">
 
-                Computer Science Department            text-align: center;
+        .flowchart {            margin-top: 10px;        }
 
-            </div>
+            display: flex;
 
-            <div class="affiliation">            box-shadow: 0 4px 15px rgba(79, 195, 247, 0.3);            border: 1px solid #ddd;
+            flex-direction: column;        }
 
-                Deep Learning & Agricultural Technology Research Lab
+            align-items: center;
 
-            </div>        }
-
-            <div class="date">
-
-                November 2025        .diagram {            padding: 10px;
-
-            </div>
-
-        </div>        .metric-value {
-
-
-
-        <!-- Abstract -->            font-size: 36px;            margin: 30px 0;            text-align: center;
-
-        <div class="section">
-
-            <div class="section-title">ABSTRACT</div>            font-weight: bold;
-
-            <div class="abstract">
-
-                <p>            margin: 10px 0;            text-align: center;        }
-
-                    Rice (<em>Oryza sativa</em>) is one of the most important staple crops globally, feeding over half 
-
-                    of the world's population. However, rice production faces significant challenges from various leaf         }
-
-                    diseases that can reduce yield by 30-50% if left untreated. This research presents an automated 
-
-                    rice leaf disease detection system using Convolutional Neural Networks (CNN) with real-time pesticide         }
-
-                    recommendation capabilities. Our custom CNN architecture achieves <span class="highlight">92-95% accuracy</span> 
-
-                    in classifying four major rice diseases: Bacterial Blight, Rice Blast, Brown Spot, and Tungro Virus.         .metric-label {
-
-                    The system processes images through a 4-block convolutional architecture with batch normalization and 
-
-                    dropout regularization, trained on 5,932 high-resolution images. Additionally, we implement a             font-size: 14px;        table th {
-
-                    comprehensive pesticide recommendation database integrated with a web-based interface for real-time 
-
-                    diagnosis and treatment suggestions. The complete system achieves inference times of less than 2 seconds             opacity: 0.9;
-
-                    on standard hardware, making it suitable for deployment in resource-constrained agricultural settings.
-
-                </p>        }        .diagram-box {            background: #2c3e50;
-
-                <div class="keywords">
-
-                    <strong>Keywords:</strong> Deep Learning, Convolutional Neural Networks, Rice Disease Detection, 
-
-                    Agricultural AI, Computer Vision, Image Classification, TensorFlow, Precision Agriculture
-
-                </div>        .graph-placeholder {            background: white;            color: white;
-
-            </div>
-
-        </div>            background: linear-gradient(135deg, #e1f5fe 0%, #b3e5fc 100%);
-
-
-
-        <!-- Introduction -->            border: 2px dashed #4fc3f7;            border: 2px solid #3498db;            font-weight: bold;
-
-        <div class="section">
-
-            <div class="section-title">1. INTRODUCTION</div>            border-radius: 8px;
-
-            
-
-            <div class="subsection-title">1.1 Background and Motivation</div>            padding: 60px;            border-radius: 8px;        }
-
-            <p>
-
-                Rice diseases pose a critical threat to global food security, with annual losses estimated at             text-align: center;
-
-                37% of potential yield worldwide. Traditional disease identification methods rely heavily on manual 
-
-                inspection by agricultural experts, which is time-consuming, subjective, and often unavailable in             color: #0277bd;            padding: 30px;
-
-                remote farming regions. The advancement of deep learning and computer vision technologies presents 
-
-                an opportunity to automate and democratize disease detection capabilities.            margin: 20px 0;
-
-            </p>
-
-        }            margin: 20px auto;        table caption {
-
-            <div class="subsection-title">1.2 Problem Statement</div>
-
-            <p>
-
-                The primary challenges in rice disease detection include:
-
-            </p>        .equation {            box-shadow: 0 4px 6px rgba(0,0,0,0.1);            caption-side: top;
-
-            <ul>
-
-                <li>Visual similarity between different disease symptoms in early stages</li>            background: #e1f5fe;
-
-                <li>Variation in disease appearance due to environmental conditions</li>
-
-                <li>Limited access to agricultural experts in rural areas</li>            padding: 20px;        }            font-weight: bold;
-
-                <li>Time-critical nature of disease treatment requiring rapid diagnosis</li>
-
-                <li>Need for integrated treatment recommendations alongside diagnosis</li>            border-radius: 5px;
-
-            </ul>
-
-            font-family: 'Courier New', monospace;            margin-bottom: 10px;
-
-            <div class="subsection-title">1.3 Research Objectives</div>
-
-            <ol>            text-align: center;
-
-                <li>Develop a high-accuracy CNN model for multi-class rice disease classification</li>
-
-                <li>Create a comprehensive dataset of rice leaf disease images</li>            margin: 20px 0;        .flowchart {            font-size: 12px;
-
-                <li>Implement real-time pesticide recommendation system</li>
-
-                <li>Design an accessible web-based interface for farmers</li>            font-size: 16px;
-
-                <li>Achieve deployment-ready performance on standard hardware</li>
-
-            </ol>            color: #01579b;            display: flex;        }
-
-        </div>
+            gap: 15px;        h3 {
 
         }
 
-        <!-- Dataset -->
+        .section {            font-size: 14px;
 
-        <div class="section">            flex-direction: column;
+        .flow-step {
 
-            <div class="section-title">2. DATASET DESCRIPTION</div>
+            background: linear-gradient(135deg, #4fc3f7 0%, #03a9f4 100%);            margin: 40px 0;            font-weight: bold;
 
-                    .conclusion-box {
+            color: white;
 
-            <div class="subsection-title">2.1 Dataset Overview</div>
+            padding: 20px 40px;        }            margin-top: 20px;
 
-            <table>            background: #e1f5fe;            align-items: center;        .figure {
+            border-radius: 10px;
 
-                <tr>
+            font-weight: bold;            margin-bottom: 10px;
 
-                    <th>Disease Class</th>            border-left: 4px solid #03a9f4;
+            min-width: 300px;
 
-                    <th>Number of Images</th>
+            text-align: center;        .section-title {            font-style: italic;
 
-                    <th>Percentage</th>            padding: 25px;            gap: 15px;            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(79, 195, 247, 0.4);
 
-                    <th>Severity Level</th>
+        }            font-size: 20px;        }
 
-                </tr>            margin: 30px 0;
 
-                <tr>
 
-                    <td><strong>Bacterial Blight</strong></td>        }        }            text-align: center;
+        .flow-arrow {            font-weight: bold;
 
-                    <td>1,584</td>
+            color: #03a9f4;
 
-                    <td>26.7%</td>
-
-                    <td>High</td>
-
-                </tr>        .reference {        }
-
-                <tr>
-
-                    <td><strong>Rice Blast</strong></td>            font-size: 13px;
-
-                    <td>1,440</td>
-
-                    <td>24.3%</td>            margin: 8px 0;        .flow-step {
-
-                    <td>Very High</td>
-
-                </tr>            padding-left: 20px;
-
-                <tr>
-
-                    <td><strong>Brown Spot</strong></td>            text-indent: -20px;            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);        .figure img {
-
-                    <td>1,600</td>
-
-                    <td>27.0%</td>        }
-
-                    <td>Medium</td>
-
-                </tr>            color: white;            max-width: 100%;
-
-                <tr>
-
-                    <td><strong>Tungro Virus</strong></td>        .figure-caption {
-
-                    <td>1,308</td>
-
-                    <td>22.0%</td>            font-size: 13px;            padding: 20px 40px;            border: 1px solid #ddd;
-
-                    <td>Very High</td>
-
-                </tr>            color: #0277bd;
-
-                <tr>
-
-                    <td><strong>TOTAL</strong></td>            text-align: center;            border-radius: 10px;            padding: 10px;
-
-                    <td><strong>5,932</strong></td>
-
-                    <td><strong>100%</strong></td>            margin-top: 10px;
-
-                    <td>-</td>
-
-                </tr>            font-style: italic;            font-weight: bold;        }
-
-            </table>
-
-        }
-
-            <div class="subsection-title">2.2 Data Preprocessing</div>
-
-            <p>            min-width: 300px;
-
-                All images underwent standardized preprocessing:
-
-            </p>        .highlight {
-
-            <ul>
-
-                <li><strong>Resizing:</strong> 224×224 pixels (RGB)</li>            background: #fff3cd;            text-align: center;        .figure-caption {
-
-                <li><strong>Normalization:</strong> Pixel values scaled to [0, 1]</li>
-
-                <li><strong>Train/Validation Split:</strong> 80/20 ratio (4,746 / 1,186 images)</li>            padding: 2px 5px;
-
-            </ul>
-
-            border-radius: 3px;            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);            font-size: 11px;
-
-            <div class="subsection-title">2.3 Data Augmentation</div>
-
-            <p>        }
-
-                To improve model generalization and prevent overfitting, we applied the following augmentation techniques:
-
-            </p>        }            font-style: italic;
-
-            <ul>
-
-                <li>Random rotation: ±20 degrees</li>        ul, ol {
-
-                <li>Width/height shift: ±20%</li>
-
-                <li>Shear transformation: 20%</li>            margin: 15px 0 15px 30px;            margin-top: 10px;
-
-                <li>Zoom range: ±20%</li>
-
-                <li>Horizontal and vertical flipping</li>        }
-
-            </ul>
-
-        </div>        .flow-arrow {        }
-
-
-
-        <!-- Methodology -->        li {
-
-        <div class="section">
-
-            <div class="section-title">3. METHODOLOGY</div>            margin: 8px 0;            color: #3498db;
-
-
-
-            <div class="subsection-title">3.1 System Workflow</div>        }
-
-            <div class="diagram">
-
-                <div class="diagram-box">            font-size: 30px;        ul, ol {
-
-                    <div class="flowchart">
-
-                        <div class="flow-step">📸 Image Capture</div>        .code-block {
-
-                        <div class="flow-arrow">↓</div>
-
-                        <div class="flow-step">🔄 Preprocessing (Resize & Normalize)</div>            background: #01579b;            font-weight: bold;            margin-left: 30px;
-
-                        <div class="flow-arrow">↓</div>
-
-                        <div class="flow-step">🧠 CNN Feature Extraction</div>            color: #e1f5fe;
-
-                        <div class="flow-arrow">↓</div>
-
-                        <div class="flow-step">🎯 Disease Classification</div>            padding: 20px;        }            margin-bottom: 15px;
-
-                        <div class="flow-arrow">↓</div>
-
-                        <div class="flow-step">💊 Pesticide Recommendation</div>            border-radius: 5px;
-
-                        <div class="flow-arrow">↓</div>
-
-                        <div class="flow-step">📊 Results Display</div>            font-family: 'Courier New', monospace;            font-size: 12px;
-
-                    </div>
-
-                </div>            font-size: 13px;
-
-                <div class="figure-caption">Figure 1: End-to-end system workflow for rice disease detection</div>
-
-            </div>            overflow-x: auto;        .architecture {        }
-
-
-
-            <div class="subsection-title">3.2 CNN Architecture</div>            margin: 20px 0;
-
-            <p>
-
-                Our custom CNN architecture consists of 4 convolutional blocks followed by fully connected layers:        }            background: #f8f9fa;
-
-            </p>
-
-
-
-            <div class="architecture">
-
-                <div class="layer-box">        .pesticide-grid {            padding: 20px;        li {
-
-                    <span class="layer-name">INPUT LAYER</span>
-
-                    <span class="layer-params">Shape: 224×224×3</span>            display: grid;
-
-                </div>
-
-            grid-template-columns: repeat(4, 1fr);            border-radius: 8px;            margin-bottom: 8px;
-
-                <div class="layer-box">
-
-                    <span class="layer-name">CONV BLOCK 1</span>            gap: 15px;
-
-                    <span class="layer-params">Conv2D(32, 3×3) → BatchNorm → MaxPool(2×2)</span>
-
-                </div>            margin: 20px 0;            margin: 20px 0;        }
-
-
-
-                <div class="layer-box">        }
-
-                    <span class="layer-name">CONV BLOCK 2</span>
-
-                    <span class="layer-params">Conv2D(64, 3×3) → BatchNorm → MaxPool(2×2) → Dropout(0.25)</span>        }
-
-                </div>
-
-        .pesticide-card {
-
-                <div class="layer-box">
-
-                    <span class="layer-name">CONV BLOCK 3</span>            background: white;        .equation {
-
-                    <span class="layer-params">Conv2D(128, 3×3) → BatchNorm → MaxPool(2×2) → Dropout(0.25)</span>
-
-                </div>            border: 2px solid #4fc3f7;
-
-
-
-                <div class="layer-box">            border-radius: 8px;        .layer-box {            text-align: center;
-
-                    <span class="layer-name">CONV BLOCK 4</span>
-
-                    <span class="layer-params">Conv2D(256, 3×3) → BatchNorm → MaxPool(2×2) → Dropout(0.30)</span>            padding: 15px;
-
-                </div>
-
-            text-align: center;            background: white;            margin: 20px 0;
-
-                <div class="layer-box">
-
-                    <span class="layer-name">FLATTEN</span>        }
-
-                    <span class="layer-params">Convert to 1D vector</span>
-
-                </div>            border: 2px solid #e74c3c;            font-style: italic;
-
-
-
-                <div class="layer-box">        .pesticide-card h4 {
-
-                    <span class="layer-name">DENSE LAYER 1</span>
-
-                    <span class="layer-params">512 units → BatchNorm → Dropout(0.5)</span>            color: #0277bd;            padding: 15px;            font-size: 14px;
-
-                </div>
-
-            margin-bottom: 10px;
-
-                <div class="layer-box">
-
-                    <span class="layer-name">DENSE LAYER 2</span>            font-size: 14px;            margin: 10px 0;        }
-
-                    <span class="layer-params">256 units → Dropout(0.5)</span>
-
-                </div>        }
-
-
-
-                <div class="layer-box">            border-radius: 5px;
-
-                    <span class="layer-name">OUTPUT LAYER</span>
-
-                    <span class="layer-params">4 units (Softmax activation)</span>        .disease-count {
-
-                </div>
-
-            </div>            font-size: 24px;            display: flex;        .references {
-
-            <div class="figure-caption">Figure 2: Detailed CNN architecture with layer specifications</div>
+            font-size: 30px;            color: #2c3e50;        p {
 
             font-weight: bold;
 
-            <div class="subsection-title">3.3 Model Parameters</div>
+        }            margin-bottom: 15px;            text-align: justify;
 
-            <table>            color: #01579b;            justify-content: space-between;            font-size: 11px;
 
-                <tr>
 
-                    <th>Parameter</th>        }
+        .architecture {            padding-bottom: 8px;            margin-bottom: 15px;
 
-                    <th>Value</th>
+            background: #f8f9fa;
 
-                    <th>Description</th>            align-items: center;        }
+            padding: 20px;            border-bottom: 2px solid #3498db;            font-size: 12px;
 
-                </tr>
+            border-radius: 8px;
 
-                <tr>        @media print {
+            margin: 20px 0;        }        }
 
-                    <td>Optimizer</td>
+        }
 
-                    <td>Adam</td>            body {        }
 
-                    <td>Adaptive learning rate optimization</td>
 
-                </tr>                background: white;
+        .layer-box {
 
-                <tr>
+            background: white;        .subsection-title {        .abstract {
 
-                    <td>Learning Rate</td>                padding: 0;        .references li {
+            border: 2px solid #29b6f6;
 
-                    <td>0.001</td>
+            padding: 15px;            font-size: 18px;            background: #f8f9fa;
 
-                    <td>Initial learning rate</td>            }
+            margin: 10px 0;
 
-                </tr>
+            border-radius: 5px;            font-weight: bold;            padding: 20px;
 
-                <tr>            .paper-container {        .layer-name {            margin-bottom: 10px;
+            display: flex;
 
-                    <td>Loss Function</td>
+            justify-content: space-between;            color: #34495e;            margin-bottom: 30px;
 
-                    <td>Categorical Crossentropy</td>                box-shadow: none;
+            align-items: center;
 
-                    <td>Multi-class classification loss</td>
+        }            margin: 25px 0 12px 0;            border-left: 4px solid #2ecc71;
 
-                </tr>                padding: 40px;            font-weight: bold;        }
 
-                <tr>
 
-                    <td>Batch Size</td>            }
+        .layer-name {        }        }
 
-                    <td>32</td>
+            font-weight: bold;
 
-                    <td>Number of samples per gradient update</td>        }            color: #e74c3c;
+            color: #0277bd;
 
-                </tr>
+        }
 
-                <tr>
+        .abstract {        .abstract h2 {
 
-                    <td>Epochs</td>
+        .layer-params {
 
-                    <td>50 (max)</td>        @media (max-width: 768px) {        }        .performance-metrics {
+            color: #555;            background: #ecf0f1;            margin-top: 0;
 
-                    <td>With early stopping (patience=10)</td>
+            font-size: 14px;
 
-                </tr>            .paper-container {
+        }            padding: 25px;        }
 
-                <tr>
 
-                    <td>Total Parameters</td>                padding: 30px 20px;            background: #e8f5e9;
 
-                    <td>~3.2M</td>
+        table {            border-left: 4px solid #3498db;
 
-                    <td>Trainable parameters</td>            }
+            width: 100%;
 
-                </tr>
+            border-collapse: collapse;            font-style: italic;        .keywords {
 
-            </table>            .metrics-grid {        .layer-params {            padding: 15px;
+            margin: 25px 0;
 
-        </div>
+            font-size: 14px;            margin: 30px 0;            font-size: 12px;
+
+        }
+
+        }            margin-top: 15px;
+
+        th, td {
+
+            padding: 12px;        }
+
+            text-align: left;
+
+            border: 1px solid #ddd;        .keywords {
+
+        }
+
+            margin-top: 15px;        .keywords strong {
+
+        th {
+
+            background: #4fc3f7;            font-size: 14px;            font-weight: bold;
+
+            color: white;
+
+            font-weight: bold;        }        }
+
+        }
+
+
+
+        tr:nth-child(even) {
+
+            background: #f9f9f9;        .keywords strong {        table {
+
+        }
+
+            color: #2c3e50;            width: 100%;
+
+        .metrics-grid {
+
+            display: grid;        }            border-collapse: collapse;
+
+            grid-template-columns: repeat(2, 1fr);
+
+            gap: 20px;            margin: 20px 0;
+
+            margin: 30px 0;
+
+        }        p {            font-size: 12px;
+
+
+
+        .metric-card {            text-align: justify;        }
+
+            background: linear-gradient(135deg, #4fc3f7 0%, #03a9f4 100%);
+
+            color: white;            margin-bottom: 15px;
+
+            padding: 25px;
+
+            border-radius: 10px;        }        table th, table td {
+
+            text-align: center;
+
+            box-shadow: 0 4px 15px rgba(79, 195, 247, 0.3);            border: 1px solid #ddd;
+
+        }
+
+        .diagram {            padding: 10px;
+
+        .metric-value {
+
+            font-size: 36px;            margin: 30px 0;            text-align: center;
+
+            font-weight: bold;
+
+            margin: 10px 0;            text-align: center;        }
+
+        }
+
+        }
+
+        .metric-label {
+
+            font-size: 14px;        table th {
+
+            opacity: 0.9;
+
+        }        .diagram-box {            background: #2c3e50;
+
+
+
+        .graph-placeholder {            background: white;            color: white;
+
+            background: linear-gradient(135deg, #e1f5fe 0%, #b3e5fc 100%);
+
+            border: 2px dashed #4fc3f7;            border: 2px solid #3498db;            font-weight: bold;
+
+            border-radius: 8px;
+
+            padding: 60px;            border-radius: 8px;        }
+
+            text-align: center;
+
+            color: #0277bd;            padding: 30px;
+
+            margin: 20px 0;
+
+        }            margin: 20px auto;        table caption {
+
+
+
+        .equation {            box-shadow: 0 4px 6px rgba(0,0,0,0.1);            caption-side: top;
+
+            background: #e1f5fe;
+
+            padding: 20px;        }            font-weight: bold;
+
+            border-radius: 5px;
+
+            font-family: 'Courier New', monospace;            margin-bottom: 10px;
+
+            text-align: center;
+
+            margin: 20px 0;        .flowchart {            font-size: 12px;
+
+            font-size: 16px;
+
+            color: #01579b;            display: flex;        }
+
+        }
+
+            flex-direction: column;
+
+        .conclusion-box {
+
+            background: #e1f5fe;            align-items: center;        .figure {
+
+            border-left: 4px solid #03a9f4;
+
+            padding: 25px;            gap: 15px;            margin: 20px 0;
+
+            margin: 30px 0;
+
+        }        }            text-align: center;
+
+
+
+        .reference {        }
+
+            font-size: 13px;
+
+            margin: 8px 0;        .flow-step {
+
+            padding-left: 20px;
+
+            text-indent: -20px;            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);        .figure img {
+
+        }
+
+            color: white;            max-width: 100%;
+
+        .figure-caption {
+
+            font-size: 13px;            padding: 20px 40px;            border: 1px solid #ddd;
+
+            color: #0277bd;
+
+            text-align: center;            border-radius: 10px;            padding: 10px;
+
+            margin-top: 10px;
+
+            font-style: italic;            font-weight: bold;        }
+
+        }
+
+            min-width: 300px;
+
+        .highlight {
+
+            background: #fff3cd;            text-align: center;        .figure-caption {
+
+            padding: 2px 5px;
+
+            border-radius: 3px;            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);            font-size: 11px;
+
+        }
+
+        }            font-style: italic;
+
+        ul, ol {
+
+            margin: 15px 0 15px 30px;            margin-top: 10px;
+
+        }
+
+        .flow-arrow {        }
+
+        li {
+
+            margin: 8px 0;            color: #3498db;
+
+        }
+
+            font-size: 30px;        ul, ol {
+
+        .code-block {
+
+            background: #01579b;            font-weight: bold;            margin-left: 30px;
+
+            color: #e1f5fe;
+
+            padding: 20px;        }            margin-bottom: 15px;
+
+            border-radius: 5px;
+
+            font-family: 'Courier New', monospace;            font-size: 12px;
+
+            font-size: 13px;
+
+            overflow-x: auto;        .architecture {        }
+
+            margin: 20px 0;
+
+        }            background: #f8f9fa;
+
+
+
+        .pesticide-grid {            padding: 20px;        li {
+
+            display: grid;
+
+            grid-template-columns: repeat(4, 1fr);            border-radius: 8px;            margin-bottom: 8px;
+
+            gap: 15px;
+
+            margin: 20px 0;            margin: 20px 0;        }
+
+        }
+
+        }
+
+        .pesticide-card {
+
+            background: white;        .equation {
+
+            border: 2px solid #4fc3f7;
+
+            border-radius: 8px;        .layer-box {            text-align: center;
+
+            padding: 15px;
+
+            text-align: center;            background: white;            margin: 20px 0;
+
+        }
+
+            border: 2px solid #e74c3c;            font-style: italic;
+
+        .pesticide-card h4 {
+
+            color: #0277bd;            padding: 15px;            font-size: 14px;
+
+            margin-bottom: 10px;
+
+            font-size: 14px;            margin: 10px 0;        }
+
+        }
+
+            border-radius: 5px;
+
+        .disease-count {
+
+            font-size: 24px;            display: flex;        .references {
+
+            font-weight: bold;
+
+            color: #01579b;            justify-content: space-between;            font-size: 11px;
+
+        }
+
+            align-items: center;        }
+
+        @media print {
+
+            body {        }
+
+                background: white;
+
+                padding: 0;        .references li {
+
+            }
+
+            .paper-container {        .layer-name {            margin-bottom: 10px;
+
+                box-shadow: none;
+
+                padding: 40px;            font-weight: bold;        }
+
+            }
+
+        }            color: #e74c3c;
+
+
+
+        @media (max-width: 768px) {        }        .performance-metrics {
+
+            .paper-container {
+
+                padding: 30px 20px;            background: #e8f5e9;
+
+            }
+
+            .metrics-grid {        .layer-params {            padding: 15px;
 
                 grid-template-columns: 1fr;
 
-        <!-- Results -->
-
-        <div class="section">            }            color: #555;            border-radius: 5px;
-
-            <div class="section-title">4. RESULTS AND PERFORMANCE</div>
+            }            color: #555;            border-radius: 5px;
 
             .pesticide-grid {
 
-            <div class="subsection-title">4.1 Overall Model Performance</div>
+                grid-template-columns: repeat(2, 1fr);            font-size: 14px;            margin: 20px 0;
 
-            <div class="metrics-grid">                grid-template-columns: repeat(2, 1fr);            font-size: 14px;            margin: 20px 0;
+            }
 
-                <div class="metric-card">
+        }        }        }
 
-                    <div class="metric-label">Training Accuracy</div>            }
+    </style>
 
-                    <div class="metric-value">96.2%</div>
+</head>
 
-                </div>        }        }        }
+<body>
 
-                <div class="metric-card">
+    <div class="paper-container">        table {        .metric-grid {
 
-                    <div class="metric-label">Validation Accuracy</div>    </style>
+        <!-- Header -->
 
-                    <div class="metric-value">93.8%</div>
-
-                </div></head>
-
-                <div class="metric-card">
-
-                    <div class="metric-label">Training Loss</div><body>
-
-                    <div class="metric-value">0.112</div>
-
-                </div>    <div class="paper-container">        table {        .metric-grid {
-
-                <div class="metric-card">
-
-                    <div class="metric-label">Validation Loss</div>        <!-- Header -->
-
-                    <div class="metric-value">0.198</div>
-
-                </div>        <div class="header">            width: 100%;            display: grid;
-
-            </div>
+        <div class="header">            width: 100%;            display: grid;
 
             <div class="title">
 
-            <div class="subsection-title">4.2 Per-Class Performance Metrics</div>
+                Rice Leaf Disease Detection Using Convolutional Neural Networks:<br>            border-collapse: collapse;            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
 
-            <table>                Rice Leaf Disease Detection Using Convolutional Neural Networks:<br>            border-collapse: collapse;            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                A Deep Learning Approach with Real-Time Pesticide Recommendation System
 
-                <tr>
+            </div>            margin: 25px 0;            gap: 15px;
 
-                    <th>Disease Class</th>                A Deep Learning Approach with Real-Time Pesticide Recommendation System
+            <div class="authors">
 
-                    <th>Precision</th>
-
-                    <th>Recall</th>            </div>            margin: 25px 0;            gap: 15px;
-
-                    <th>F1-Score</th>
-
-                    <th>Support</th>            <div class="authors">
-
-                </tr>
-
-                <tr>                Computer Science Department            font-size: 14px;            margin-top: 15px;
-
-                    <td><strong>Bacterial Blight</strong></td>
-
-                    <td>0.94</td>            </div>
-
-                    <td>0.92</td>
-
-                    <td>0.93</td>            <div class="affiliation">        }        }
-
-                    <td>317</td>
-
-                </tr>                Deep Learning & Agricultural Technology Research Lab
-
-                <tr>
-
-                    <td><strong>Rice Blast</strong></td>            </div>
-
-                    <td>0.95</td>
-
-                    <td>0.96</td>            <div class="date">
-
-                    <td>0.96</td>
-
-                    <td>288</td>                November 2025        th, td {        .metric-card {
-
-                </tr>
-
-                <tr>            </div>
-
-                    <td><strong>Brown Spot</strong></td>
-
-                    <td>0.93</td>        </div>            padding: 12px;            background: white;
-
-                    <td>0.94</td>
-
-                    <td>0.94</td>
-
-                    <td>320</td>
-
-                </tr>        <!-- Abstract -->            text-align: left;            padding: 15px;
-
-                <tr>
-
-                    <td><strong>Tungro Virus</strong></td>        <div class="section">
-
-                    <td>0.92</td>
-
-                    <td>0.91</td>            <div class="section-title">ABSTRACT</div>            border: 1px solid #ddd;            border-radius: 5px;
-
-                    <td>0.92</td>
-
-                    <td>261</td>            <div class="abstract">
-
-                </tr>
-
-                <tr>                <p>        }            text-align: center;
-
-                    <td><strong>Weighted Average</strong></td>
-
-                    <td><strong>0.94</strong></td>                    Rice (<em>Oryza sativa</em>) is one of the most important staple crops globally, feeding over half 
-
-                    <td><strong>0.94</strong></td>
-
-                    <td><strong>0.94</strong></td>                    of the world's population. However, rice production faces significant challenges from various leaf             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-
-                    <td><strong>1,186</strong></td>
-
-                </tr>                    diseases that can reduce yield by 30-50% if left untreated. This research presents an automated 
-
-            </table>
-
-        </div>                    rice leaf disease detection system using Convolutional Neural Networks (CNN) with real-time pesticide         th {        }
-
-
-
-        <!-- Pesticide Recommendation System -->                    recommendation capabilities. Our custom CNN architecture achieves <span class="highlight">92-95% accuracy</span> 
-
-        <div class="section">
-
-            <div class="section-title">5. PESTICIDE RECOMMENDATION SYSTEM</div>                    in classifying four major rice diseases: Bacterial Blight, Rice Blast, Brown Spot, and Tungro Virus.             background: #3498db;
-
-
-
-            <div class="subsection-title">5.1 Treatment Database</div>                    The system processes images through a 4-block convolutional architecture with batch normalization and 
-
-            <p>
-
-                Our system integrates a comprehensive pesticide recommendation database with 16 different treatment                     dropout regularization, trained on 5,932 high-resolution images. Additionally, we implement a             color: white;        .metric-value {
-
-                options across 4 disease categories.
-
-            </p>                    comprehensive pesticide recommendation database integrated with a web-based interface for real-time 
-
-
-
-            <div class="pesticide-grid">                    diagnosis and treatment suggestions. The complete system achieves inference times of less than 2 seconds             font-weight: bold;            font-size: 24px;
-
-                <div class="pesticide-card">
-
-                    <h4>Bacterial Blight</h4>                    on standard hardware, making it suitable for deployment in resource-constrained agricultural settings.
-
-                    <div class="disease-count">4</div>
-
-                    <p>Copper-based & Antibiotics</p>                </p>        }            font-weight: bold;
-
-                </div>
-
-                <div class="pesticide-card">                <div class="keywords">
-
-                    <h4>Rice Blast</h4>
-
-                    <div class="disease-count">4</div>                    <strong>Keywords:</strong> Deep Learning, Convolutional Neural Networks, Rice Disease Detection,             color: #27ae60;
-
-                    <p>Fungicides & Systemic</p>
-
-                </div>                    Agricultural AI, Computer Vision, Image Classification, TensorFlow, Precision Agriculture
-
-                <div class="pesticide-card">
-
-                    <h4>Brown Spot</h4>                </div>        tr:nth-child(even) {        }
-
-                    <div class="disease-count">4</div>
-
-                    <p>Contact & Systemic</p>            </div>
-
-                </div>
-
-                <div class="pesticide-card">        </div>            background: #f9f9f9;
-
-                    <h4>Tungro Virus</h4>
-
-                    <div class="disease-count">4</div>
-
-                    <p>Vector Control</p>
-
-                </div>        <!-- Introduction -->        }        .metric-label {
+                Computer Science Department            font-size: 14px;            margin-top: 15px;
 
             </div>
 
+            <div class="affiliation">        }        }
+
+                Deep Learning & Agricultural Technology Research Lab
+
+            </div>
+
+            <div class="date">
+
+                November 2025        th, td {        .metric-card {
+
+            </div>
+
+        </div>            padding: 12px;            background: white;
+
+
+
+        <!-- Abstract -->            text-align: left;            padding: 15px;
+
         <div class="section">
 
-            <div class="subsection-title">5.2 Treatment Examples</div>
+            <div class="section-title">ABSTRACT</div>            border: 1px solid #ddd;            border-radius: 5px;
 
-            <table>            <div class="section-title">1. INTRODUCTION</div>            font-size: 11px;
+            <div class="abstract">
 
-                <tr>
+                <p>        }            text-align: center;
 
-                    <th>Disease</th>            
+                    Rice (<em>Oryza sativa</em>) is one of the most important staple crops globally, feeding over half 
 
-                    <th>Recommended Pesticides</th>
+                    of the world's population. However, rice production faces significant challenges from various leaf             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 
-                    <th>Application Method</th>            <div class="subsection-title">1.1 Background and Motivation</div>        .metrics-grid {            color: #666;
+                    diseases that can reduce yield by 30-50% if left untreated. This research presents an automated 
 
-                </tr>
+                    rice leaf disease detection system using Convolutional Neural Networks (CNN) with real-time pesticide         th {        }
 
-                <tr>            <p>
+                    recommendation capabilities. Our custom CNN architecture achieves <span class="highlight">92-95% accuracy</span> 
 
-                    <td><strong>Bacterial Blight</strong></td>
+                    in classifying four major rice diseases: Bacterial Blight, Rice Blast, Brown Spot, and Tungro Virus.             background: #3498db;
 
-                    <td>Copper Hydroxide, Streptocycline, Plantomycin</td>                Rice diseases pose a critical threat to global food security, with annual losses estimated at             display: grid;            margin-top: 5px;
+                    The system processes images through a 4-block convolutional architecture with batch normalization and 
 
-                    <td>Foliar spray at 7-10 day intervals</td>
+                    dropout regularization, trained on 5,932 high-resolution images. Additionally, we implement a             color: white;        .metric-value {
 
-                </tr>                37% of potential yield worldwide. Traditional disease identification methods rely heavily on manual 
+                    comprehensive pesticide recommendation database integrated with a web-based interface for real-time 
 
-                <tr>
+                    diagnosis and treatment suggestions. The complete system achieves inference times of less than 2 seconds             font-weight: bold;            font-size: 24px;
 
-                    <td><strong>Rice Blast</strong></td>                inspection by agricultural experts, which is time-consuming, subjective, and often unavailable in             grid-template-columns: repeat(2, 1fr);        }
+                    on standard hardware, making it suitable for deployment in resource-constrained agricultural settings.
 
-                    <td>Tricyclazole, Carbendazim, Azoxystrobin</td>
+                </p>        }            font-weight: bold;
 
-                    <td>Spray at panicle initiation</td>                remote farming regions. The advancement of deep learning and computer vision technologies presents 
+                <div class="keywords">
 
-                </tr>
+                    <strong>Keywords:</strong> Deep Learning, Convolutional Neural Networks, Rice Disease Detection,             color: #27ae60;
 
-                <tr>                an opportunity to automate and democratize disease detection capabilities.            gap: 20px;
+                    Agricultural AI, Computer Vision, Image Classification, TensorFlow, Precision Agriculture
 
-                    <td><strong>Brown Spot</strong></td>
+                </div>        tr:nth-child(even) {        }
 
-                    <td>Mancozeb, Propiconazole, Carbendazim</td>            </p>
+            </div>
 
-                    <td>Apply at tillering & booting</td>
+        </div>            background: #f9f9f9;
 
-                </tr>            margin: 30px 0;        code {
 
-                <tr>
 
-                    <td><strong>Tungro Virus</strong></td>            <div class="subsection-title">1.2 Problem Statement</div>
+        <!-- Introduction -->        }        .metric-label {
 
-                    <td>Imidacloprid, Thiamethoxam, Fipronil</td>
+        <div class="section">
 
-                    <td>Vector (leafhopper) control</td>            <p>        }            background: #f4f4f4;
+            <div class="section-title">1. INTRODUCTION</div>            font-size: 11px;
 
-                </tr>
+            
 
-            </table>                The primary challenges in rice disease detection include:
+            <div class="subsection-title">1.1 Background and Motivation</div>        .metrics-grid {            color: #666;
 
-        </div>
+            <p>
+
+                Rice diseases pose a critical threat to global food security, with annual losses estimated at             display: grid;            margin-top: 5px;
+
+                37% of potential yield worldwide. Traditional disease identification methods rely heavily on manual 
+
+                inspection by agricultural experts, which is time-consuming, subjective, and often unavailable in             grid-template-columns: repeat(2, 1fr);        }
+
+                remote farming regions. The advancement of deep learning and computer vision technologies presents 
+
+                an opportunity to automate and democratize disease detection capabilities.            gap: 20px;
+
+            </p>
+
+            margin: 30px 0;        code {
+
+            <div class="subsection-title">1.2 Problem Statement</div>
+
+            <p>        }            background: #f4f4f4;
+
+                The primary challenges in rice disease detection include:
 
             </p>            padding: 2px 6px;
 
-        <!-- System Implementation -->
-
-        <div class="section">            <ul>
-
-            <div class="section-title">6. SYSTEM IMPLEMENTATION</div>
+            <ul>
 
                 <li>Visual similarity between different disease symptoms in early stages</li>        .metric-card {            border-radius: 3px;
 
-            <div class="subsection-title">6.1 Technology Stack</div>
+                <li>Variation in disease appearance due to environmental conditions</li>
 
-            <table>                <li>Variation in disease appearance due to environmental conditions</li>
+                <li>Limited access to agricultural experts in rural areas</li>            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);            font-family: 'Courier New', monospace;
 
-                <tr>
+                <li>Time-critical nature of disease treatment requiring rapid diagnosis</li>
 
-                    <th>Component</th>                <li>Limited access to agricultural experts in rural areas</li>            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);            font-family: 'Courier New', monospace;
-
-                    <th>Technology</th>
-
-                    <th>Version</th>                <li>Time-critical nature of disease treatment requiring rapid diagnosis</li>
-
-                </tr>
-
-                <tr>                <li>Need for integrated treatment recommendations alongside diagnosis</li>            color: white;            font-size: 11px;
-
-                    <td>Deep Learning Framework</td>
-
-                    <td>TensorFlow/Keras</td>            </ul>
-
-                    <td>2.20.0 / 3.12.0</td>
-
-                </tr>            padding: 25px;        }
-
-                <tr>
-
-                    <td>Backend Framework</td>            <div class="subsection-title">1.3 Research Objectives</div>
-
-                    <td>Flask</td>
-
-                    <td>3.1.2</td>            <ol>            border-radius: 10px;
-
-                </tr>
-
-                <tr>                <li>Develop a high-accuracy CNN model for multi-class rice disease classification</li>
-
-                    <td>Frontend</td>
-
-                    <td>HTML5/CSS3/JavaScript</td>                <li>Create a comprehensive dataset of rice leaf disease images</li>            text-align: center;        .architecture-box {
-
-                    <td>ES6+</td>
-
-                </tr>                <li>Implement real-time pesticide recommendation system</li>
-
-                <tr>
-
-                    <td>Image Processing</td>                <li>Design an accessible web-based interface for farmers</li>            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);            background: #f8f9fa;
-
-                    <td>Pillow (PIL)</td>
-
-                    <td>12.0.0</td>                <li>Achieve deployment-ready performance on standard hardware</li>
-
-                </tr>
-
-                <tr>            </ol>        }            padding: 15px;
-
-                    <td>Python Version</td>
-
-                    <td>Python</td>        </div>
-
-                    <td>3.12</td>
-
-                </tr>            margin: 15px 0;
-
-            </table>
-
-        <!-- Dataset -->
-
-            <div class="subsection-title">6.2 Rice Leaf Validation</div>
-
-            <p>        <div class="section">        .metric-value {            border-left: 3px solid #3498db;
-
-                The system includes intelligent validation to ensure uploaded images are rice leaves:
-
-            </p>            <div class="section-title">2. DATASET DESCRIPTION</div>
-
-            <ul>
-
-                <li><strong>Confidence Threshold:</strong> Minimum 30% confidence required</li>                        font-size: 36px;            font-size: 11px;
-
-                <li><strong>Ambiguity Detection:</strong> Rejects images with evenly distributed predictions</li>
-
-                <li><strong>User Feedback:</strong> Clear error messages for invalid uploads</li>            <div class="subsection-title">2.1 Dataset Overview</div>
+                <li>Need for integrated treatment recommendations alongside diagnosis</li>            color: white;            font-size: 11px;
 
             </ul>
 
-        </div>            <table>            font-weight: bold;        }
+            padding: 25px;        }
 
+            <div class="subsection-title">1.3 Research Objectives</div>
 
+            <ol>            border-radius: 10px;
 
-        <!-- Conclusion -->                <tr>
+                <li>Develop a high-accuracy CNN model for multi-class rice disease classification</li>
 
-        <div class="section">
+                <li>Create a comprehensive dataset of rice leaf disease images</li>            text-align: center;        .architecture-box {
 
-            <div class="section-title">7. CONCLUSION</div>                    <th>Disease Class</th>            margin: 10px 0;
+                <li>Implement real-time pesticide recommendation system</li>
 
-            <div class="conclusion-box">
+                <li>Design an accessible web-based interface for farmers</li>            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);            background: #f8f9fa;
 
-                <p>                    <th>Number of Images</th>
+                <li>Achieve deployment-ready performance on standard hardware</li>
 
-                    This research successfully demonstrates the application of deep learning for automated rice 
-
-                    disease detection with integrated treatment recommendations. Our custom CNN architecture achieves                     <th>Percentage</th>        }        @media print {
-
-                    93.8% validation accuracy while maintaining real-time inference capability on standard hardware. 
-
-                    The complete system, including web interface, pesticide database, and rice validation, provides a                     <th>Severity Level</th>
-
-                    practical solution for agricultural communities to identify and treat rice diseases efficiently.
-
-                </p>                </tr>            body {
-
-                <p>
-
-                    The integration of computer vision and agricultural expertise bridges the gap between advanced                 <tr>
-
-                    technology and practical farming needs. With inference times under 2 seconds and a user-friendly 
-
-                    interface, the system is ready for deployment in resource-constrained agricultural settings.                    <td><strong>Bacterial Blight</strong></td>        .metric-label {                padding: 0;
-
-                </p>
-
-            </div>                    <td>1,584</td>
+            </ol>        }            padding: 15px;
 
         </div>
+
+            margin: 15px 0;
+
+        <!-- Dataset -->
+
+        <div class="section">        .metric-value {            border-left: 3px solid #3498db;
+
+            <div class="section-title">2. DATASET DESCRIPTION</div>
+
+                        font-size: 36px;            font-size: 11px;
+
+            <div class="subsection-title">2.1 Dataset Overview</div>
+
+            <table>            font-weight: bold;        }
+
+                <tr>
+
+                    <th>Disease Class</th>            margin: 10px 0;
+
+                    <th>Number of Images</th>
+
+                    <th>Percentage</th>        }        @media print {
+
+                    <th>Severity Level</th>
+
+                </tr>            body {
+
+                <tr>
+
+                    <td><strong>Bacterial Blight</strong></td>        .metric-label {                padding: 0;
+
+                    <td>1,584</td>
 
                     <td>26.7%</td>            font-size: 14px;            }
 
-        <!-- Footer -->
+                    <td>High</td>
 
-        <div class="footer-section">                    <td>High</td>
+                </tr>            opacity: 0.9;            .paper-container {
 
-            <p>© 2025 Rice Disease Detection Research Project</p>
+                <tr>
 
-            <p>Deep Learning & Agricultural Technology Research Lab</p>                </tr>            opacity: 0.9;            .paper-container {
-
-        </div>
-
-    </div>                <tr>
-
-</body>
-
-</html>                    <td><strong>Rice Blast</strong></td>        }                box-shadow: none;
-
+                    <td><strong>Rice Blast</strong></td>        }                box-shadow: none;
 
                     <td>1,440</td>
 
