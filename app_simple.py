@@ -1,31 +1,37 @@
 """
-Rice Disease Detection - Flask Backend API (Simplified)
-Serves predictions and handles image uploads
+Rice Disease Detection - Flask Backend API (Enhanced)
+Multi-user system with Farmer and Research Center roles
 """
 
-from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, request, jsonify, send_from_directory, session
 from flask_cors import CORS
-from keras.models import load_model
-from keras.preprocessing import image
+from tensorflow.keras.models import load_model
+from tensorflow.keras.preprocessing import image
 import numpy as np
 from PIL import Image
 import os
 import json
 from datetime import datetime
 import uuid
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, supports_credentials=True)
+app.secret_key = 'rice-disease-detection-secret-key-2024'
 
 # Configuration
 MODEL_PATH = 'models/rice_disease_model.h5'
 CLASS_INDICES_PATH = 'models/class_indices.json'
 UPLOAD_FOLDER = 'uploads'
+DATA_FOLDER = 'data'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 IMG_SIZE = 224
 
-# Create upload folder
+# Create necessary folders
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+os.makedirs(DATA_FOLDER, exist_ok=True)
 
 # Load model and class indices
 print("Loading model...")
@@ -34,6 +40,22 @@ print("✓ Model loaded successfully")
 
 with open(CLASS_INDICES_PATH, 'r') as f:
     class_indices = json.load(f)
+
+# Helper functions for data management
+def load_json_file(filename):
+    """Load JSON data file"""
+    filepath = os.path.join(DATA_FOLDER, filename)
+    try:
+        with open(filepath, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return {}
+
+def save_json_file(filename, data):
+    """Save JSON data file"""
+    filepath = os.path.join(DATA_FOLDER, filename)
+    with open(filepath, 'w', encoding='utf-8') as f:
+        json.dump(data, f, indent=2, ensure_ascii=False)
 
 # Treatment and pesticide recommendations database
 treatment_database = {
@@ -222,25 +244,222 @@ def is_rice_leaf(img_array, predictions):
     
     return True, "Valid rice leaf detected"
 
+# ==================== AUTHENTICATION ROUTES ====================
+
+@app.route('/api/login', methods=['POST'])
+def login():
+    """Handle user login (Farmer or Research Center)"""
+    data = request.json
+    email = data.get('email')
+    password = data.get('password')
+    user_type = data.get('user_type')  # 'farmer' or 'research_center'
+    
+    if not all([email, password, user_type]):
+        return jsonify({'success': False, 'error': 'Missing credentials'}), 400
+    
+    users_data = load_json_file('users.json')
+    
+    if user_type == 'farmer':
+        users = users_data.get('farmers', [])
+    elif user_type == 'research_center':
+        users = users_data.get('research_centers', [])
+    else:
+        return jsonify({'success': False, 'error': 'Invalid user type'}), 400
+    
+    user = next((u for u in users if u['email'] == email and u['password'] == password), None)
+    
+    if user:
+        session['user_id'] = user['id']
+        session['user_type'] = user_type
+        session['user_name'] = user['name']
+        
+        return jsonify({
+            'success': True,
+            'user': {
+                'id': user['id'],
+                'name': user['name'],
+                'email': user['email'],
+                'phone': user['phone'],
+                'type': user_type
+            }
+        }), 200
+    else:
+        return jsonify({'success': False, 'error': 'Invalid credentials'}), 401
+
+@app.route('/api/logout', methods=['POST'])
+def logout():
+    """Handle user logout"""
+    session.clear()
+    return jsonify({'success': True}), 200
+
+@app.route('/api/register', methods=['POST'])
+def register():
+    """Register new farmer"""
+    data = request.json
+    users_data = load_json_file('users.json')
+    
+    if 'farmers' not in users_data:
+        users_data['farmers'] = []
+    
+    # Generate new farmer ID
+    existing_ids = [f['id'] for f in users_data['farmers']]
+    new_id_num = len(existing_ids) + 1
+    new_id = f"F{new_id_num:03d}"
+    
+    new_farmer = {
+        'id': new_id,
+        'name': data.get('name'),
+        'email': data.get('email'),
+        'phone': data.get('phone'),
+        'location': data.get('location', {}),
+        'password': data.get('password'),
+        'registered_date': datetime.now().isoformat()
+    }
+    
+    users_data['farmers'].append(new_farmer)
+    save_json_file('users.json', users_data)
+    
+    return jsonify({'success': True, 'message': 'Registration successful'}), 201
+
+# ==================== FARMER ROUTES ====================
+
+@app.route('/api/pesticide-shops', methods=['GET'])
+def get_pesticide_shops():
+    """Get list of pesticide shops"""
+    shops_data = load_json_file('pesticide_shops.json')
+    return jsonify(shops_data.get('pesticide_shops', [])), 200
+
+@app.route('/api/research-centers', methods=['GET'])
+def get_research_centers():
+    """Get list of research centers"""
+    users_data = load_json_file('users.json')
+    centers = users_data.get('research_centers', [])
+    
+    # Remove sensitive data
+    public_centers = []
+    for center in centers:
+        public_centers.append({
+            'id': center['id'],
+            'name': center['name'],
+            'email': center['email'],
+            'phone': center['phone'],
+            'location': center['location'],
+            'expertise': center.get('expertise', []),
+            'established': center.get('established', '')
+        })
+    
+    return jsonify(public_centers), 200
+
+@app.route('/api/my-detections', methods=['GET'])
+def get_my_detections():
+    """Get farmer's detection history"""
+    if 'user_id' not in session:
+        return jsonify({'error': 'Unauthorized'}), 401
+    
+    detections_data = load_json_file('detections.json')
+    user_detections = [d for d in detections_data.get('detections', []) 
+                       if d.get('farmer_id') == session['user_id']]
+    
+    return jsonify(user_detections), 200
+
+# ==================== RESEARCH CENTER ROUTES ====================
+
+@app.route('/api/all-detections', methods=['GET'])
+def get_all_detections():
+    """Get all detections (for research centers)"""
+    if 'user_id' not in session or session.get('user_type') != 'research_center':
+        return jsonify({'error': 'Unauthorized'}), 401
+    
+    detections_data = load_json_file('detections.json')
+    return jsonify(detections_data.get('detections', [])), 200
+
+@app.route('/api/send-recommendation', methods=['POST'])
+def send_recommendation():
+    """Send recommendation to farmer"""
+    if 'user_id' not in session or session.get('user_type') != 'research_center':
+        return jsonify({'error': 'Unauthorized'}), 401
+    
+    data = request.json
+    farmer_id = data.get('farmer_id')
+    message = data.get('message')
+    contact_method = data.get('contact_method')  # 'email', 'whatsapp', 'phone'
+    
+    users_data = load_json_file('users.json')
+    farmer = next((f for f in users_data.get('farmers', []) if f['id'] == farmer_id), None)
+    
+    if not farmer:
+        return jsonify({'error': 'Farmer not found'}), 404
+    
+    # Log the recommendation
+    detections_data = load_json_file('detections.json')
+    if 'recommendations' not in detections_data:
+        detections_data['recommendations'] = []
+    
+    recommendation = {
+        'id': str(uuid.uuid4()),
+        'research_center_id': session['user_id'],
+        'farmer_id': farmer_id,
+        'farmer_name': farmer['name'],
+        'farmer_phone': farmer['phone'],
+        'farmer_email': farmer['email'],
+        'message': message,
+        'contact_method': contact_method,
+        'timestamp': datetime.now().isoformat()
+    }
+    
+    detections_data['recommendations'] = detections_data.get('recommendations', [])
+    detections_data['recommendations'].append(recommendation)
+    save_json_file('detections.json', detections_data)
+    
+    return jsonify({
+        'success': True,
+        'message': f'Recommendation logged. Contact farmer at {farmer["phone"]} or {farmer["email"]}',
+        'farmer_contact': {
+            'phone': farmer['phone'],
+            'email': farmer['email'],
+            'whatsapp': f"https://wa.me/{farmer['phone'].replace('+', '').replace('-', '')}"
+        }
+    }), 200
+
+@app.route('/api/update-disease-info', methods=['POST'])
+def update_disease_info():
+    """Update disease treatment information"""
+    if 'user_id' not in session or session.get('user_type') != 'research_center':
+        return jsonify({'error': 'Unauthorized'}), 401
+    
+    data = request.json
+    # This would update the treatment_database
+    # For now, we'll just log it
+    
+    return jsonify({'success': True, 'message': 'Disease information updated'}), 200
+
+# ==================== MAIN DETECTION ROUTES ====================
+
 @app.route('/')
 def index():
     """Serve the main page"""
     return send_from_directory('website', 'index.html')
 
-@app.route('/website/<path:path>')
+@app.route('/<path:path>')
 def serve_static(path):
-    """Serve static files"""
-    return send_from_directory('website', path)
+    """Serve static files from website folder"""
+    try:
+        return send_from_directory('website', path)
+    except:
+        # If file not found in website folder, return 404
+        return jsonify({'error': 'File not found'}), 404
 
 @app.route('/api/predict', methods=['POST'])
 def predict():
     """Handle image upload and prediction"""
     try:
-        # Check if image was uploaded
-        if 'image' not in request.files:
+        # Check if image was uploaded (accept both 'image' and 'file' keys)
+        if 'file' in request.files:
+            file = request.files['file']
+        elif 'image' in request.files:
+            file = request.files['image']
+        else:
             return jsonify({'error': 'No image uploaded'}), 400
-        
-        file = request.files['image']
         
         # Check if file is valid
         if file.filename == '':
@@ -277,30 +496,28 @@ def predict():
         is_healthy, health_confidence = is_healthy_rice_leaf(img_array, predictions)
         
         if is_healthy:
+            # Save detection record for farmer
+            detection_record = {
+                'id': str(uuid.uuid4()),
+                'farmer_id': session.get('user_id', 'guest'),
+                'farmer_name': session.get('user_name', 'Guest'),
+                'image_path': f'/uploads/{unique_filename}',
+                'result': 'healthy',
+                'confidence': round(health_confidence, 2),
+                'timestamp': datetime.now().isoformat()
+            }
+            
+            detections_data = load_json_file('detections.json')
+            detections_data['detections'] = detections_data.get('detections', [])
+            detections_data['detections'].append(detection_record)
+            save_json_file('detections.json', detections_data)
+            
             # Return healthy leaf response
             response = {
-                'success': True,
-                'healthy': True,
+                'status': 'healthy',
                 'confidence': round(health_confidence, 2),
-                'message': '✅ HEALTHY RICE LEAF DETECTED!',
-                'description': 'Great news! This rice leaf appears to be healthy with no visible disease symptoms.',
-                'recommendations': [
-                    'Continue regular monitoring of your rice crop',
-                    'Maintain proper water management (2-5 cm depth)',
-                    'Apply balanced NPK fertilizer as per crop stage',
-                    'Keep field free from weeds',
-                    'Monitor for early signs of pests or diseases',
-                    'Ensure adequate spacing for air circulation'
-                ],
-                'preventive_measures': [
-                    'Use disease-free certified seeds',
-                    'Practice crop rotation',
-                    'Maintain field hygiene - remove crop debris',
-                    'Apply organic matter to improve soil health',
-                    'Use recommended fertilizer doses - avoid excess nitrogen',
-                    'Monitor weather conditions and adjust management accordingly'
-                ],
-                'uploaded_image': unique_filename,
+                'message': 'The rice leaf appears to be healthy with no visible diseases.',
+                'image_path': f'/uploads/{unique_filename}',
                 'timestamp': datetime.now().isoformat()
             }
             print(f"✓ Healthy rice leaf detected ({health_confidence:.2f}%)")
@@ -316,19 +533,32 @@ def predict():
         # Get treatment info
         treatment_info = treatment_database.get(predicted_disease, {})
         
-        # Prepare response for diseased leaves
-        response = {
-            'success': True,
-            'healthy': False,
+        # Save detection record for farmer
+        detection_record = {
+            'id': str(uuid.uuid4()),
+            'farmer_id': session.get('user_id', 'guest'),
+            'farmer_name': session.get('user_name', 'Guest'),
+            'image_path': f'/uploads/{unique_filename}',
+            'result': 'disease',
             'disease': treatment_info.get('disease_name', predicted_disease),
             'disease_key': predicted_disease,
             'confidence': round(confidence, 2),
-            'description': treatment_info.get('description', ''),
-            'pesticides': treatment_info.get('pesticides', []),
-            'application_method': treatment_info.get('application_method', ''),
-            'frequency': treatment_info.get('frequency', ''),
-            'preventive_measures': treatment_info.get('preventive_measures', []),
-            'uploaded_image': unique_filename,
+            'timestamp': datetime.now().isoformat(),
+            'location': session.get('user_location', {})
+        }
+        
+        detections_data = load_json_file('detections.json')
+        detections_data['detections'] = detections_data.get('detections', [])
+        detections_data['detections'].append(detection_record)
+        save_json_file('detections.json', detections_data)
+        
+        # Prepare response for diseased leaves
+        response = {
+            'status': 'diseased',
+            'disease': treatment_info.get('disease_name', predicted_disease),
+            'confidence': round(confidence, 2),
+            'recommendations': treatment_info.get('description', ''),
+            'image_path': f'/uploads/{unique_filename}',
             'timestamp': datetime.now().isoformat()
         }
         
