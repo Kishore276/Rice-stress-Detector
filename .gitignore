@@ -148,3 +148,6 @@ sessions/
 
 # Package files
 *.whl
+
+models/*.h5
+data/
