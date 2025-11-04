@@ -3,11 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rice Disease Detection - Redirecting...</title>
-    <script>
-        // Redirect to login page
-        window.location.href = 'login.html';
-    </script>
+    <title>Rice Disease Detection</title>
     <style>
         * {
             margin: 0;
@@ -15,52 +11,393 @@
             box-sizing: border-box;
         }
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rice Disease Detection - Redirecting...</title>
-    <script>
-        // Redirect to login page
-        window.location.href = 'login.html';
-    </script>
-    <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #87ceeb 0%, #4fc3f7 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
             text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+
+        .upload-area {
+            border: 3px dashed #667eea;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f8f9ff;
+        }
+
+        .upload-area:hover {
+            border-color: #764ba2;
+            background: #f0f2ff;
+        }
+
+        .upload-area.dragover {
+            border-color: #764ba2;
+            background: #e8ebff;
+        }
+
+        .upload-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+
+        .upload-text {
+            color: #666;
+            font-size: 16px;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .image-preview {
+            display: none;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .image-preview img {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .results {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9ff;
+            border-radius: 10px;
+        }
+
+        .disease-name {
+            font-size: 24px;
+            color: #667eea;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .confidence {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .confidence-bar {
+            width: 100%;
+            height: 30px;
+            background: #e0e0e0;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 1s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: white;
+            font-weight: bold;
+        }
+
+        .description {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        h3 {
+            color: #333;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        ul li {
+            padding: 8px 0;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        ul li:before {
+            content: "✓ ";
+            color: #667eea;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        .pesticide-item {
+            background: white;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border-left: 4px solid #667eea;
         }
 
         .loading {
-            font-size: 20px;
+            display: none;
+            text-align: center;
+            margin-top: 20px;
         }
 
         .spinner {
-            border: 4px solid rgba(255,255,255,0.3);
-            border-top: 4px solid white;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
             border-radius: 50%;
-            width: 50px;
-            height: 50px;
+            width: 40px;
+            height: 40px;
             animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
+            margin: 20px auto;
         }
 
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        .btn-reset {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .btn-reset:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+        }
+
+        .error {
+            color: #e74c3c;
+            padding: 15px;
+            background: #ffe8e8;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .info-text {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
-    <div>
-        <div class="spinner"></div>
-        <div class="loading">Redirecting to login...</div>
-        <p style="margin-top: 10px; font-size: 14px; opacity: 0.9;">
-            If not redirected, <a href="login.html" style="color: white; text-decoration: underline;">click here</a>
-        </p>
+    <div class="container">
+        <h1>🌾 Rice Disease Detection</h1>
+        
+        <div class="upload-area" id="uploadArea">
+            <div class="upload-icon">📸</div>
+            <div class="upload-text">
+                <strong>Click to upload</strong> or drag and drop<br>
+                Rice leaf image (JPG, PNG)
+            </div>
+            <input type="file" id="fileInput" accept="image/*">
+        </div>
+
+        <div class="image-preview" id="imagePreview">
+            <img id="previewImg" src="" alt="Preview">
+        </div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Analyzing image...</p>
+        </div>
+
+        <div class="error" id="error"></div>
+
+        <div class="results" id="results">
+            <div class="disease-name" id="diseaseName"></div>
+            <div class="confidence" id="confidenceText"></div>
+            <div class="confidence-bar">
+                <div class="confidence-fill" id="confidenceFill"></div>
+            </div>
+            <div class="description" id="description"></div>
+
+            <h3>🌿 Recommended Pesticides</h3>
+            <div id="pesticidesContainer"></div>
+
+            <h3>📋 Application Method</h3>
+            <p id="applicationMethod" style="color: #555; line-height: 1.6;"></p>
+
+            <h3>🔄 Application Frequency</h3>
+            <p id="frequency" style="color: #555; line-height: 1.6;"></p>
+
+            <h3>🛡️ Preventive Measures</h3>
+            <ul id="preventiveList"></ul>
+
+            <button class="btn-reset" onclick="resetForm()">Upload Another Image</button>
+        </div>
+
+        <p class="info-text">AI-powered detection with treatment recommendations</p>
     </div>
+
+    <script>
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const imagePreview = document.getElementById('imagePreview');
+        const previewImg = document.getElementById('previewImg');
+        const loading = document.getElementById('loading');
+        const results = document.getElementById('results');
+        const errorDiv = document.getElementById('error');
+
+        // Click to upload
+        uploadArea.addEventListener('click', () => fileInput.click());
+
+        // Drag and drop
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file && file.type.startsWith('image/')) {
+                handleFile(file);
+            }
+        });
+
+        // File input change
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                handleFile(file);
+            }
+        });
+
+        function handleFile(file) {
+            // Show preview
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                previewImg.src = e.target.result;
+                imagePreview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+
+            // Upload and predict
+            uploadImage(file);
+        }
+
+        async function uploadImage(file) {
+            loading.style.display = 'block';
+            results.style.display = 'none';
+            errorDiv.style.display = 'none';
+
+            const formData = new FormData();
+            formData.append('image', file);
+
+            try {
+                const response = await fetch('http://localhost:5000/api/predict', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    displayResults(data);
+                } else {
+                    showError(data.error || 'Prediction failed');
+                }
+            } catch (error) {
+                showError('Failed to connect to server. Make sure the backend is running (python app.py)');
+                console.error(error);
+            } finally {
+                loading.style.display = 'none';
+            }
+        }
+
+        function displayResults(data) {
+            document.getElementById('diseaseName').textContent = data.disease;
+            document.getElementById('confidenceText').textContent = `Confidence: ${data.confidence}%`;
+            document.getElementById('description').textContent = data.description;
+
+            // Confidence bar
+            const fill = document.getElementById('confidenceFill');
+            fill.style.width = data.confidence + '%';
+            fill.textContent = data.confidence + '%';
+
+            // Pesticides
+            const pesticidesContainer = document.getElementById('pesticidesContainer');
+            pesticidesContainer.innerHTML = '';
+            data.pesticides.forEach(pesticide => {
+                const div = document.createElement('div');
+                div.className = 'pesticide-item';
+                div.textContent = pesticide;
+                pesticidesContainer.appendChild(div);
+            });
+
+            // Application details
+            document.getElementById('applicationMethod').textContent = data.application_method;
+            document.getElementById('frequency').textContent = data.frequency;
+
+            // Preventive measures
+            const preventiveList = document.getElementById('preventiveList');
+            preventiveList.innerHTML = '';
+            data.preventive_measures.forEach(measure => {
+                const li = document.createElement('li');
+                li.textContent = measure;
+                preventiveList.appendChild(li);
+            });
+
+            results.style.display = 'block';
+        }
+
+        function showError(message) {
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+
+        function resetForm() {
+            fileInput.value = '';
+            imagePreview.style.display = 'none';
+            results.style.display = 'none';
+            errorDiv.style.display = 'none';
+        }
+    </script>
 </body>
 </html>
