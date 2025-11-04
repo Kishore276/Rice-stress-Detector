@@ -154,17 +154,53 @@ function showResults(data) {
         resultsSection.innerHTML = `
             <div style="background: #FFF3E0; border-left: 4px solid #FF9800; padding: 20px; border-radius: 8px; color: #E65100;">
                 <h3 style="margin-bottom: 15px;">⚠️ Disease Detected</h3>
+                
+                <!-- Disease Info -->
                 <div style="background: white; padding: 15px; border-radius: 6px; margin-bottom: 15px;">
                     <p style="font-size: 18px; font-weight: 600; color: #2C5F7C; margin-bottom: 5px;">${data.disease}</p>
                     <p style="font-size: 14px; color: #5A9FBA;">Confidence: ${data.confidence}%</p>
+                    ${data.description ? `<p style="margin-top: 10px; color: #666; font-size: 14px;">${data.description}</p>` : ''}
                 </div>
-                ${data.recommendations ? `
-                    <div style="background: white; padding: 15px; border-radius: 6px;">
-                        <h4 style="color: #2C5F7C; margin-bottom: 10px;">📋 Recommendations:</h4>
-                        <p style="color: #5A9FBA; line-height: 1.6;">${data.recommendations}</p>
+                
+                <!-- Pesticides -->
+                ${data.pesticides && data.pesticides.length > 0 ? `
+                    <div style="background: white; padding: 15px; border-radius: 6px; margin-bottom: 15px;">
+                        <h4 style="color: #2C5F7C; margin-bottom: 10px;">💊 Recommended Pesticides:</h4>
+                        <ul style="margin: 0; padding-left: 20px; color: #5A9FBA; line-height: 1.8;">
+                            ${data.pesticides.map(p => `<li>${p}</li>`).join('')}
+                        </ul>
                     </div>
                 ` : ''}
-                <p style="margin-top: 15px; font-size: 14px;">💡 <strong>Tip:</strong> Visit "Nearby Shops" to find pesticides and fertilizers, or contact a research center for expert advice.</p>
+                
+                <!-- Application Method -->
+                ${data.application_method ? `
+                    <div style="background: white; padding: 15px; border-radius: 6px; margin-bottom: 15px;">
+                        <h4 style="color: #2C5F7C; margin-bottom: 10px;">📋 Application Method:</h4>
+                        <p style="color: #5A9FBA; line-height: 1.6;">${data.application_method}</p>
+                    </div>
+                ` : ''}
+                
+                <!-- Frequency -->
+                ${data.frequency ? `
+                    <div style="background: white; padding: 15px; border-radius: 6px; margin-bottom: 15px;">
+                        <h4 style="color: #2C5F7C; margin-bottom: 10px;">🔄 Application Frequency:</h4>
+                        <p style="color: #5A9FBA; line-height: 1.6;">${data.frequency}</p>
+                    </div>
+                ` : ''}
+                
+                <!-- Preventive Measures -->
+                ${data.preventive_measures && data.preventive_measures.length > 0 ? `
+                    <div style="background: white; padding: 15px; border-radius: 6px; margin-bottom: 15px;">
+                        <h4 style="color: #2C5F7C; margin-bottom: 10px;">🛡️ Preventive Measures:</h4>
+                        <ul style="margin: 0; padding-left: 20px; color: #5A9FBA; line-height: 1.8;">
+                            ${data.preventive_measures.map(m => `<li>${m}</li>`).join('')}
+                        </ul>
+                    </div>
+                ` : ''}
+                
+                <p style="margin-top: 15px; font-size: 14px; background: #E3F2FD; padding: 12px; border-radius: 6px; border-left: 3px solid #2196F3;">
+                    💡 <strong>Tip:</strong> Visit "Nearby Shops" to find these pesticides and fertilizers, or contact a research center for expert advice.
+                </p>
             </div>
         `;
     }
