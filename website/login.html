@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rice Disease Detection - Login</title>
+    <link rel="stylesheet" href="auth.css">
+</head>
+<body>
+    <div class="container">
+        <div class="auth-box">
+            <div class="logo-section">
+                <h1>🌾 Rice Disease Detection System</h1>
+                <p>Smart Agriculture for Better Yields</p>
+            </div>
+
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('login')">Login</button>
+                <button class="tab" onclick="showTab('register')">Register</button>
+            </div>
+
+            <!-- Login Form -->
+            <div id="login-form" class="form-container active">
+                <h2>Welcome Back!</h2>
+                <form onsubmit="handleLogin(event)">
+                    <div class="user-type-selector">
+                        <label class="radio-option">
+                            <input type="radio" name="user_type" value="farmer" checked>
+                            <span>👨‍🌾 Farmer</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="user_type" value="research_center">
+                            <span>🔬 Research Center</span>
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" name="email" required placeholder="Enter your email">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" name="password" required placeholder="Enter your password">
+                    </div>
+
+                    <button type="submit" class="btn-primary">Login</button>
+
+                    <div class="demo-credentials">
+                        <p><strong>Demo Credentials:</strong></p>
+                        <p>Farmer: rajesh.kumar@example.com / farmer123</p>
+                        <p>Research: iirr.hyderabad@icar.gov.in / research123</p>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Registration Form -->
+            <div id="register-form" class="form-container">
+                <h2>New Farmer Registration</h2>
+                <form onsubmit="handleRegister(event)">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" name="name" required placeholder="Enter your full name">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" name="email" required placeholder="Enter your email">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="tel" name="phone" required placeholder="+91-XXXXXXXXXX">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Address</label>
+                        <input type="text" name="address" required placeholder="Enter your address">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" name="password" required placeholder="Create a password">
+                    </div>
+
+                    <button type="submit" class="btn-primary">Register</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+</body>
+</html>
