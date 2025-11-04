@@ -1,153 +1,66 @@
 # Python
 __pycache__/
 *.py[cod]
-*$py.class
-*.so
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-pip-wheel-metadata/
-share/python-wheels/
-*.egg-info/
-.installed.cfg
+*.pyo
+*.pyd
+*.pyc
+*.pdb
 *.egg
-MANIFEST
-
-# Virtual Environment
+*.eggs
+*.env
+.env/
 venv/
-env/
 ENV/
-env.bak/
-venv.bak/
-.venv/
+env/
+*.env
+*.venv
 
-# PyCharm
-.idea/
-*.iml
-*.iws
-.idea_modules/
+# Jupyter Notebooks
+.ipynb_checkpoints/
+*.ipynb_checkpoints
 
 # VS Code
 .vscode/
-*.code-workspace
 
-# Jupyter Notebook
-.ipynb_checkpoints/
-*/.ipynb_checkpoints/*
-*.ipynb_checkpoints
-
-# TensorFlow/Keras
+# Data and model files
 *.h5
-*.hdf5
-*.pb
-*.pbtxt
-*.ckpt
-*.ckpt.data-*
-*.ckpt.index
-*.ckpt.meta
-saved_model/
-checkpoints/
-
-# Model files (except the main one you want to keep)
-models/*.h5
-!models/rice_disease_model.h5
-models/*.hdf5
-models/*.ckpt
-models/*.pb
-
-# Uploads folder (user uploaded images)
-uploads/*
-!uploads/.gitkeep
-
-# User data files (contains sensitive passwords and detection records)
-data/detections.json
-data/*.json.bak
-data/*.json.tmp
-
-# Keep template/initial data files
-!data/users.json
-!data/pesticide_shops.json
-
-# Dataset (large files)
-Rice\ Leaf\ Disease\ Images/
-*.zip
-*.tar
-*.tar.gz
-*.rar
-dataset/
-data/
-datasets/
-
-# Logs
+*.json
+*.csv
+*.tsv
+*.xls
+*.xlsx
+*.db
+*.sqlite
 *.log
-logs/
-tensorboard/
-*.out
-*.err
+*.pickle
+*.joblib
+*.npy
+*.npz
 
 # OS files
 .DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
 Thumbs.db
-desktop.ini
 
-# Environment variables
-.env
-.env.local
-.env.*.local
+# Uploads and outputs
+uploads/
 
-# Test coverage
-htmlcov/
-.tox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-.hypothesis/
-.pytest_cache/
+# HTML and browser cache
+*.html
+*.mhtml
+*.webp
 
-# Analysis files
-*.csv
-*.png
-!paper.html
-confusion_matrix.png
-training_curves.png
-detailed_training_analysis.png
-advanced_accuracy_analysis.png
+# Batch files
+*.bat
 
-# Session data
-flask_session/
-sessions/
-
-# Temporary files
+# Misc
+*.bak
 *.tmp
-*.temp
 *.swp
 *.swo
-*~
-.#*
 
-# Git
-*.orig
+# Ignore models directory except class_indices.json
+models/
+!models/class_indices.json
 
-# Package files
-*.whl
-
-models/*.h5
-data/
+# Ignore Rice Leaf Disease Images
+Rice Leaf Disease Images/
