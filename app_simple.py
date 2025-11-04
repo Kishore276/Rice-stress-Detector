@@ -327,7 +327,7 @@ def register():
 def get_pesticide_shops():
     """Get list of pesticide shops"""
     shops_data = load_json_file('pesticide_shops.json')
-    return jsonify(shops_data.get('pesticide_shops', [])), 200
+    return jsonify({'shops': shops_data.get('pesticide_shops', [])}), 200
 
 @app.route('/api/research-centers', methods=['GET'])
 def get_research_centers():
@@ -563,12 +563,16 @@ def predict():
         detections_data['detections'].append(detection_record)
         save_json_file('detections.json', detections_data)
         
-        # Prepare response for diseased leaves
+        # Prepare response for diseased leaves with full treatment details
         response = {
             'status': 'diseased',
             'disease': treatment_info.get('disease_name', predicted_disease),
             'confidence': round(confidence, 2),
-            'recommendations': treatment_info.get('description', ''),
+            'description': treatment_info.get('description', ''),
+            'pesticides': treatment_info.get('pesticides', []),
+            'application_method': treatment_info.get('application_method', ''),
+            'frequency': treatment_info.get('frequency', ''),
+            'preventive_measures': treatment_info.get('preventive_measures', []),
             'image_path': f'/uploads/{unique_filename}',
             'timestamp': datetime.now().isoformat()
         }
