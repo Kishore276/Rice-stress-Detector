@@ -154,116 +154,13 @@ function handleImageUpload(file) {
         uploadBox.style.display = 'none';
         previewBox.style.display = 'block';
         
-        // Send to backend for prediction
-        uploadToBackend(file);
+        // Simulate prediction (in real app, send to backend)
+        setTimeout(() => {
+            predictDisease();
+        }, 1000);
     };
     
     reader.readAsDataURL(file);
-}
-
-// Upload to backend API
-async function uploadToBackend(file) {
-    try {
-        // Show loading state
-        resultsSection.style.display = 'block';
-        resultsSection.innerHTML = '<div style="text-align:center; padding: 40px;"><div class="loader"></div><p>Analyzing image...</p></div>';
-        
-        const formData = new FormData();
-        formData.append('image', file);
-        
-        const response = await fetch('/api/predict', {
-            method: 'POST',
-            body: formData
-        });
-        
-        const data = await response.json();
-        
-        if (!response.ok || !data.success) {
-            // Not a rice plant or error
-            showError(data.message || data.error);
-            return;
-        }
-        
-        // Check if leaf is healthy
-        if (data.healthy) {
-            showHealthyResult(data);
-            return;
-        }
-        
-        // Display disease results
-        displayResults(data);
-        
-    } catch (error) {
-        showError('Failed to analyze image. Please try again.\n\nError: ' + error.message);
-    }
-}
-
-// Show error message
-function showError(message) {
-    resultsSection.style.display = 'block';
-    resultsSection.innerHTML = `
-        <div style="background: #fff3cd; border: 2px solid #ffc107; border-radius: 12px; padding: 30px; text-align: center; margin: 20px 0;">
-            <div style="font-size: 60px; margin-bottom: 20px;">⚠️</div>
-            <h2 style="color: #856404; margin-bottom: 15px;">Invalid Image</h2>
-            <div style="color: #856404; font-size: 16px; line-height: 1.8; white-space: pre-line; text-align: left; max-width: 600px; margin: 0 auto;">
-                ${message}
-            </div>
-            <button onclick="clearImage()" style="margin-top: 20px; padding: 12px 30px; background: #ff6b6b; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px;">
-                ✕ Clear and Try Again
-            </button>
-        </div>
-        <div style="background: #d4edda; border: 2px solid #28a745; border-radius: 12px; padding: 25px; margin: 20px 0;">
-            <h3 style="color: #155724; margin-bottom: 15px;">📸 How to take a proper rice leaf photo:</h3>
-            <ul style="color: #155724; text-align: left; line-height: 2; max-width: 600px; margin: 0 auto;">
-                <li><strong>Focus on rice plants only</strong> - Not wheat, corn, or other crops</li>
-                <li><strong>Close-up of a single leaf</strong> - Show disease symptoms clearly</li>
-                <li><strong>Good lighting</strong> - Natural daylight works best</li>
-                <li><strong>Sharp focus</strong> - Avoid blurry images</li>
-                <li><strong>Visible disease signs</strong> - Spots, lesions, or discoloration</li>
-            </ul>
-        </div>
-    `;
-    resultsSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-}
-
-// Show healthy leaf result
-function showHealthyResult(data) {
-    resultsSection.style.display = 'block';
-    resultsSection.innerHTML = `
-        <div style="background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%); border: 3px solid #28a745; border-radius: 12px; padding: 40px; text-align: center; margin: 20px 0; box-shadow: 0 5px 20px rgba(40, 167, 69, 0.3);">
-            <div style="font-size: 80px; margin-bottom: 20px;">✅</div>
-            <h2 style="color: #155724; margin-bottom: 15px; font-size: 32px;">HEALTHY RICE LEAF!</h2>
-            <div class="confidence-header" style="margin: 20px 0;">
-                <span style="color: #155724; font-size: 18px;">Confidence Level</span>
-                <span style="color: #155724; font-size: 24px; font-weight: bold;">${data.confidence.toFixed(1)}%</span>
-            </div>
-            <div class="confidence-bar" style="background: #fff; height: 30px; border-radius: 15px; overflow: hidden; margin: 15px 0;">
-                <div style="width: ${data.confidence}%; height: 100%; background: linear-gradient(90deg, #28a745, #20c997); transition: width 1s ease;"></div>
-            </div>
-            <p style="color: #155724; font-size: 18px; line-height: 1.8; margin: 20px 0;">
-                ${data.description}
-            </p>
-        </div>
-
-        <div style="background: white; border-radius: 12px; padding: 30px; margin: 20px 0; box-shadow: 0 3px 10px rgba(0,0,0,0.1);">
-            <h3 style="color: #28a745; margin-bottom: 20px; font-size: 24px;">🌾 Maintenance Recommendations</h3>
-            <ul style="color: #155724; text-align: left; line-height: 2; font-size: 16px;">
-                ${data.recommendations.map(r => `<li>${r}</li>`).join('')}
-            </ul>
-        </div>
-
-        <div style="background: white; border-radius: 12px; padding: 30px; margin: 20px 0; box-shadow: 0 3px 10px rgba(0,0,0,0.1);">
-            <h3 style="color: #28a745; margin-bottom: 20px; font-size: 24px;">🛡️ Preventive Measures</h3>
-            <ul style="color: #155724; text-align: left; line-height: 2; font-size: 16px;">
-                ${data.preventive_measures.map(p => `<li>${p}</li>`).join('')}
-            </ul>
-        </div>
-
-        <button onclick="clearImage()" style="margin: 30px auto; display: block; padding: 15px 50px; background: #28a745; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 18px; box-shadow: 0 3px 10px rgba(40, 167, 69, 0.3);">
-            📷 Analyze Another Leaf
-        </button>
-    `;
-    resultsSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
 // Clear image
@@ -274,71 +171,65 @@ function clearImage() {
     imageInput.value = '';
 }
 
-// Smooth scrolling for navigation links
-function displayResults(data) {
-    const disease = treatmentDatabase[data.disease_key];
+// Simulate disease prediction
+function predictDisease() {
+    // In real application, this would send image to backend API
+    // For demo, randomly select a disease
+    const diseases = ['Bacterialblight', 'Blast', 'Brownspot', 'Tungro'];
+    const randomDisease = diseases[Math.floor(Math.random() * diseases.length)];
+    const confidence = 85 + Math.random() * 15; // 85-100%
+    
+    displayResults(randomDisease, confidence);
+}
+
+// Display results
+function displayResults(diseaseName, confidence) {
+    const disease = treatmentDatabase[diseaseName];
     
     // Show results section
     resultsSection.style.display = 'block';
-    resultsSection.innerHTML = ''; // Clear loading/error state
     
-    // Create results HTML
-    resultsSection.innerHTML = `
-        <div class="confidence-meter">
-            <div class="confidence-header">
-                <span>Confidence Level</span>
-                <span id="confidenceValue">${data.confidence.toFixed(1)}%</span>
-            </div>
-            <div class="confidence-bar">
-                <div class="confidence-fill" id="confidenceFill" style="width: ${data.confidence}%"></div>
-            </div>
-        </div>
-
-        <div class="disease-info">
-            <h2 id="diseaseName">${disease.disease_name}</h2>
-            <p id="diseaseDescription">${disease.description}</p>
-        </div>
-
-        <div class="symptoms-section">
-            <h3>🔍 Symptoms</h3>
-            <ul id="symptomsList">
-                ${disease.symptoms.map(s => `<li>${s}</li>`).join('')}
-            </ul>
-        </div>
-
-        <div class="treatment-section">
-            <h3>💊 Treatment & Pesticides</h3>
-            <ul id="treatmentList">
-                ${disease.treatment.map(t => `<li>${t}</li>`).join('')}
-            </ul>
-        </div>
-
-        <div class="precautions-section">
-            <h3>🛡️ Precautions & Prevention</h3>
-            <ul id="precautionsList">
-                ${disease.precautions.map(p => `<li>${p}</li>`).join('')}
-            </ul>
-        </div>
-
-        <div class="recommendations-section">
-            <div class="recommendation-card">
-                <h4>💧 Water Management</h4>
-                <p id="waterManagement">${disease.water_management}</p>
-            </div>
-            <div class="recommendation-card">
-                <h4>🌱 Fertilizer Recommendation</h4>
-                <p id="fertilizerRec">${disease.fertilizer}</p>
-            </div>
-            <div class="recommendation-card severity-${disease.severity.toLowerCase().replace(' ', '-')}">
-                <h4>⚠️ Severity Level</h4>
-                <p id="severityLevel">${disease.severity}</p>
-            </div>
-        </div>
-
-        <button onclick="clearImage()" style="margin: 30px auto; display: block; padding: 12px 40px; background: #2ecc71; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px;">
-            📷 Analyze Another Image
-        </button>
-    `;
+    // Update confidence meter
+    const confidenceFill = document.getElementById('confidenceFill');
+    const confidenceValue = document.getElementById('confidenceValue');
+    confidenceFill.style.width = confidence + '%';
+    confidenceValue.textContent = confidence.toFixed(1) + '%';
+    
+    // Update disease info
+    document.getElementById('diseaseName').textContent = disease.disease_name;
+    document.getElementById('diseaseDescription').textContent = disease.description;
+    
+    // Update symptoms
+    const symptomsList = document.getElementById('symptomsList');
+    symptomsList.innerHTML = '';
+    disease.symptoms.forEach(symptom => {
+        const li = document.createElement('li');
+        li.textContent = symptom;
+        symptomsList.appendChild(li);
+    });
+    
+    // Update precautions
+    const precautionsList = document.getElementById('precautionsList');
+    precautionsList.innerHTML = '';
+    disease.precautions.forEach(precaution => {
+        const li = document.createElement('li');
+        li.textContent = precaution;
+        precautionsList.appendChild(li);
+    });
+    
+    // Update treatment
+    const treatmentList = document.getElementById('treatmentList');
+    treatmentList.innerHTML = '';
+    disease.treatment.forEach(treatment => {
+        const li = document.createElement('li');
+        li.textContent = treatment;
+        treatmentList.appendChild(li);
+    });
+    
+    // Update other recommendations
+    document.getElementById('waterManagement').textContent = disease.water_management;
+    document.getElementById('fertilizerRec').textContent = disease.fertilizer;
+    document.getElementById('severityLevel').textContent = disease.severity;
     
     // Scroll to results
     resultsSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
