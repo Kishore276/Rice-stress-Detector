@@ -77,6 +77,16 @@
             <!-- Nearby Shops Section -->
             <section id="shops-section" class="content-section">
                 <h2>Nearby Pesticide & Fertilizer Shops</h2>
+                
+                <!-- Map Search Box -->
+                <div style="margin-bottom: 15px; position: relative;">
+                    <input type="text" id="mapSearch" placeholder="🔍 Search for places, shops, hospitals..." 
+                           style="width: 100%; padding: 12px 45px 12px 15px; border: 2px solid #87CEEB; border-radius: 8px; font-size: 15px; outline: none;">
+                    <button onclick="searchMap()" style="position: absolute; right: 5px; top: 5px; padding: 7px 15px; background: linear-gradient(135deg, #87CEEB 0%, #5A9FBA 100%); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">
+                        Search
+                    </button>
+                </div>
+                
                 <div class="map-container">
                     <div id="map" style="height: 500px; border-radius: 12px;"></div>
                     <div style="margin-top: 15px; padding: 15px; background: #F0F9FF; border-radius: 8px; border-left: 4px solid #87CEEB;">
@@ -92,7 +102,7 @@
                             <div>🏠 <strong>Gray</strong> - Buildings/Homes</div>
                         </div>
                         <p style="margin: 10px 0 0 0; font-size: 12px; color: #5A9FBA;">
-                            💡 <strong>Tip:</strong> Click on any marker to see details. Click on a shop marker to see the route from your location.
+                            💡 <strong>Tip:</strong> Click on any marker to see details. Use search box to find specific places. Zoom in to see street names and building details.
                         </p>
                     </div>
                 </div>
