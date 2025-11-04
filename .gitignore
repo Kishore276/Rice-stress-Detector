@@ -69,6 +69,15 @@ models/*.pb
 uploads/*
 !uploads/.gitkeep
 
+# User data files (contains sensitive passwords and detection records)
+data/detections.json
+data/*.json.bak
+data/*.json.tmp
+
+# Keep template/initial data files
+!data/users.json
+!data/pesticide_shops.json
+
 # Dataset (large files)
 Rice\ Leaf\ Disease\ Images/
 *.zip
@@ -121,6 +130,10 @@ confusion_matrix.png
 training_curves.png
 detailed_training_analysis.png
 advanced_accuracy_analysis.png
+
+# Session data
+flask_session/
+sessions/
 
 # Temporary files
 *.tmp

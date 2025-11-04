@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmer Dashboard - Rice Disease Detection</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="dashboard-header">
+        <div class="header-content">
+            <h1>🌾 Rice Disease Detection</h1>
+            <div class="user-info">
+                <span id="user-name">Welcome, Farmer</span>
+                <button onclick="logout()" class="btn-logout">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="dashboard-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <ul>
+                <li><a href="#detection" onclick="showSection('detection')" class="active">
+                    📸 Disease Detection
+                </a></li>
+                <li><a href="#history" onclick="showSection('history')">
+                    📊 My History
+                </a></li>
+                <li><a href="#shops" onclick="showSection('shops')">
+                    🛒 Nearby Shops
+                </a></li>
+                <li><a href="#research" onclick="showSection('research')">
+                    🔬 Research Centers
+                </a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Disease Detection Section -->
+            <section id="detection-section" class="content-section active">
+                <h2>Upload Rice Leaf Image</h2>
+                
+                <div class="upload-area">
+                    <div id="uploadBox" class="upload-box">
+                        <div class="upload-icon">📷</div>
+                        <h3>Drag & Drop or Click to Upload</h3>
+                        <p>Upload a clear image of rice leaf</p>
+                        <input type="file" id="imageInput" accept="image/*" style="display: none;">
+                        <button onclick="document.getElementById('imageInput').click()" class="btn-upload">
+                            Choose Image
+                        </button>
+                    </div>
+
+                    <div id="previewBox" class="preview-box" style="display: none;">
+                        <img id="previewImage" alt="Preview">
+                        <button onclick="clearImage()" class="btn-clear">✕ Clear</button>
+                    </div>
+                </div>
+
+                <div id="resultsSection" class="results-section"></div>
+            </section>
+
+            <!-- History Section -->
+            <section id="history-section" class="content-section">
+                <h2>Detection History</h2>
+                <div id="history-list" class="history-list">
+                    <p class="loading">Loading history...</p>
+                </div>
+            </section>
+
+            <!-- Nearby Shops Section -->
+            <section id="shops-section" class="content-section">
+                <h2>Nearby Pesticide & Fertilizer Shops</h2>
+                <div class="map-container">
+                    <div id="map" style="height: 500px; border-radius: 12px;"></div>
+                    <div style="margin-top: 15px; padding: 15px; background: #F0F9FF; border-radius: 8px; border-left: 4px solid #87CEEB;">
+                        <h4 style="margin: 0 0 10px 0; color: #2C5F7C;">Map Legend:</h4>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; font-size: 13px;">
+                            <div>📍 <strong>Blue Dot</strong> - Your Location</div>
+                            <div>🏪 <strong>Red</strong> - Pesticide Shops</div>
+                            <div>🏥 <strong>Red</strong> - Hospitals/Clinics</div>
+                            <div>💊 <strong>Purple</strong> - Pharmacies</div>
+                            <div>🏫 <strong>Blue</strong> - Schools</div>
+                            <div>🏦 <strong>Orange</strong> - Banks</div>
+                            <div>🏬 <strong>Green</strong> - Supermarkets</div>
+                            <div>🏠 <strong>Gray</strong> - Buildings/Homes</div>
+                        </div>
+                        <p style="margin: 10px 0 0 0; font-size: 12px; color: #5A9FBA;">
+                            💡 <strong>Tip:</strong> Click on any marker to see details. Click on a shop marker to see the route from your location.
+                        </p>
+                    </div>
+                </div>
+                <div id="shops-list" class="shops-list"></div>
+            </section>
+
+            <!-- Research Centers Section -->
+            <section id="research-section" class="content-section">
+                <h2>Contact Research Centers</h2>
+                <div id="research-centers" class="research-centers"></div>
+            </section>
+        </main>
+    </div>
+
+    <script src="farmer-dashboard.js"></script>
+</body>
+</html>
