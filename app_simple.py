@@ -433,6 +433,17 @@ def update_disease_info():
     
     return jsonify({'success': True, 'message': 'Disease information updated'}), 200
 
+@app.route('/api/farmers-list', methods=['GET'])
+def farmers_list():
+    """Get list of all farmers (for research centers)"""
+    if 'user_id' not in session or session.get('user_type') != 'research_center':
+        return jsonify({'error': 'Unauthorized'}), 401
+    
+    users_data = load_json_file('users.json')
+    farmers = users_data.get('farmers', [])
+    
+    return jsonify({'farmers': farmers}), 200
+
 # ==================== MAIN DETECTION ROUTES ====================
 
 @app.route('/')
