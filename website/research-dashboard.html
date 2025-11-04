@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Research Center Dashboard - Rice Disease Detection</title>
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="dashboard-header">
+        <div class="header-content">
+            <h1>🔬 Rice Disease Detection - Research Center</h1>
+            <div class="user-info">
+                <span id="user-name">Welcome, Research Center</span>
+                <button onclick="logout()" class="btn-logout">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="dashboard-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <ul>
+                <li><a href="#detections" onclick="showSection('detections')" class="active">
+                    📊 All Detections
+                </a></li>
+                <li><a href="#farmers" onclick="showSection('farmers')">
+                    👨‍🌾 Farmers
+                </a></li>
+                <li><a href="#statistics" onclick="showSection('statistics')">
+                    📈 Statistics
+                </a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- All Detections Section -->
+            <section id="detections-section" class="content-section active">
+                <h2>All Farmer Detections</h2>
+                <div id="detections-list" class="history-list">
+                    <p class="loading">Loading detections...</p>
+                </div>
+            </section>
+
+            <!-- Farmers Section -->
+            <section id="farmers-section" class="content-section">
+                <h2>Registered Farmers</h2>
+                <div id="farmers-list" class="research-centers">
+                    <p class="loading">Loading farmers...</p>
+                </div>
+            </section>
+
+            <!-- Statistics Section -->
+            <section id="statistics-section" class="content-section">
+                <h2>Detection Statistics</h2>
+                <div id="statistics-content">
+                    <p class="loading">Loading statistics...</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="research-dashboard.js"></script>
+</body>
+</html>
