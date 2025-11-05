@@ -153,6 +153,9 @@ function detectDisease() {
     })
     .then(response => response.json())
     .then(data => {
+        console.log('API Response:', data);
+        console.log('Recommended pesticides:', data.recommended_pesticides);
+        
         if (data.success) {
             currentDetectionResult = data;
             displayDetectionResult(data);
@@ -173,33 +176,81 @@ function detectDisease() {
 }
 
 function displayDetectionResult(data) {
+    console.log('displayDetectionResult called with:', data);
+    
     const resultDiv = document.getElementById('detection-result');
-    document.getElementById('result-disease-name').textContent = data.disease;
+    document.getElementById('result-disease-name').textContent = data.disease || data.disease_key;
     document.getElementById('result-confidence').textContent = data.confidence + '%';
     
     // Show treatment recommendations
-    let recommendations = data.treatment || `Detected: ${data.disease} with ${data.confidence}% confidence.`;
+    let recommendations = '';
+    
+    if (data.treatment) {
+        recommendations = data.treatment + '\n\n';
+    } else {
+        recommendations = `Detected: ${data.disease} with ${data.confidence}% confidence.\n\n`;
+    }
+    
+    // Add application method and frequency if available
+    if (data.application_method) {
+        recommendations += `📝 Application Method:\n${data.application_method}\n\n`;
+    }
+    
+    if (data.frequency) {
+        recommendations += `⏰ Frequency:\n${data.frequency}\n\n`;
+    }
+    
+    console.log('Pesticides array:', data.recommended_pesticides);
+    console.log('Pesticides length:', data.recommended_pesticides ? data.recommended_pesticides.length : 0);
     
     // Add pesticide recommendations if available
     if (data.recommended_pesticides && data.recommended_pesticides.length > 0) {
-        recommendations += '\n\n📋 Recommended Pesticides:\n\n';
+        console.log('Adding pesticide recommendations to display');
+        recommendations += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
+        recommendations += '📋 RECOMMENDED PESTICIDES\n';
+        recommendations += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n';
+        
         data.recommended_pesticides.forEach((pesticide, index) => {
+            console.log(`Adding pesticide ${index + 1}:`, pesticide);
             recommendations += `${index + 1}. ${pesticide.name}\n`;
-            recommendations += `   💊 Dosage: ${pesticide.dosage_per_acre || 'As per instructions'}\n`;
-            recommendations += `   📝 Method: ${pesticide.application_method || 'Spray application'}\n`;
-            recommendations += `   ⭐ Effectiveness: ${pesticide.effectiveness || 'N/A'}%\n`;
-            recommendations += `   💰 Price: ₹${pesticide.price}/${pesticide.unit}\n\n`;
+            recommendations += `   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+            recommendations += `   💊 Dosage: ${pesticide.dosage_per_acre || pesticide.description || 'As per instructions'}\n`;
+            
+            if (pesticide.application_method && pesticide.application_method !== data.application_method) {
+                recommendations += `   📝 Method: ${pesticide.application_method}\n`;
+            }
+            
+            if (pesticide.effectiveness) {
+                recommendations += `   ⭐ Effectiveness: ${pesticide.effectiveness}%\n`;
+            }
+            
+            if (pesticide.price && pesticide.price > 0) {
+                recommendations += `   💰 Price: ₹${pesticide.price}/${pesticide.unit}\n`;
+            }
+            
+            recommendations += '\n';
         });
+        
+        recommendations += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n';
+        recommendations += '💡 Tip: Click "Add Pesticides to Cart" to purchase these products.\n';
     } else {
-        recommendations += '\n\nApply appropriate pesticides and follow treatment guidelines.';
+        console.log('No pesticides found in response');
+        recommendations += '\n⚠️ Pesticide recommendations not available.\n';
+        recommendations += 'Please consult with agricultural experts for treatment advice.\n';
     }
     
     document.getElementById('result-recommendations').textContent = recommendations;
     
     resultDiv.style.display = 'block';
     
-    // Store pesticides for cart
-    currentDetectionResult.pesticides = data.recommended_pesticides || [];
+    // Store full detection result for cart
+    currentDetectionResult = {
+        disease: data.disease || data.disease_key,
+        confidence: data.confidence,
+        pesticides: data.recommended_pesticides || []
+    };
+    
+    console.log('Detection result displayed:', currentDetectionResult);
 }
 
 function addToCart() {
@@ -429,24 +480,73 @@ function displayResearchLabs(labs) {
 // MAP & SHOPS
 // =====================================================
 
-function initializeMap() {
-    // Use farmer location if available, otherwise use default location (India center)
-    const defaultLat = 20.5937;  // India center
-    const defaultLng = 78.9629;
-    
-    const lat = (farmerLocation && farmerLocation.latitude) ? farmerLocation.latitude : defaultLat;
-    const lng = (farmerLocation && farmerLocation.longitude) ? farmerLocation.longitude : defaultLng;
+let currentMapCenter = null; // Store current map center for search
+let baseLayers = {}; // Store different map layers
+let roadLayer = null; // Roads overlay layer
+let userLocationMarker = null; // Store user's current location marker
 
+function initializeMap() {
+    console.log('Initializing map...');
+    console.log('Farmer location:', farmerLocation);
+    
+    // Default to center of India if farmer location not set
+    let lat = 20.5937;
+    let lng = 78.9629;
+    let zoom = 5;
+    
+    // Use farmer's location if available
+    if (farmerLocation && farmerLocation.latitude && farmerLocation.longitude) {
+        lat = farmerLocation.latitude;
+        lng = farmerLocation.longitude;
+        zoom = 12;
+    }
+    
+    currentMapCenter = { lat, lng };
+    console.log(`Map center: [${lat}, ${lng}], zoom: ${zoom}`);
+
+    // Remove existing map if any
     if (map) {
         map.remove();
     }
 
-    map = L.map('map').setView([lat, lng], 12);
+    map = L.map('map').setView([lat, lng], zoom);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    // Define base layers
+    baseLayers = {
+        street: L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors',
+            maxZoom: 19
+        }),
+        satellite: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Tiles &copy; Esri',
+            maxZoom: 19
+        }),
+        hybrid: L.layerGroup([
+            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                attribution: 'Tiles &copy; Esri',
+                maxZoom: 19
+            }),
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors, © CARTO',
+                maxZoom: 19
+            })
+        ]),
+        terrain: L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+            attribution: 'Map data: &copy; OpenStreetMap contributors, SRTM | Map style: &copy; OpenTopoMap',
+            maxZoom: 17
+        })
+    };
+
+    // Add default street layer
+    baseLayers.street.addTo(map);
+
+    // Create roads overlay layer
+    roadLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors',
-        maxZoom: 19
-    }).addTo(map);
+        maxZoom: 19,
+        opacity: 0.5
+    });
+    roadLayer.addTo(map);
 
     // Add farmer location marker only if available
     if (farmerLocation && farmerLocation.latitude) {
@@ -465,6 +565,163 @@ function initializeMap() {
     }
 
     loadShopsOnMap();
+}
+
+function changeMapLayer(layerType) {
+    if (!map) return;
+    
+    console.log('Changing map layer to:', layerType);
+    
+    // Remove all base layers
+    Object.values(baseLayers).forEach(layer => {
+        map.removeLayer(layer);
+    });
+    
+    // Add selected layer
+    if (baseLayers[layerType]) {
+        baseLayers[layerType].addTo(map);
+    }
+    
+    // Re-add road layer if enabled
+    const showRoads = document.getElementById('show-roads').checked;
+    if (showRoads && layerType !== 'street') {
+        if (!map.hasLayer(roadLayer)) {
+            roadLayer.addTo(map);
+        }
+    }
+}
+
+function toggleRoads(show) {
+    if (!map || !roadLayer) return;
+    
+    const currentLayer = document.getElementById('map-layer-selector').value;
+    
+    if (show && currentLayer !== 'street') {
+        roadLayer.addTo(map);
+    } else {
+        map.removeLayer(roadLayer);
+    }
+}
+
+function getCurrentLocation() {
+    if (!navigator.geolocation) {
+        showAlert('Geolocation is not supported by your browser', 'error');
+        return;
+    }
+
+    showAlert('Getting your location...', 'info');
+
+    navigator.geolocation.getCurrentPosition(
+        (position) => {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+            
+            console.log('Got user location:', lat, lng);
+            
+            currentMapCenter = { lat, lng };
+            
+            // Remove old user location marker if exists
+            if (userLocationMarker) {
+                map.removeLayer(userLocationMarker);
+            }
+            
+            // Add new user location marker
+            userLocationMarker = L.marker([lat, lng], {
+                icon: L.icon({
+                    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+                    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                    iconSize: [25, 41],
+                    iconAnchor: [12, 41],
+                    popupAnchor: [1, -34],
+                    shadowSize: [41, 41]
+                })
+            }).addTo(map).bindPopup('📍 Your Current Location');
+            
+            // Center map on user location
+            map.setView([lat, lng], 13);
+            
+            showAlert('Location found! Searching nearby shops...', 'success');
+            loadShopsOnMap();
+        },
+        (error) => {
+            let message = 'Unable to get your location';
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    message = 'Location permission denied. Please enable location access.';
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    message = 'Location information unavailable.';
+                    break;
+                case error.TIMEOUT:
+                    message = 'Location request timed out.';
+                    break;
+            }
+            showAlert(message, 'error');
+        },
+        {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 0
+        }
+    );
+}
+
+function searchLocation() {
+    const searchInput = document.getElementById('location-search');
+    const query = searchInput.value.trim();
+    
+    if (!query) {
+        showAlert('Please enter a location to search', 'error');
+        return;
+    }
+    
+    showAlert('Searching for location...', 'info');
+    
+    // Use Nominatim API for geocoding
+    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&countrycodes=in&limit=1`;
+    
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            if (data && data.length > 0) {
+                const result = data[0];
+                const lat = parseFloat(result.lat);
+                const lng = parseFloat(result.lon);
+                
+                console.log('Found location:', result.display_name, lat, lng);
+                
+                currentMapCenter = { lat, lng };
+                
+                // Remove old search marker if exists
+                if (userLocationMarker) {
+                    map.removeLayer(userLocationMarker);
+                }
+                
+                // Add marker for searched location
+                userLocationMarker = L.marker([lat, lng], {
+                    icon: L.icon({
+                        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-violet.png',
+                        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                        iconSize: [25, 41],
+                        iconAnchor: [12, 41],
+                        popupAnchor: [1, -34],
+                        shadowSize: [41, 41]
+                    })
+                }).addTo(map).bindPopup(`📍 ${result.display_name}`);
+                
+                // Center map on found location
+                map.setView([lat, lng], 12);
+                
+                showAlert(`Location found: ${result.display_name}`, 'success');
+                loadShopsOnMap();
+            } else {
+                showAlert('Location not found. Try a different search term.', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Geocoding error:', error);
+            showAlert('Failed to search location. Please try again.', 'error');
+        });
 }
 
 function updateMapRadius(value) {

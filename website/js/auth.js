@@ -192,41 +192,31 @@ function setupFormValidation() {
 }
 
 function handleLoginSubmit(e) {
-    e.preventDefault();
-
-    const form = this;
     const username = document.getElementById('login-username').value.trim();
     const password = document.getElementById('login-password').value;
-    const userType = document.getElementById('login-user-type').value;
 
     // Validation
     if (!username) {
+        e.preventDefault();
         showAlert('Please enter your username', 'error');
         return false;
     }
 
     if (!password || password.length < 6) {
+        e.preventDefault();
         showAlert('Password must be at least 6 characters', 'error');
         return false;
     }
 
-    console.log('Login attempt:', { username, userType });
+    console.log('Login attempt:', { username });
     showAlert('Logging in...', 'success');
     
-    // Submit form after short delay
-    setTimeout(() => {
-        form.submit();
-    }, 500);
-    
-    return false;
+    // Let the form submit normally (don't prevent default)
+    return true;
 }
 
 function handleRegisterSubmit(e) {
     console.log('=== REGISTER FORM SUBMIT HANDLER CALLED ===');
-    e.preventDefault();
-
-    const form = e.target;
-    console.log('Form element:', form);
     
     const username = document.getElementById('register-username').value.trim();
     const email = document.getElementById('register-email').value.trim();
@@ -240,26 +230,31 @@ function handleRegisterSubmit(e) {
 
     // Basic validation
     if (!username || username.length < 3) {
+        e.preventDefault();
         alert('Username must be at least 3 characters');
         return false;
     }
 
     if (!email || !email.includes('@')) {
+        e.preventDefault();
         alert('Please enter a valid email address');
         return false;
     }
 
     if (!whatsapp || whatsapp.length < 10) {
+        e.preventDefault();
         alert('Please enter a valid 10-digit WhatsApp number');
         return false;
     }
 
     if (!password || password.length < 8) {
+        e.preventDefault();
         alert('Password must be at least 8 characters');
         return false;
     }
 
     if (password !== confirmPassword) {
+        e.preventDefault();
         alert('Passwords do not match');
         return false;
     }
@@ -271,18 +266,22 @@ function handleRegisterSubmit(e) {
         const address = document.getElementById('register-address').value.trim();
 
         if (!fullName) {
+            e.preventDefault();
             alert('Please enter your full name');
             return false;
         }
         if (!city) {
+            e.preventDefault();
             alert('Please enter your city');
             return false;
         }
         if (!state) {
+            e.preventDefault();
             alert('Please enter your state');
             return false;
         }
         if (!address) {
+            e.preventDefault();
             alert('Please enter your address');
             return false;
         }
@@ -291,16 +290,19 @@ function handleRegisterSubmit(e) {
         const organization = document.getElementById('register-organization').value.trim();
 
         if (!fullName) {
+            e.preventDefault();
             alert('Please enter your full name');
             return false;
         }
         if (!organization) {
+            e.preventDefault();
             alert('Please enter your organization');
             return false;
         }
     }
 
     if (!agreeTerms) {
+        e.preventDefault();
         alert('Please agree to Terms & Conditions');
         return false;
     }
@@ -308,10 +310,8 @@ function handleRegisterSubmit(e) {
     console.log('All validations passed! Submitting form...');
     alert('Registration in progress...');
     
-    // Submit the form immediately
-    form.submit();
-    
-    return false;
+    // Let the form submit normally (don't prevent default)
+    return true;
 }
 
 // =====================================================
