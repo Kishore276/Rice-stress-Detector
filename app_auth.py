@@ -158,7 +158,12 @@ def login():
     password = data.get('password', '')
     user_type = data.get('user_type', 'farmer')
     
+    print(f"=== LOGIN ATTEMPT ===")
+    print(f"Username: {username}")
+    print(f"User Type: {user_type}")
+    
     if not username or not password:
+        print("Error: Missing username or password")
         return render_template('login.html', error='Username and password required')
     
     db = get_db()
@@ -168,19 +173,29 @@ def login():
         query = "SELECT id, email, password_hash, user_type FROM users WHERE username = %s AND user_type = %s"
         user = db.fetch_one(query, (username, user_type))
         
-        if user and verify_password(user[2], password):
-            # Login successful
-            session['user_id'] = user[0]
-            session['username'] = username
-            session['user_type'] = user_type
+        print(f"User found in database: {user is not None}")
+        
+        if user:
+            print(f"User ID: {user[0]}, User Type: {user[3]}")
+            password_match = verify_password(user[2], password)
+            print(f"Password match: {password_match}")
             
-            # Redirect based on user type
-            if user_type == 'farmer':
-                return redirect(url_for('farmer_dashboard'))
-            else:
-                return redirect(url_for('researcher_dashboard'))
-        else:
-            return render_template('login.html', error='Invalid username or password')
+            if password_match:
+                # Login successful
+                session['user_id'] = user[0]
+                session['username'] = username
+                session['user_type'] = user_type
+                
+                print(f"✓ Login successful! Redirecting to dashboard")
+                
+                # Redirect based on user type
+                if user_type == 'farmer':
+                    return redirect(url_for('farmer_dashboard'))
+                else:
+                    return redirect(url_for('researcher_dashboard'))
+        
+        print("✗ Login failed: Invalid credentials")
+        return render_template('login.html', error='Invalid username or password')
     
     except Exception as e:
         print(f"Login error: {e}")
@@ -202,14 +217,23 @@ def register():
         user_type = data.get('user_type', 'farmer')
         whatsapp_number = data.get('whatsapp_number', '').strip()
         
+        print(f"=== REGISTRATION ATTEMPT ===")
+        print(f"Username: {username}")
+        print(f"Email: {email}")
+        print(f"WhatsApp: {whatsapp_number}")
+        print(f"User Type: {user_type}")
+        
         # Validation
         if not all([username, email, password, confirm_password, whatsapp_number]):
+            print("Error: Missing required fields")
             return render_template('login.html', error='All fields are required')
         
         if password != confirm_password:
+            print("Error: Passwords don't match")
             return render_template('login.html', error='Passwords do not match')
         
         if len(password) < 8:
+            print("Error: Password too short")
             return render_template('login.html', error='Password must be at least 8 characters')
         
         # Check if user exists
@@ -217,10 +241,12 @@ def register():
         existing_user = db.fetch_one(query, (username, email))
         
         if existing_user:
+            print(f"Error: User already exists (ID: {existing_user[0]})")
             return render_template('login.html', error='Username or email already exists')
         
         # Hash password
         password_hash = hash_password(password)
+        print(f"Password hashed successfully")
         
         # Create user
         insert_query = """
@@ -228,10 +254,14 @@ def register():
             VALUES (%s, %s, %s, %s, %s)
         """
         
-        if db.execute_query(insert_query, (username, email, password_hash, user_type, whatsapp_number)):
+        result = db.execute_query(insert_query, (username, email, password_hash, user_type, whatsapp_number))
+        print(f"User insert result: {result}")
+        
+        if result:
             # Get user ID
             user = db.fetch_one("SELECT id FROM users WHERE username = %s", (username,))
             user_id = user[0]
+            print(f"✓ User created with ID: {user_id}")
             
             if user_type == 'farmer':
                 # Create farmer record
@@ -685,36 +715,45 @@ def predict():
                     disease_id = disease[0]
                     treatment_info = disease[1] if disease[1] else ""
                     
-                    # Get recommended pesticides for this disease
-                    pesticide_query = """
-                        SELECT p.id, p.name, p.description, p.price_per_unit, p.unit_type,
-                               p.effectiveness_rating, p.application_method, p.dosage_per_acre
-                        FROM pesticides p
-                        WHERE p.id IN (
-                            SELECT pesticide_id FROM disease_pesticide_mapping 
-                            WHERE disease_id = %s
-                        )
-                        ORDER BY p.effectiveness_rating DESC
-                        LIMIT 5
-                    """
-                    pesticides = db.fetch_query(pesticide_query, (disease_id,))
-                    
-                    for pest in pesticides:
-                        pesticides_list.append({
-                            'id': pest[0],
-                            'name': pest[1],
-                            'description': pest[2],
-                            'price': float(pest[3]),
-                            'unit': pest[4],
-                            'effectiveness': float(pest[5]) if pest[5] else 0,
-                            'application_method': pest[6],
-                            'dosage_per_acre': pest[7]
-                        })
+                    try:
+                        # Get recommended pesticides for this disease
+                        pesticide_query = """
+                            SELECT p.id, p.name, p.description, p.price_per_unit, p.unit_type,
+                                   p.effectiveness_rating, p.application_method, p.dosage_per_acre
+                            FROM pesticides p
+                            WHERE p.id IN (
+                                SELECT pesticide_id FROM disease_pesticide_mapping 
+                                WHERE disease_id = %s
+                            )
+                            ORDER BY p.effectiveness_rating DESC
+                            LIMIT 5
+                        """
+                        pesticides = db.fetch_query(pesticide_query, (disease_id,))
+                        
+                        print(f"Found {len(pesticides) if pesticides else 0} pesticides from database for disease_id {disease_id}")
+                        
+                        if pesticides:
+                            for pest in pesticides:
+                                pesticides_list.append({
+                                    'id': pest[0],
+                                    'name': pest[1],
+                                    'description': pest[2],
+                                    'price': float(pest[3]),
+                                    'unit': pest[4],
+                                    'effectiveness': float(pest[5]) if pest[5] else 0,
+                                    'application_method': pest[6],
+                                    'dosage_per_acre': pest[7]
+                                })
+                    except Exception as pest_error:
+                        print(f"Error querying pesticides: {pest_error}")
+                        # Continue to fallback
                 else:
                     disease_id = None
+                    print(f"Disease '{predicted_disease}' not found in database")
                 
                 # If no pesticides from database, use fallback data
                 if not pesticides_list and predicted_disease in treatment_database:
+                    print(f"Using fallback data for '{predicted_disease}'")
                     treatment_data = treatment_database[predicted_disease]
                     treatment_info = treatment_data.get('description', '')
                     application_method = treatment_data.get('application_method', '')
@@ -731,6 +770,9 @@ def predict():
                             'application_method': application_method,
                             'dosage_per_acre': pest['dosage']
                         })
+                    print(f"Added {len(pesticides_list)} pesticides from fallback data")
+                elif not pesticides_list:
+                    print(f"No fallback data found for '{predicted_disease}'")
                 
                 # Insert prediction
                 insert_query = """
