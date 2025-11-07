@@ -6,7 +6,6 @@ let map = null;
 let farmerLocation = null;
 let currentRadius = 10;
 let currentDetectionResult = null;
-let cartData = [];
 let shopMarkers = []; // Store shop markers to clear them later
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -14,6 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
     loadPredictionHistory();
     setupDiseaseDetection();
     setupTabNavigation();
+    loadCartCount(); // Load cart count on page load
 });
 
 // =====================================================
@@ -409,13 +409,30 @@ function addProductToCart(productId, type, price) {
     const cartItem = {
         product_id: productId,
         product_type: type,
-        quantity: quantity,
-        price: price * quantity
+        quantity: quantity
     };
 
-    cartData.push(cartItem);
-    updateCartCount();
-    showAlert(`Added ${quantity} item(s) to cart!`, 'success');
+    // Save to database
+    fetch('/api/farmer/cart', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(cartItem)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            loadCartCount(); // Update cart count
+            showAlert(`Added ${quantity} item(s) to cart!`, 'success');
+        } else {
+            showAlert(data.error || 'Failed to add to cart', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error adding to cart:', error);
+        showAlert('Failed to add to cart', 'error');
+    });
 }
 
 // =====================================================
@@ -818,15 +835,25 @@ function displayShops(shops) {
 // =====================================================
 
 function loadCart() {
-    updateCartUI();
+    fetch('/api/farmer/cart')
+        .then(response => response.json())
+        .then(data => {
+            if (data.cart_items) {
+                displayCart(data.cart_items);
+            }
+        })
+        .catch(error => {
+            console.error('Error loading cart:', error);
+            showAlert('Failed to load cart', 'error');
+        });
 }
 
-function updateCartUI() {
+function displayCart(cartItems) {
     const cartContent = document.getElementById('cart-content');
     const cartCount = document.getElementById('cart-total-items');
     const cartPrice = document.getElementById('cart-total-price');
 
-    if (cartData.length === 0) {
+    if (cartItems.length === 0) {
         cartContent.innerHTML = '<p class="loading">Your cart is empty</p>';
         cartCount.textContent = '0';
         cartPrice.textContent = '0';
@@ -834,7 +861,7 @@ function updateCartUI() {
     }
 
     let totalPrice = 0;
-    let html = cartData.map((item, index) => {
+    let html = cartItems.map(item => {
         totalPrice += item.price;
         return `
             <div class="cart-item">
@@ -843,27 +870,53 @@ function updateCartUI() {
                     <h4>${item.name || item.product_type}</h4>
                     <p>Quantity: ${item.quantity}</p>
                 </div>
-                <div class="cart-item-price">₹${item.price}</div>
-                <button class="remove-btn" onclick="removeFromCart(${index})">Remove</button>
+                <div class="cart-item-price">₹${item.price.toFixed(2)}</div>
+                <button class="remove-btn" onclick="removeFromCart(${item.id})">Remove</button>
             </div>
         `;
     }).join('');
 
     cartContent.innerHTML = html;
-    cartCount.textContent = cartData.length;
+    cartCount.textContent = cartItems.length;
     cartPrice.textContent = totalPrice.toFixed(2);
 }
 
-function removeFromCart(index) {
-    cartData.splice(index, 1);
-    updateCartUI();
-    updateCartCount();
-    showAlert('Item removed from cart', 'info');
+function removeFromCart(itemId) {
+    fetch(`/api/farmer/cart/${itemId}`, {
+        method: 'DELETE'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            loadCart(); // Reload cart
+            loadCartCount(); // Update cart count
+            showAlert('Item removed from cart', 'info');
+        } else {
+            showAlert(data.error || 'Failed to remove item', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error removing from cart:', error);
+        showAlert('Failed to remove item', 'error');
+    });
+}
+
+function loadCartCount() {
+    fetch('/api/farmer/cart')
+        .then(response => response.json())
+        .then(data => {
+            if (data.cart_items) {
+                const badge = document.getElementById('cart-count');
+                badge.textContent = data.cart_items.length;
+            }
+        })
+        .catch(error => {
+            console.error('Error loading cart count:', error);
+        });
 }
 
 function updateCartCount() {
-    const badge = document.getElementById('cart-count');
-    badge.textContent = cartData.length;
+    loadCartCount(); // Just reload from database
 }
 
 function checkout() {
