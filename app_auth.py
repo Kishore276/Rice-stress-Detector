@@ -439,42 +439,61 @@ def get_prediction_history():
 @app.route('/api/farmer/research-labs', methods=['GET'])
 @login_required
 def get_research_labs():
-    """Get all research labs"""
+    """Get all registered researchers"""
     db = get_db()
     
     try:
         query = """
-            SELECT id, name, description, address, city, state, latitude, longitude, 
-                   email, whatsapp_number, phone_number, website
-            FROM research_labs
-            ORDER BY city, name
+            SELECT 
+                r.id,
+                r.full_name,
+                r.organization,
+                r.department,
+                r.research_focus,
+                r.phone_number,
+                u.email,
+                u.whatsapp_number
+            FROM researchers r
+            JOIN users u ON r.user_id = u.id
+            ORDER BY r.full_name
         """
         
-        labs = db.fetch_query(query)
+        researchers = db.fetch_query(query)
+        
+        # Check if query failed
+        if researchers is None:
+            print("✗ Query returned None - database error")
+            return jsonify({'error': 'Database query failed'}), 500
         
         labs_list = []
-        for lab in labs:
+        for researcher in researchers:
             labs_list.append({
-                'id': lab[0],
-                'name': lab[1],
-                'description': lab[2],
-                'address': lab[3],
-                'city': lab[4],
-                'state': lab[5],
-                'latitude': float(lab[6]),
-                'longitude': float(lab[7]),
-                'email': lab[8],
-                'whatsapp_number': lab[9],
-                'phone_number': lab[10],
-                'website': lab[11]
+                'id': researcher[0],
+                'name': researcher[1] or 'Researcher',
+                'description': researcher[4] or 'Research in rice diseases and stress analysis',
+                'address': researcher[2] or 'N/A',  # organization
+                'city': researcher[3] or 'N/A',  # department
+                'state': 'N/A',
+                'specialization': researcher[3] or 'Rice Disease Research',  # department
+                'email': researcher[6] or 'N/A',
+                'whatsapp_number': researcher[7] or 'N/A',
+                'phone_number': researcher[5] or 'N/A',
+                'website': 'N/A'
             })
         
+        print(f"✓ Successfully fetched {len(labs_list)} researchers")
         return jsonify({'labs': labs_list}), 200
     
     except Exception as e:
+        print(f"✗ Error fetching researchers: {str(e)}")
+        import traceback
+        traceback.print_exc()
         return jsonify({'error': str(e)}), 500
     finally:
-        db.disconnect()
+        try:
+            db.disconnect()
+        except:
+            pass
 
 @app.route('/api/farmer/products', methods=['GET'])
 @login_required
@@ -793,6 +812,31 @@ def get_gene_analysis():
     
     except Exception as e:
         print(f"✗ Error fetching gene analysis data: {str(e)}")
+        return jsonify({'error': f'Database error: {str(e)}'}), 500
+    finally:
+        db.disconnect()
+
+@app.route('/api/researcher/gene-analysis/<int:analysis_id>', methods=['DELETE'])
+@login_required
+def delete_gene_analysis(analysis_id):
+    """Delete a gene analysis record"""
+    if session.get('user_type') != 'researcher':
+        return jsonify({'error': 'Unauthorized'}), 403
+    
+    db = get_db()
+    
+    try:
+        # Delete the record
+        query = "DELETE FROM rice_gene_expression WHERE id = %s"
+        db.execute_query(query, (analysis_id,))
+        
+        return jsonify({
+            'success': True,
+            'message': 'Gene analysis record deleted successfully'
+        }), 200
+    
+    except Exception as e:
+        print(f"✗ Error deleting gene analysis: {str(e)}")
         return jsonify({'error': f'Database error: {str(e)}'}), 500
     finally:
         db.disconnect()
@@ -1145,6 +1189,150 @@ def remove_from_cart(item_id):
     finally:
         db.disconnect()
 
+@app.route('/api/farmer/stats', methods=['GET'])
+@login_required
+def get_farmer_stats():
+    """Get farmer's statistics including total spent"""
+    if session.get('user_type') != 'farmer':
+        return jsonify({'error': 'Unauthorized'}), 403
+    
+    user_id = session.get('user_id')
+    db = get_db()
+    
+    try:
+        # Get farmer ID
+        farmer = db.fetch_one("SELECT id FROM farmers WHERE user_id = %s", (user_id,))
+        if not farmer:
+            return jsonify({'error': 'Farmer profile not found'}), 404
+        
+        farmer_id = farmer[0]
+        
+        # Get total spent from completed orders
+        total_spent_result = db.fetch_one("""
+            SELECT COALESCE(SUM(total_amount), 0) as total_spent
+            FROM orders
+            WHERE farmer_id = %s AND status IN ('delivered', 'processing', 'shipped')
+        """, (farmer_id,))
+        
+        total_spent = float(total_spent_result[0]) if total_spent_result else 0.0
+        
+        # Get cart count
+        cart = db.fetch_one("SELECT id FROM carts WHERE farmer_id = %s", (farmer_id,))
+        cart_count = 0
+        if cart:
+            cart_id = cart[0]
+            cart_count_result = db.fetch_one("SELECT COUNT(*) FROM cart_items WHERE cart_id = %s", (cart_id,))
+            cart_count = cart_count_result[0] if cart_count_result else 0
+        
+        # Get disease scan count
+        scan_count_result = db.fetch_one("SELECT COUNT(*) FROM prediction_history WHERE farmer_id = %s", (farmer_id,))
+        scan_count = scan_count_result[0] if scan_count_result else 0
+        
+        # Get last scan date
+        last_scan = db.fetch_one("SELECT MAX(prediction_date) FROM prediction_history WHERE farmer_id = %s", (farmer_id,))
+        last_scan_date = last_scan[0].strftime('%d/%m/%Y') if last_scan and last_scan[0] else None
+        
+        return jsonify({
+            'total_spent': total_spent,
+            'cart_count': cart_count,
+            'scan_count': scan_count,
+            'last_scan_date': last_scan_date
+        }), 200
+    
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    finally:
+        db.disconnect()
+
+@app.route('/api/farmer/checkout', methods=['POST'])
+@login_required
+def checkout_cart():
+    """Checkout cart and create order"""
+    if session.get('user_type') != 'farmer':
+        return jsonify({'error': 'Unauthorized'}), 403
+    
+    user_id = session.get('user_id')
+    db = get_db()
+    
+    try:
+        # Get farmer ID and address
+        farmer = db.fetch_one("""
+            SELECT id, address, city
+            FROM farmers
+            WHERE user_id = %s
+        """, (user_id,))
+        
+        if not farmer:
+            return jsonify({'error': 'Farmer profile not found'}), 404
+        
+        farmer_id = farmer[0]
+        farmer_address = farmer[1] or 'Address not provided'
+        farmer_city = farmer[2] or 'City not provided'
+        
+        # Get cart
+        cart = db.fetch_one("SELECT id FROM carts WHERE farmer_id = %s", (farmer_id,))
+        if not cart:
+            return jsonify({'error': 'Cart not found'}), 404
+        
+        cart_id = cart[0]
+        
+        # Get cart items
+        cart_items = db.fetch_query("""
+            SELECT ci.id, ci.product_type, ci.product_id, ci.quantity, ci.price_at_purchase,
+                   CASE 
+                       WHEN ci.product_type = 'pesticide' THEN p.price_per_unit
+                       WHEN ci.product_type = 'fertilizer' THEN f.price_per_unit
+                   END as current_price
+            FROM cart_items ci
+            LEFT JOIN pesticides p ON ci.product_id = p.id AND ci.product_type = 'pesticide'
+            LEFT JOIN fertilizers f ON ci.product_id = f.id AND ci.product_type = 'fertilizer'
+            WHERE ci.cart_id = %s
+        """, (cart_id,))
+        
+        if not cart_items or len(cart_items) == 0:
+            return jsonify({'error': 'Cart is empty'}), 400
+        
+        # Calculate total amount
+        total_amount = 0
+        for item in cart_items:
+            price = float(item[4]) if item[4] else float(item[5]) * item[3]
+            total_amount += price
+        
+        # Create order
+        db.execute_query("""
+            INSERT INTO orders (farmer_id, total_amount, status, delivery_address, delivery_city)
+            VALUES (%s, %s, 'processing', %s, %s)
+        """, (farmer_id, total_amount, farmer_address, farmer_city))
+        
+        # Get the created order ID
+        order = db.fetch_one("SELECT LAST_INSERT_ID()")
+        order_id = order[0]
+        
+        # Move cart items to order_items
+        for item in cart_items:
+            price_per_unit = float(item[4]) / item[3] if item[4] else float(item[5])
+            total_price = float(item[4]) if item[4] else float(item[5]) * item[3]
+            
+            db.execute_query("""
+                INSERT INTO order_items (order_id, product_type, product_id, quantity, price_per_unit, total_price)
+                VALUES (%s, %s, %s, %s, %s, %s)
+            """, (order_id, item[1], item[2], item[3], price_per_unit, total_price))
+        
+        # Clear cart items
+        db.execute_query("DELETE FROM cart_items WHERE cart_id = %s", (cart_id,))
+        
+        return jsonify({
+            'success': True,
+            'message': 'Order placed successfully',
+            'order_id': order_id,
+            'total_amount': total_amount
+        }), 200
+    
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    finally:
+        db.disconnect()
+
 @app.route('/api/health', methods=['GET'])
 def health():
     """Health check"""
@@ -1163,29 +1351,27 @@ def get_researcher_reports():
     if 'user_id' not in session or session.get('user_type') != 'researcher':
         return jsonify({'error': 'Unauthorized'}), 401
     
+    db = get_db()
+    
     try:
-        conn = get_db_connection()
-        cursor = conn.cursor(dictionary=True)
-        
         # Get researcher ID
-        cursor.execute("""
-            SELECT id FROM researchers WHERE user_id = %s
-        """, (session['user_id'],))
-        researcher = cursor.fetchone()
+        researcher = db.fetch_one("SELECT id FROM researchers WHERE user_id = %s", (session['user_id'],))
         
         if not researcher:
             return jsonify({'error': 'Researcher not found'}), 404
         
+        researcher_id = researcher[0]
+        
         # Get all reports for this researcher
-        cursor.execute("""
+        query = """
             SELECT 
                 id,
                 title,
                 report_type,
                 start_date,
                 end_date,
-                CONCAT(DATE_FORMAT(start_date, '%b %d, %Y'), ' - ', 
-                       DATE_FORMAT(end_date, '%b %d, %Y')) as date_range,
+                CONCAT(DATE_FORMAT(start_date, '%%b %%d, %%Y'), ' - ', 
+                       DATE_FORMAT(end_date, '%%b %%d, %%Y')) as date_range,
                 description,
                 methodology,
                 recommendations,
@@ -1193,24 +1379,40 @@ def get_researcher_reports():
             FROM research_reports
             WHERE researcher_id = %s
             ORDER BY created_date DESC
-        """, (researcher['id'],))
+        """
         
-        reports = cursor.fetchall()
+        results = db.fetch_query(query, (researcher_id,))
         
-        cursor.close()
-        conn.close()
+        reports = []
+        for row in results:
+            reports.append({
+                'id': row[0],
+                'title': row[1],
+                'report_type': row[2],
+                'start_date': row[3].isoformat() if row[3] else None,
+                'end_date': row[4].isoformat() if row[4] else None,
+                'date_range': row[5],
+                'description': row[6],
+                'methodology': row[7],
+                'recommendations': row[8],
+                'created_date': row[9].isoformat() if row[9] else None
+            })
         
         return jsonify({'reports': reports}), 200
         
     except Exception as e:
         print(f"Error fetching reports: {str(e)}")
         return jsonify({'error': str(e)}), 500
+    finally:
+        db.disconnect()
 
 @app.route('/api/researcher/reports', methods=['POST'])
 def create_researcher_report():
     """Create a new research report"""
     if 'user_id' not in session or session.get('user_type') != 'researcher':
         return jsonify({'error': 'Unauthorized'}), 401
+    
+    db = get_db()
     
     try:
         data = request.json
@@ -1221,26 +1423,24 @@ def create_researcher_report():
             if not data.get(field):
                 return jsonify({'error': f'Missing required field: {field}'}), 400
         
-        conn = get_db_connection()
-        cursor = conn.cursor(dictionary=True)
-        
         # Get researcher ID
-        cursor.execute("""
-            SELECT id FROM researchers WHERE user_id = %s
-        """, (session['user_id'],))
-        researcher = cursor.fetchone()
+        researcher = db.fetch_one("SELECT id FROM researchers WHERE user_id = %s", (session['user_id'],))
         
         if not researcher:
             return jsonify({'error': 'Researcher not found'}), 404
         
+        researcher_id = researcher[0]
+        
         # Insert report
-        cursor.execute("""
+        query = """
             INSERT INTO research_reports 
             (researcher_id, title, report_type, start_date, end_date, 
              description, methodology, recommendations)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-        """, (
-            researcher['id'],
+        """
+        
+        db.execute_query(query, (
+            researcher_id,
             data['title'],
             data['report_type'],
             data['start_date'],
@@ -1250,11 +1450,9 @@ def create_researcher_report():
             data.get('recommendations')
         ))
         
-        report_id = cursor.lastrowid
-        conn.commit()
-        
-        cursor.close()
-        conn.close()
+        # Get last insert ID
+        result = db.fetch_one("SELECT LAST_INSERT_ID()")
+        report_id = result[0] if result else None
         
         return jsonify({
             'success': True,
@@ -1265,6 +1463,8 @@ def create_researcher_report():
     except Exception as e:
         print(f"Error creating report: {str(e)}")
         return jsonify({'error': str(e)}), 500
+    finally:
+        db.disconnect()
 
 @app.route('/api/researcher/reports/<int:report_id>', methods=['GET'])
 def get_researcher_report(report_id):
@@ -1272,21 +1472,19 @@ def get_researcher_report(report_id):
     if 'user_id' not in session or session.get('user_type') != 'researcher':
         return jsonify({'error': 'Unauthorized'}), 401
     
+    db = get_db()
+    
     try:
-        conn = get_db_connection()
-        cursor = conn.cursor(dictionary=True)
-        
         # Get researcher ID
-        cursor.execute("""
-            SELECT id FROM researchers WHERE user_id = %s
-        """, (session['user_id'],))
-        researcher = cursor.fetchone()
+        researcher = db.fetch_one("SELECT id FROM researchers WHERE user_id = %s", (session['user_id'],))
         
         if not researcher:
             return jsonify({'error': 'Researcher not found'}), 404
         
+        researcher_id = researcher[0]
+        
         # Get the specific report
-        cursor.execute("""
+        query = """
             SELECT 
                 id,
                 title,
@@ -1299,21 +1497,32 @@ def get_researcher_report(report_id):
                 created_date
             FROM research_reports
             WHERE id = %s AND researcher_id = %s
-        """, (report_id, researcher['id']))
+        """
         
-        report = cursor.fetchone()
+        result = db.fetch_one(query, (report_id, researcher_id))
         
-        cursor.close()
-        conn.close()
-        
-        if not report:
+        if not result:
             return jsonify({'error': 'Report not found'}), 404
+        
+        report = {
+            'id': result[0],
+            'title': result[1],
+            'report_type': result[2],
+            'start_date': result[3].isoformat() if result[3] else None,
+            'end_date': result[4].isoformat() if result[4] else None,
+            'description': result[5],
+            'methodology': result[6],
+            'recommendations': result[7],
+            'created_date': result[8].isoformat() if result[8] else None
+        }
         
         return jsonify({'report': report}), 200
         
     except Exception as e:
         print(f"Error fetching report: {str(e)}")
         return jsonify({'error': str(e)}), 500
+    finally:
+        db.disconnect()
 
 @app.route('/api/researcher/reports/<int:report_id>', methods=['DELETE'])
 def delete_researcher_report(report_id):
@@ -1321,33 +1530,25 @@ def delete_researcher_report(report_id):
     if 'user_id' not in session or session.get('user_type') != 'researcher':
         return jsonify({'error': 'Unauthorized'}), 401
     
+    db = get_db()
+    
     try:
-        conn = get_db_connection()
-        cursor = conn.cursor(dictionary=True)
-        
         # Get researcher ID
-        cursor.execute("""
-            SELECT id FROM researchers WHERE user_id = %s
-        """, (session['user_id'],))
-        researcher = cursor.fetchone()
+        researcher = db.fetch_one("SELECT id FROM researchers WHERE user_id = %s", (session['user_id'],))
         
         if not researcher:
             return jsonify({'error': 'Researcher not found'}), 404
         
+        researcher_id = researcher[0]
+        
         # Delete the report (only if it belongs to this researcher)
-        cursor.execute("""
-            DELETE FROM research_reports
-            WHERE id = %s AND researcher_id = %s
-        """, (report_id, researcher['id']))
+        query = "DELETE FROM research_reports WHERE id = %s AND researcher_id = %s"
+        db.execute_query(query, (report_id, researcher_id))
         
-        if cursor.rowcount == 0:
-            cursor.close()
-            conn.close()
+        # Check if anything was deleted
+        check = db.fetch_one("SELECT ROW_COUNT()")
+        if check and check[0] == 0:
             return jsonify({'error': 'Report not found or unauthorized'}), 404
-        
-        conn.commit()
-        cursor.close()
-        conn.close()
         
         return jsonify({
             'success': True,
@@ -1357,6 +1558,8 @@ def delete_researcher_report(report_id):
     except Exception as e:
         print(f"Error deleting report: {str(e)}")
         return jsonify({'error': str(e)}), 500
+    finally:
+        db.disconnect()
 
 @app.route('/api/researcher/reports/<int:report_id>/download', methods=['GET'])
 def download_researcher_report(report_id):
