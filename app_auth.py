@@ -342,9 +342,16 @@ def farmer_dashboard():
 @login_required
 def researcher_dashboard():
     """Researcher dashboard"""
+    print(f"=== RESEARCHER DASHBOARD ACCESS ===")
+    print(f"Session user_type: {session.get('user_type')}")
+    print(f"Session user_id: {session.get('user_id')}")
+    print(f"Session username: {session.get('username')}")
+    
     if session.get('user_type') != 'researcher':
+        print(f"✗ Access denied: user_type is '{session.get('user_type')}', not 'researcher'")
         return redirect(url_for('login'))
     
+    print(f"✓ Rendering researcher_dashboard.html")
     return render_template('researcher_dashboard.html')
 
 # =====================================================
@@ -655,6 +662,141 @@ def get_all_farmers():
     finally:
         db.disconnect()
 
+
+@app.route('/api/researcher/gene-analysis', methods=['POST'])
+@login_required
+def submit_gene_analysis():
+    """Submit rice gene expression analysis data"""
+    if session.get('user_type') != 'researcher':
+        return jsonify({'error': 'Unauthorized. Only researchers can submit analysis data.'}), 403
+    
+    db = get_db()
+    
+    try:
+        data = request.json
+        
+        # Validate required fields
+        required_fields = ['rice_variety', 'ros_level', 'osrmc_level', 'sub1a_level', 
+                          'cat_level', 'snca3_level', 'stress_condition']
+        
+        for field in required_fields:
+            if field not in data:
+                return jsonify({'error': f'Missing required field: {field}'}), 400
+        
+        # Validate gene expression levels (should be numeric)
+        try:
+            ros_level = float(data['ros_level'])
+            osrmc_level = float(data['osrmc_level'])
+            sub1a_level = float(data['sub1a_level'])
+            cat_level = float(data['cat_level'])
+            snca3_level = float(data['snca3_level'])
+        except ValueError:
+            return jsonify({'error': 'Gene expression levels must be numeric values'}), 400
+        
+        # Get researcher ID from session
+        researcher_id = session.get('user_id')
+        
+        # Insert gene analysis data
+        insert_query = """
+            INSERT INTO rice_gene_expression 
+            (rice_variety, ros_level, osrmc_level, sub1a_level, cat_level, snca3_level, 
+             stress_condition, researcher_id, notes)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+        """
+        
+        values = (
+            data['rice_variety'],
+            ros_level,
+            osrmc_level,
+            sub1a_level,
+            cat_level,
+            snca3_level,
+            data['stress_condition'],
+            researcher_id,
+            data.get('notes', '')
+        )
+        
+        db.execute_query(insert_query, values)
+        
+        # Get the ID of the inserted record
+        last_id_query = "SELECT LAST_INSERT_ID()"
+        result = db.fetch_query(last_id_query)
+        analysis_id = result[0][0] if result else None
+        
+        print(f"✓ Gene analysis data submitted successfully. Analysis ID: {analysis_id}")
+        
+        return jsonify({
+            'success': True,
+            'message': 'Gene analysis data submitted successfully',
+            'analysis_id': analysis_id
+        }), 201
+    
+    except Exception as e:
+        print(f"✗ Error submitting gene analysis data: {str(e)}")
+        return jsonify({'error': f'Database error: {str(e)}'}), 500
+    finally:
+        db.disconnect()
+
+
+@app.route('/api/researcher/gene-analysis', methods=['GET'])
+@login_required
+def get_gene_analysis():
+    """Get rice gene expression analysis data for researcher"""
+    if session.get('user_type') != 'researcher':
+        return jsonify({'error': 'Unauthorized'}), 403
+    
+    db = get_db()
+    
+    try:
+        # Optional filters
+        rice_variety = request.args.get('variety')
+        stress_condition = request.args.get('stress')
+        limit = request.args.get('limit', 100)
+        
+        query = """
+            SELECT id, rice_variety, ros_level, osrmc_level, sub1a_level, 
+                   cat_level, snca3_level, stress_condition, submission_date, notes
+            FROM rice_gene_expression
+            WHERE 1=1
+        """
+        params = []
+        
+        if rice_variety:
+            query += " AND rice_variety = %s"
+            params.append(rice_variety)
+        
+        if stress_condition:
+            query += " AND stress_condition = %s"
+            params.append(stress_condition)
+        
+        query += " ORDER BY submission_date DESC LIMIT %s"
+        params.append(int(limit))
+        
+        results = db.fetch_query(query, tuple(params))
+        
+        analysis_data = []
+        for row in results:
+            analysis_data.append({
+                'id': row[0],
+                'rice_variety': row[1],
+                'ros_level': float(row[2]),
+                'osrmc_level': float(row[3]),
+                'sub1a_level': float(row[4]),
+                'cat_level': float(row[5]),
+                'snca3_level': float(row[6]),
+                'stress_condition': row[7],
+                'submission_date': row[8].isoformat() if row[8] else None,
+                'notes': row[9]
+            })
+        
+        return jsonify({'data': analysis_data, 'count': len(analysis_data)}), 200
+    
+    except Exception as e:
+        print(f"✗ Error fetching gene analysis data: {str(e)}")
+        return jsonify({'error': f'Database error: {str(e)}'}), 500
+    finally:
+        db.disconnect()
+
 # =====================================================
 # PREDICTION API (Enhanced with DB logging)
 # =====================================================
@@ -824,6 +966,185 @@ def uploaded_file(filename):
     """Serve uploaded images"""
     return send_from_directory(UPLOAD_FOLDER, filename)
 
+# =====================================================
+# CART API ROUTES
+# =====================================================
+
+@app.route('/api/farmer/cart', methods=['GET'])
+@login_required
+def get_cart():
+    """Get farmer's cart items"""
+    if session.get('user_type') != 'farmer':
+        return jsonify({'error': 'Unauthorized'}), 403
+    
+    user_id = session.get('user_id')
+    db = get_db()
+    
+    try:
+        # Get farmer ID
+        farmer = db.fetch_one("SELECT id FROM farmers WHERE user_id = %s", (user_id,))
+        if not farmer:
+            return jsonify({'error': 'Farmer profile not found'}), 404
+        
+        farmer_id = farmer[0]
+        
+        # Get cart
+        cart = db.fetch_one("SELECT id FROM carts WHERE farmer_id = %s", (farmer_id,))
+        if not cart:
+            # Create cart if not exists
+            db.execute_query("INSERT INTO carts (farmer_id) VALUES (%s)", (farmer_id,))
+            cart = db.fetch_one("SELECT id FROM carts WHERE farmer_id = %s", (farmer_id,))
+        
+        cart_id = cart[0]
+        
+        # Get cart items
+        query = """
+            SELECT ci.id, ci.product_type, ci.product_id, ci.quantity, ci.price_at_purchase,
+                   CASE 
+                       WHEN ci.product_type = 'pesticide' THEN p.name
+                       WHEN ci.product_type = 'fertilizer' THEN f.name
+                   END as product_name,
+                   CASE 
+                       WHEN ci.product_type = 'pesticide' THEN p.price_per_unit
+                       WHEN ci.product_type = 'fertilizer' THEN f.price_per_unit
+                   END as current_price
+            FROM cart_items ci
+            LEFT JOIN pesticides p ON ci.product_id = p.id AND ci.product_type = 'pesticide'
+            LEFT JOIN fertilizers f ON ci.product_id = f.id AND ci.product_type = 'fertilizer'
+            WHERE ci.cart_id = %s
+        """
+        
+        items = db.fetch_query(query, (cart_id,))
+        cart_items = []
+        
+        for item in items:
+            cart_items.append({
+                'id': item[0],
+                'product_type': item[1],
+                'product_id': item[2],
+                'quantity': item[3],
+                'price': float(item[4]) if item[4] else float(item[6]) * item[3],
+                'name': item[5],
+                'current_price': float(item[6]) if item[6] else 0
+            })
+        
+        return jsonify({'cart_items': cart_items}), 200
+    
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    finally:
+        db.disconnect()
+
+@app.route('/api/farmer/cart', methods=['POST'])
+@login_required
+def add_to_cart():
+    """Add item to cart"""
+    if session.get('user_type') != 'farmer':
+        return jsonify({'error': 'Unauthorized'}), 403
+    
+    user_id = session.get('user_id')
+    db = get_db()
+    
+    try:
+        data = request.json
+        product_id = data.get('product_id')
+        product_type = data.get('product_type')
+        quantity = data.get('quantity', 1)
+        
+        if not product_id or not product_type:
+            return jsonify({'error': 'Product ID and type required'}), 400
+        
+        # Get farmer ID
+        farmer = db.fetch_one("SELECT id FROM farmers WHERE user_id = %s", (user_id,))
+        if not farmer:
+            return jsonify({'error': 'Farmer profile not found'}), 404
+        
+        farmer_id = farmer[0]
+        
+        # Get or create cart
+        cart = db.fetch_one("SELECT id FROM carts WHERE farmer_id = %s", (farmer_id,))
+        if not cart:
+            db.execute_query("INSERT INTO carts (farmer_id) VALUES (%s)", (farmer_id,))
+            cart = db.fetch_one("SELECT id FROM carts WHERE farmer_id = %s", (farmer_id,))
+        
+        cart_id = cart[0]
+        
+        # Get product price
+        if product_type == 'pesticide':
+            product = db.fetch_one("SELECT price_per_unit FROM pesticides WHERE id = %s", (product_id,))
+        else:
+            product = db.fetch_one("SELECT price_per_unit FROM fertilizers WHERE id = %s", (product_id,))
+        
+        if not product:
+            return jsonify({'error': 'Product not found'}), 404
+        
+        price_per_unit = float(product[0])
+        total_price = price_per_unit * quantity
+        
+        # Check if item already in cart
+        existing = db.fetch_one(
+            "SELECT id, quantity FROM cart_items WHERE cart_id = %s AND product_id = %s AND product_type = %s",
+            (cart_id, product_id, product_type)
+        )
+        
+        if existing:
+            # Update quantity
+            new_quantity = existing[1] + quantity
+            new_price = price_per_unit * new_quantity
+            db.execute_query(
+                "UPDATE cart_items SET quantity = %s, price_at_purchase = %s WHERE id = %s",
+                (new_quantity, new_price, existing[0])
+            )
+        else:
+            # Add new item
+            db.execute_query(
+                """INSERT INTO cart_items (cart_id, product_type, product_id, quantity, price_at_purchase)
+                   VALUES (%s, %s, %s, %s, %s)""",
+                (cart_id, product_type, product_id, quantity, total_price)
+            )
+        
+        return jsonify({'success': True, 'message': 'Item added to cart'}), 200
+    
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    finally:
+        db.disconnect()
+
+@app.route('/api/farmer/cart/<int:item_id>', methods=['DELETE'])
+@login_required
+def remove_from_cart(item_id):
+    """Remove item from cart"""
+    if session.get('user_type') != 'farmer':
+        return jsonify({'error': 'Unauthorized'}), 403
+    
+    user_id = session.get('user_id')
+    db = get_db()
+    
+    try:
+        # Get farmer ID
+        farmer = db.fetch_one("SELECT id FROM farmers WHERE user_id = %s", (user_id,))
+        if not farmer:
+            return jsonify({'error': 'Farmer profile not found'}), 404
+        
+        farmer_id = farmer[0]
+        
+        # Get cart
+        cart = db.fetch_one("SELECT id FROM carts WHERE farmer_id = %s", (farmer_id,))
+        if not cart:
+            return jsonify({'error': 'Cart not found'}), 404
+        
+        cart_id = cart[0]
+        
+        # Delete item
+        db.execute_query("DELETE FROM cart_items WHERE id = %s AND cart_id = %s", (item_id, cart_id))
+        
+        return jsonify({'success': True, 'message': 'Item removed from cart'}), 200
+    
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    finally:
+        db.disconnect()
+
 @app.route('/api/health', methods=['GET'])
 def health():
     """Health check"""
@@ -832,7 +1153,224 @@ def health():
         'model_loaded': model is not None
     }), 200
 
+# =====================================================
+# RESEARCHER REPORTS API ROUTES
+# =====================================================
+
+@app.route('/api/researcher/reports', methods=['GET'])
+def get_researcher_reports():
+    """Get all reports for the logged-in researcher"""
+    if 'user_id' not in session or session.get('user_type') != 'researcher':
+        return jsonify({'error': 'Unauthorized'}), 401
+    
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        
+        # Get researcher ID
+        cursor.execute("""
+            SELECT id FROM researchers WHERE user_id = %s
+        """, (session['user_id'],))
+        researcher = cursor.fetchone()
+        
+        if not researcher:
+            return jsonify({'error': 'Researcher not found'}), 404
+        
+        # Get all reports for this researcher
+        cursor.execute("""
+            SELECT 
+                id,
+                title,
+                report_type,
+                start_date,
+                end_date,
+                CONCAT(DATE_FORMAT(start_date, '%b %d, %Y'), ' - ', 
+                       DATE_FORMAT(end_date, '%b %d, %Y')) as date_range,
+                description,
+                methodology,
+                recommendations,
+                created_date
+            FROM research_reports
+            WHERE researcher_id = %s
+            ORDER BY created_date DESC
+        """, (researcher['id'],))
+        
+        reports = cursor.fetchall()
+        
+        cursor.close()
+        conn.close()
+        
+        return jsonify({'reports': reports}), 200
+        
+    except Exception as e:
+        print(f"Error fetching reports: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/researcher/reports', methods=['POST'])
+def create_researcher_report():
+    """Create a new research report"""
+    if 'user_id' not in session or session.get('user_type') != 'researcher':
+        return jsonify({'error': 'Unauthorized'}), 401
+    
+    try:
+        data = request.json
+        
+        # Validate required fields
+        required_fields = ['title', 'report_type', 'start_date', 'end_date', 'description']
+        for field in required_fields:
+            if not data.get(field):
+                return jsonify({'error': f'Missing required field: {field}'}), 400
+        
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        
+        # Get researcher ID
+        cursor.execute("""
+            SELECT id FROM researchers WHERE user_id = %s
+        """, (session['user_id'],))
+        researcher = cursor.fetchone()
+        
+        if not researcher:
+            return jsonify({'error': 'Researcher not found'}), 404
+        
+        # Insert report
+        cursor.execute("""
+            INSERT INTO research_reports 
+            (researcher_id, title, report_type, start_date, end_date, 
+             description, methodology, recommendations)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+        """, (
+            researcher['id'],
+            data['title'],
+            data['report_type'],
+            data['start_date'],
+            data['end_date'],
+            data['description'],
+            data.get('methodology'),
+            data.get('recommendations')
+        ))
+        
+        report_id = cursor.lastrowid
+        conn.commit()
+        
+        cursor.close()
+        conn.close()
+        
+        return jsonify({
+            'success': True,
+            'report_id': report_id,
+            'message': 'Report created successfully'
+        }), 201
+        
+    except Exception as e:
+        print(f"Error creating report: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/researcher/reports/<int:report_id>', methods=['GET'])
+def get_researcher_report(report_id):
+    """Get a specific report"""
+    if 'user_id' not in session or session.get('user_type') != 'researcher':
+        return jsonify({'error': 'Unauthorized'}), 401
+    
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        
+        # Get researcher ID
+        cursor.execute("""
+            SELECT id FROM researchers WHERE user_id = %s
+        """, (session['user_id'],))
+        researcher = cursor.fetchone()
+        
+        if not researcher:
+            return jsonify({'error': 'Researcher not found'}), 404
+        
+        # Get the specific report
+        cursor.execute("""
+            SELECT 
+                id,
+                title,
+                report_type,
+                start_date,
+                end_date,
+                description,
+                methodology,
+                recommendations,
+                created_date
+            FROM research_reports
+            WHERE id = %s AND researcher_id = %s
+        """, (report_id, researcher['id']))
+        
+        report = cursor.fetchone()
+        
+        cursor.close()
+        conn.close()
+        
+        if not report:
+            return jsonify({'error': 'Report not found'}), 404
+        
+        return jsonify({'report': report}), 200
+        
+    except Exception as e:
+        print(f"Error fetching report: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/researcher/reports/<int:report_id>', methods=['DELETE'])
+def delete_researcher_report(report_id):
+    """Delete a specific report"""
+    if 'user_id' not in session or session.get('user_type') != 'researcher':
+        return jsonify({'error': 'Unauthorized'}), 401
+    
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        
+        # Get researcher ID
+        cursor.execute("""
+            SELECT id FROM researchers WHERE user_id = %s
+        """, (session['user_id'],))
+        researcher = cursor.fetchone()
+        
+        if not researcher:
+            return jsonify({'error': 'Researcher not found'}), 404
+        
+        # Delete the report (only if it belongs to this researcher)
+        cursor.execute("""
+            DELETE FROM research_reports
+            WHERE id = %s AND researcher_id = %s
+        """, (report_id, researcher['id']))
+        
+        if cursor.rowcount == 0:
+            cursor.close()
+            conn.close()
+            return jsonify({'error': 'Report not found or unauthorized'}), 404
+        
+        conn.commit()
+        cursor.close()
+        conn.close()
+        
+        return jsonify({
+            'success': True,
+            'message': 'Report deleted successfully'
+        }), 200
+        
+    except Exception as e:
+        print(f"Error deleting report: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/researcher/reports/<int:report_id>/download', methods=['GET'])
+def download_researcher_report(report_id):
+    """Download report as PDF (placeholder for future implementation)"""
+    if 'user_id' not in session or session.get('user_type') != 'researcher':
+        return jsonify({'error': 'Unauthorized'}), 401
+    
+    # For now, return an error indicating this feature is coming soon
+    return jsonify({
+        'error': 'PDF download feature coming soon. Please use the print function.'
+    }), 501
+
 if __name__ == '__main__':
+
     print("\n" + "=" * 60)
     print("Rice Stress Detector - Enhanced Flask Backend")
     print("=" * 60)
