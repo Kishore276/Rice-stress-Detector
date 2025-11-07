@@ -33,7 +33,7 @@ function showSection(sectionName) {
         } else if (sectionName === 'statistics') {
             loadStatistics();
         } else if (sectionName === 'reports') {
-            // Reports section is static
+            loadReports();
         }
     }
 }
@@ -355,23 +355,91 @@ function loadTopCities() {
 // REPORTS
 // =====================================================
 
-function generateReport(reportType) {
-    showAlert(`Generating ${reportType} report...`, 'info');
+let currentReportId = null;
+
+function loadReports() {
+    fetch('/api/researcher/reports')
+        .then(response => response.json())
+        .then(data => {
+            if (data.reports) {
+                displayReportsList(data.reports);
+            }
+        })
+        .catch(error => {
+            console.error('Error loading reports:', error);
+            showAlert('Failed to load reports', 'error');
+        });
+}
+
+function displayReportsList(reports) {
+    const reportsList = document.getElementById('reports-list');
     
-    // Simulate report generation
-    setTimeout(() => {
-        // In real app, this would download a file
-        showAlert('Report generated successfully! Downloading...', 'success');
-    }, 2000);
+    if (reports.length === 0) {
+        reportsList.innerHTML = '<p class="loading">No reports yet. Create your first report above!</p>';
+        return;
+    }
+
+    reportsList.innerHTML = reports.map(report => `
+        <div class="report-item">
+            <div class="report-item-info">
+                <h4>${report.title}</h4>
+                <div class="report-item-meta">
+                    <span>📅 ${new Date(report.created_date).toLocaleDateString()}</span>
+                    <span>📊 ${formatReportType(report.report_type)}</span>
+                    <span>🗓️ ${report.date_range}</span>
+                </div>
+                <span class="report-type-badge">${formatReportType(report.report_type)}</span>
+            </div>
+            <div class="report-item-actions">
+                <button class="icon-btn" onclick="viewReport(${report.id})" title="View Report">
+                    👁️ View
+                </button>
+                <button class="icon-btn" onclick="downloadReportPDF(${report.id})" title="Download PDF">
+                    📥 Download
+                </button>
+                <button class="icon-btn danger" onclick="deleteReport(${report.id})" title="Delete Report">
+                    🗑️ Delete
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function formatReportType(type) {
+    const types = {
+        'disease-analysis': 'Disease Analysis',
+        'farmer-survey': 'Farmer Survey',
+        'pesticide-usage': 'Pesticide Usage',
+        'climate-impact': 'Climate Impact',
+        'treatment-effectiveness': 'Treatment Effectiveness',
+        'seasonal-trends': 'Seasonal Trends',
+        'custom': 'Custom Research'
+    };
+    return types[type] || type;
 }
 
 function generateCustomReport() {
+    const title = document.getElementById('report-title').value.trim();
     const reportType = document.getElementById('report-type').value;
     const startDate = document.getElementById('report-start-date').value;
     const endDate = document.getElementById('report-end-date').value;
+    const description = document.getElementById('report-description').value.trim();
+    const methodology = document.getElementById('report-methodology').value.trim();
+    const recommendations = document.getElementById('report-recommendations').value.trim();
 
-    if (!reportType || !startDate || !endDate) {
-        showAlert('Please fill all fields', 'error');
+    // Validation
+    if (!title) {
+        showAlert('Please enter a report title', 'error');
+        return;
+    }
+
+    if (!reportType) {
+        showAlert('Please select a report type', 'error');
+        return;
+    }
+
+    if (!startDate || !endDate) {
+        showAlert('Please select both start and end dates', 'error');
         return;
     }
 
@@ -380,11 +448,296 @@ function generateCustomReport() {
         return;
     }
 
-    showAlert('Generating custom report...', 'info');
+    if (!description) {
+        showAlert('Please enter report description/findings', 'error');
+        return;
+    }
+
+    const reportData = {
+        title: title,
+        report_type: reportType,
+        start_date: startDate,
+        end_date: endDate,
+        description: description,
+        methodology: methodology || null,
+        recommendations: recommendations || null
+    };
+
+    showAlert('Generating report...', 'info');
+
+    fetch('/api/researcher/reports', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(reportData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showAlert('Report generated and saved successfully!', 'success');
+            resetReportForm();
+            loadReports(); // Reload reports list
+        } else {
+            showAlert(data.error || 'Failed to generate report', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error generating report:', error);
+        showAlert('Failed to generate report', 'error');
+    });
+}
+
+function resetReportForm() {
+    document.getElementById('report-title').value = '';
+    document.getElementById('report-type').value = '';
+    document.getElementById('report-start-date').value = '';
+    document.getElementById('report-end-date').value = '';
+    document.getElementById('report-description').value = '';
+    document.getElementById('report-methodology').value = '';
+    document.getElementById('report-recommendations').value = '';
+}
+
+function viewReport(reportId) {
+    fetch(`/api/researcher/reports/${reportId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.report) {
+                showReportPreview(data.report);
+            }
+        })
+        .catch(error => {
+            console.error('Error loading report:', error);
+            showAlert('Failed to load report', 'error');
+        });
+}
+
+function showReportPreview(report) {
+    currentReportId = report.id;
+    const modal = document.getElementById('report-preview-modal');
+    const content = document.getElementById('report-preview-content');
+
+    content.innerHTML = `
+        <h1>${report.title}</h1>
+        <div class="report-meta">
+            <p><strong>Report Type:</strong> ${formatReportType(report.report_type)}</p>
+            <p><strong>Date Range:</strong> ${new Date(report.start_date).toLocaleDateString()} - ${new Date(report.end_date).toLocaleDateString()}</p>
+            <p><strong>Generated On:</strong> ${new Date(report.created_date).toLocaleDateString()}</p>
+        </div>
+
+        <div class="report-section">
+            <h2>Research Findings & Description</h2>
+            <p>${report.description.replace(/\n/g, '<br>')}</p>
+        </div>
+
+        ${report.methodology ? `
+        <div class="report-section">
+            <h2>Methodology</h2>
+            <p>${report.methodology.replace(/\n/g, '<br>')}</p>
+        </div>
+        ` : ''}
+
+        ${report.recommendations ? `
+        <div class="report-section">
+            <h2>Recommendations</h2>
+            <p>${report.recommendations.replace(/\n/g, '<br>')}</p>
+        </div>
+        ` : ''}
+    `;
+
+    modal.classList.add('active');
+}
+
+function closeReportPreview() {
+    const modal = document.getElementById('report-preview-modal');
+    modal.classList.remove('active');
+    currentReportId = null;
+}
+
+function printReport() {
+    const reportContent = document.getElementById('report-preview-content').innerHTML;
+    const printWindow = window.open('', '', 'height=600,width=800');
     
+    printWindow.document.write(`
+        <html>
+        <head>
+            <title>Research Report</title>
+            <style>
+                body { font-family: Arial, sans-serif; padding: 40px; line-height: 1.6; }
+                h1 { color: #0288D1; border-bottom: 3px solid #4FC3F7; padding-bottom: 10px; }
+                h2 { color: #0288D1; margin-top: 30px; }
+                .report-meta { background: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0; }
+                .report-meta p { margin: 5px 0; }
+                .report-section { margin: 30px 0; }
+                p { text-align: justify; }
+                @media print {
+                    body { padding: 20px; }
+                }
+            </style>
+        </head>
+        <body>
+            ${reportContent}
+        </body>
+        </html>
+    `);
+    
+    printWindow.document.close();
+    printWindow.focus();
     setTimeout(() => {
-        showAlert('Custom report generated successfully!', 'success');
-    }, 2000);
+        printWindow.print();
+    }, 250);
+}
+
+function downloadReport() {
+    if (!currentReportId) return;
+    
+    fetch(`/api/researcher/reports/${currentReportId}/download`)
+        .then(response => response.blob())
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `research-report-${currentReportId}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+            showAlert('Report downloaded successfully!', 'success');
+        })
+        .catch(error => {
+            console.error('Error downloading report:', error);
+            showAlert('Download feature coming soon! Use print for now.', 'info');
+            // Fallback to print
+            printReport();
+        });
+}
+
+function downloadReportPDF(reportId) {
+    fetch(`/api/researcher/reports/${reportId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.report) {
+                currentReportId = reportId;
+                downloadReport();
+            }
+        })
+        .catch(error => {
+            console.error('Error downloading report:', error);
+            showAlert('Download feature coming soon! Use print for now.', 'info');
+        });
+}
+
+function deleteReport(reportId) {
+    if (!confirm('Are you sure you want to delete this report? This action cannot be undone.')) {
+        return;
+    }
+
+    fetch(`/api/researcher/reports/${reportId}`, {
+        method: 'DELETE'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showAlert('Report deleted successfully', 'success');
+            loadReports(); // Reload reports list
+        } else {
+            showAlert(data.error || 'Failed to delete report', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error deleting report:', error);
+        showAlert('Failed to delete report', 'error');
+    });
+}
+
+// =====================================================
+// GENE ANALYSIS
+// =====================================================
+
+function submitGeneAnalysis(event) {
+    event.preventDefault();
+    
+    const form = document.getElementById('gene-analysis-form');
+    const formData = new FormData(form);
+    
+    // Convert FormData to JSON
+    const data = {
+        rice_variety: formData.get('rice_variety'),
+        stress_condition: formData.get('stress_condition'),
+        ros_level: parseFloat(formData.get('ros_level')),
+        osrmc_level: parseFloat(formData.get('osrmc_level')),
+        sub1a_level: parseFloat(formData.get('sub1a_level')),
+        cat_level: parseFloat(formData.get('cat_level')),
+        snca3_level: parseFloat(formData.get('snca3_level')),
+        notes: formData.get('notes') || ''
+    };
+    
+    // Validation
+    if (!data.rice_variety || !data.stress_condition) {
+        showAlert('Please fill all required fields', 'error');
+        return;
+    }
+    
+    // Validate numeric values
+    const geneValues = [data.ros_level, data.osrmc_level, data.sub1a_level, 
+                       data.cat_level, data.snca3_level];
+    
+    if (geneValues.some(val => isNaN(val) || val < 0 || val > 10)) {
+        showAlert('Gene expression levels must be between 0 and 10', 'error');
+        return;
+    }
+    
+    // Show loading
+    showAlert('Submitting gene analysis data...', 'info');
+    
+    // Submit to backend
+    fetch('/api/researcher/gene-analysis', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(err => {
+                throw new Error(err.error || 'Submission failed');
+            });
+        }
+        return response.json();
+    })
+    .then(result => {
+        showAlert('✓ Gene analysis data submitted successfully!', 'success');
+        
+        // Reset form after successful submission
+        setTimeout(() => {
+            resetAnalysisForm();
+        }, 1500);
+    })
+    .catch(error => {
+        console.error('Error submitting gene analysis:', error);
+        showAlert(`Failed to submit: ${error.message}`, 'error');
+    });
+}
+
+function resetAnalysisForm() {
+    const form = document.getElementById('gene-analysis-form');
+    if (form) {
+        form.reset();
+        showAlert('Form reset', 'info');
+    }
+}
+
+function validateGeneValue(inputId, min = 0, max = 10) {
+    const input = document.getElementById(inputId);
+    if (input) {
+        const value = parseFloat(input.value);
+        if (isNaN(value) || value < min || value > max) {
+            input.setCustomValidity(`Value must be between ${min} and ${max}`);
+        } else {
+            input.setCustomValidity('');
+        }
+    }
 }
 
 // =====================================================
