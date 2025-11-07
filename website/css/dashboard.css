@@ -42,7 +42,7 @@ body {
     gap: 10px;
     font-size: 1.2rem;
     font-weight: 700;
-    color: #667eea;
+    color: #0288D1;
 }
 
 .logo {
@@ -67,7 +67,7 @@ body {
 }
 
 .nav-item:hover {
-    color: #667eea;
+    color: #0288D1;
 }
 
 .nav-item::after {
@@ -77,7 +77,7 @@ body {
     left: 0;
     width: 0;
     height: 2px;
-    background: #667eea;
+    background: #4FC3F7;
     transition: width 0.3s ease;
 }
 
@@ -106,7 +106,7 @@ body {
 }
 
 .logout-btn {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #4FC3F7 0%, #0288D1 100%);
     color: white !important;
     padding: 8px 15px;
     border-radius: 5px;
@@ -115,7 +115,7 @@ body {
 
 .logout-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 5px 15px rgba(79, 195, 247, 0.4);
 }
 
 /* =====================================================
@@ -213,7 +213,7 @@ body {
 .stat-content p {
     font-size: 1.8rem;
     font-weight: 700;
-    color: #667eea;
+    color: #0288D1;
 }
 
 /* =====================================================
@@ -253,9 +253,9 @@ body {
 }
 
 .action-btn:hover {
-    border-color: #667eea;
-    background: #f0f4ff;
-    color: #667eea;
+    border-color: #4FC3F7;
+    background: #E3F2FD;
+    color: #0288D1;
     transform: translateY(-3px);
 }
 
@@ -279,7 +279,7 @@ body {
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #4FC3F7 0%, #0288D1 100%);
     color: white;
     width: 100%;
     padding: 14px 20px;
@@ -287,17 +287,17 @@ body {
 
 .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 10px 25px rgba(79, 195, 247, 0.4);
 }
 
 .btn-secondary {
-    background: #f0f4ff;
-    color: #667eea;
-    border: 1px solid #667eea;
+    background: #E3F2FD;
+    color: #0288D1;
+    border: 1px solid #4FC3F7;
 }
 
 .btn-secondary:hover {
-    background: #667eea;
+    background: #4FC3F7;
     color: white;
 }
 
@@ -397,8 +397,8 @@ body {
 .form-group select:focus,
 .form-group textarea:focus {
     outline: none;
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    border-color: #4FC3F7;
+    box-shadow: 0 0 0 3px rgba(79, 195, 247, 0.1);
 }
 
 /* =====================================================
