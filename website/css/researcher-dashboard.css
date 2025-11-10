@@ -98,6 +98,50 @@
     color: white;
 }
 
+.farmer-contact-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    flex-wrap: wrap;
+}
+
+.contact-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: white;
+}
+
+.contact-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.contact-btn.email {
+    background: linear-gradient(135deg, #D32F2F, #C62828);
+}
+
+.contact-btn.whatsapp {
+    background: linear-gradient(135deg, #25D366, #128C7E);
+}
+
+.contact-btn.phone {
+    background: linear-gradient(135deg, #2196F3, #1976D2);
+}
+
+.contact-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 .farmers-pagination {
     display: flex;
     gap: 15px;
@@ -511,6 +555,147 @@ canvas {
 
 .modal-actions .btn {
     min-width: 150px;
+}
+
+/* =====================================================
+   GENE ANALYSIS RECORDS
+   ===================================================== */
+
+.my-analysis-section {
+    margin-top: 40px;
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.my-analysis-section h3 {
+    color: #0288D1;
+    margin-bottom: 25px;
+    font-size: 1.3rem;
+}
+
+.analysis-list {
+    display: grid;
+    gap: 20px;
+}
+
+.analysis-item {
+    background: #f8f9fa;
+    border: 1px solid #e0e0e0;
+    border-left: 4px solid #4FC3F7;
+    border-radius: 10px;
+    padding: 20px;
+    transition: all 0.3s ease;
+}
+
+.analysis-item:hover {
+    box-shadow: 0 4px 12px rgba(79, 195, 247, 0.2);
+    transform: translateY(-2px);
+}
+
+.analysis-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.analysis-item-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.analysis-item-title h4 {
+    color: #0288D1;
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.stress-badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.stress-badge.healthy {
+    background: #E8F5E9;
+    color: #43A047;
+}
+
+.stress-badge.drought {
+    background: #FFF3E0;
+    color: #F57C00;
+}
+
+.stress-badge.salinity {
+    background: #E3F2FD;
+    color: #0288D1;
+}
+
+.analysis-item-date {
+    color: #999;
+    font-size: 0.9rem;
+}
+
+.gene-values-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin: 15px 0;
+}
+
+.gene-value-box {
+    background: white;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+.gene-value-box label {
+    display: block;
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.gene-value-box .value {
+    font-size: 1.1rem;
+    color: #0288D1;
+    font-weight: 700;
+}
+
+.analysis-notes {
+    margin-top: 15px;
+    padding: 12px;
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+.analysis-notes label {
+    display: block;
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.analysis-notes p {
+    margin: 0;
+    color: #333;
+    line-height: 1.6;
+}
+
+.analysis-item-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
 }
 
 /* Responsive Design */
