@@ -34,6 +34,8 @@ function showSection(sectionName) {
             loadStatistics();
         } else if (sectionName === 'reports') {
             loadReports();
+        } else if (sectionName === 'analysis') {
+            loadGeneAnalysis();
         }
     }
 }
@@ -165,9 +167,23 @@ function displayFarmersPage() {
                     <value>${farmer.whatsapp_number}</value>
                 </div>
             </div>
-            <div class="farmer-actions">
-                <button class="action-link" onclick="viewFarmerDetails(${farmer.id})">View Details</button>
-                <button class="action-link" onclick="contactFarmer('${farmer.whatsapp_number}')">Contact</button>
+            <div class="farmer-contact-buttons">
+                <a href="mailto:${farmer.email || ''}" 
+                   class="contact-btn email" 
+                   ${!farmer.email || farmer.email === 'N/A' ? 'onclick="return false;" style="opacity:0.5;cursor:not-allowed;"' : ''}>
+                    📧 Email
+                </a>
+                <a href="https://wa.me/${(farmer.whatsapp_number || '').replace(/[^0-9]/g, '')}" 
+                   target="_blank"
+                   class="contact-btn whatsapp"
+                   ${!farmer.whatsapp_number || farmer.whatsapp_number === 'N/A' ? 'onclick="return false;" style="opacity:0.5;cursor:not-allowed;"' : ''}>
+                    💬 WhatsApp
+                </a>
+                <a href="tel:${farmer.phone_number || ''}" 
+                   class="contact-btn phone"
+                   ${!farmer.phone_number || farmer.phone_number === 'N/A' ? 'onclick="return false;" style="opacity:0.5;cursor:not-allowed;"' : ''}>
+                    📞 Call
+                </a>
             </div>
         </div>
     `).join('');
@@ -654,6 +670,111 @@ function deleteReport(reportId) {
 // GENE ANALYSIS
 // =====================================================
 
+function loadGeneAnalysis() {
+    fetch('/api/researcher/gene-analysis')
+        .then(response => response.json())
+        .then(data => {
+            if (data.data) {
+                displayGeneAnalysisList(data.data);
+            }
+        })
+        .catch(error => {
+            console.error('Error loading gene analysis data:', error);
+            showAlert('Failed to load analysis records', 'error');
+        });
+}
+
+function displayGeneAnalysisList(analyses) {
+    const analysisList = document.getElementById('gene-analysis-list');
+    
+    if (analyses.length === 0) {
+        analysisList.innerHTML = '<p class="loading">No gene analysis records yet. Submit your first analysis above!</p>';
+        return;
+    }
+
+    analysisList.innerHTML = analyses.map(analysis => {
+        const stressClass = analysis.stress_condition.toLowerCase().replace('_', '-').replace(' ', '-');
+        const date = new Date(analysis.submission_date).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+
+        return `
+            <div class="analysis-item">
+                <div class="analysis-item-header">
+                    <div class="analysis-item-title">
+                        <h4>🌾 ${analysis.rice_variety}</h4>
+                        <span class="stress-badge ${stressClass}">${analysis.stress_condition.replace('_', ' ')}</span>
+                    </div>
+                    <span class="analysis-item-date">📅 ${date}</span>
+                </div>
+
+                <div class="gene-values-grid">
+                    <div class="gene-value-box">
+                        <label>ROS</label>
+                        <div class="value">${parseFloat(analysis.ros_level).toFixed(6)}</div>
+                    </div>
+                    <div class="gene-value-box">
+                        <label>OSRMC</label>
+                        <div class="value">${parseFloat(analysis.osrmc_level).toFixed(6)}</div>
+                    </div>
+                    <div class="gene-value-box">
+                        <label>SUB1A</label>
+                        <div class="value">${parseFloat(analysis.sub1a_level).toFixed(6)}</div>
+                    </div>
+                    <div class="gene-value-box">
+                        <label>CAT</label>
+                        <div class="value">${parseFloat(analysis.cat_level).toFixed(6)}</div>
+                    </div>
+                    <div class="gene-value-box">
+                        <label>SNCA3</label>
+                        <div class="value">${parseFloat(analysis.snca3_level).toFixed(6)}</div>
+                    </div>
+                </div>
+
+                ${analysis.notes ? `
+                <div class="analysis-notes">
+                    <label>Research Notes:</label>
+                    <p>${analysis.notes}</p>
+                </div>
+                ` : ''}
+
+                <div class="analysis-item-actions">
+                    <button class="icon-btn danger" onclick="deleteGeneAnalysis(${analysis.id})" title="Delete Analysis">
+                        🗑️ Delete
+                    </button>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+function deleteGeneAnalysis(analysisId) {
+    if (!confirm('Are you sure you want to delete this gene analysis record? This action cannot be undone.')) {
+        return;
+    }
+
+    fetch(`/api/researcher/gene-analysis/${analysisId}`, {
+        method: 'DELETE'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showAlert('Gene analysis record deleted successfully', 'success');
+            loadGeneAnalysis(); // Reload the list
+        } else {
+            showAlert(data.error || 'Failed to delete analysis record', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error deleting gene analysis:', error);
+        showAlert('Failed to delete analysis record', 'error');
+    });
+}
+
 function submitGeneAnalysis(event) {
     event.preventDefault();
     
@@ -709,9 +830,10 @@ function submitGeneAnalysis(event) {
     .then(result => {
         showAlert('✓ Gene analysis data submitted successfully!', 'success');
         
-        // Reset form after successful submission
+        // Reset form and reload analysis list
         setTimeout(() => {
             resetAnalysisForm();
+            loadGeneAnalysis();
         }, 1500);
     })
     .catch(error => {
