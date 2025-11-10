@@ -351,6 +351,57 @@
 
 .lab-detail value {
     color: #333;
+    font-size: 0.9rem;
+}
+
+.lab-contact-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #e0e0e0;
+    flex-wrap: wrap;
+}
+
+.contact-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: white;
+}
+
+.contact-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.contact-btn.email {
+    background: linear-gradient(135deg, #D32F2F, #C62828);
+}
+
+.contact-btn.whatsapp {
+    background: linear-gradient(135deg, #25D366, #128C7E);
+}
+
+.contact-btn.phone {
+    background: linear-gradient(135deg, #2196F3, #1976D2);
+}
+
+.contact-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.lab-detail value {
+    color: #333;
     word-break: break-all;
 }
 
