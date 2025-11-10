@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
     setupDiseaseDetection();
     setupTabNavigation();
     loadCartCount(); // Load cart count on page load
+    loadFarmerStats(); // Load real stats including total spent
 });
 
 // =====================================================
@@ -66,14 +67,33 @@ function loadFarmerProfile() {
                     longitude: data.longitude,
                     city: data.city
                 };
-
-                // Update stats
-                document.getElementById('total-spent').textContent = '₹' + (Math.random() * 50000).toFixed(2);
             }
         })
         .catch(error => {
             console.error('Error loading profile:', error);
             showAlert('Failed to load profile', 'error');
+        });
+}
+
+function loadFarmerStats() {
+    fetch('/api/farmer/stats')
+        .then(response => response.json())
+        .then(data => {
+            if (data.total_spent !== undefined) {
+                document.getElementById('total-spent').textContent = '₹' + data.total_spent.toFixed(2);
+            }
+            if (data.cart_count !== undefined) {
+                document.getElementById('cart-items-count').textContent = data.cart_count;
+            }
+            if (data.scan_count !== undefined) {
+                document.getElementById('scan-count').textContent = data.scan_count;
+            }
+            if (data.last_scan_date) {
+                document.getElementById('last-scan-date').textContent = data.last_scan_date;
+            }
+        })
+        .catch(error => {
+            console.error('Error loading stats:', error);
         });
 }
 
@@ -259,21 +279,57 @@ function addToCart() {
         return;
     }
 
-    // Add detected disease's pesticides to cart
-    const disease = currentDetectionResult.disease;
-    
-    // For now, add generic pesticide
-    const cartItem = {
-        product_type: 'pesticide',
-        product_id: 1,
-        name: 'Recommended Pesticide for ' + disease,
-        quantity: 1,
-        price: 450
-    };
+    // Check if there are recommended pesticides
+    if (!currentDetectionResult.pesticides || currentDetectionResult.pesticides.length === 0) {
+        showAlert('No recommended pesticides available for this disease', 'info');
+        return;
+    }
 
-    cartData.push(cartItem);
-    updateCartCount();
-    showAlert('Added to cart!', 'success');
+    // Add all recommended pesticides to cart
+    let addedCount = 0;
+    const promises = [];
+
+    currentDetectionResult.pesticides.forEach(pesticide => {
+        if (pesticide.id) {
+            const cartItem = {
+                product_id: pesticide.id,
+                product_type: 'pesticide',
+                quantity: 1
+            };
+
+            const promise = fetch('/api/farmer/cart', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(cartItem)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    addedCount++;
+                }
+                return data;
+            });
+
+            promises.push(promise);
+        }
+    });
+
+    Promise.all(promises)
+        .then(() => {
+            if (addedCount > 0) {
+                loadCartCount(); // Update cart count
+                loadFarmerStats(); // Update dashboard stats
+                showAlert(`Added ${addedCount} recommended pesticide(s) to cart!`, 'success');
+            } else {
+                showAlert('Failed to add pesticides to cart', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error adding pesticides to cart:', error);
+            showAlert('Failed to add pesticides to cart', 'error');
+        });
 }
 
 // =====================================================
@@ -370,7 +426,7 @@ function displayProducts(data) {
                 <div class="product-stock">Stock: ${product.stock}</div>
                 <div class="product-actions">
                     <input type="number" class="quantity-input" value="1" min="1">
-                    <button class="add-to-cart-btn" onclick="addProductToCart(${product.id}, 'pesticide', ${product.price})">
+                    <button class="add-to-cart-btn" onclick="addProductToCart(${product.id}, 'pesticide', ${product.price}, event)">
                         Add to Cart
                     </button>
                 </div>
@@ -391,7 +447,7 @@ function displayProducts(data) {
                 <div class="product-stock">Stock: ${product.stock}</div>
                 <div class="product-actions">
                     <input type="number" class="quantity-input" value="1" min="1">
-                    <button class="add-to-cart-btn" onclick="addProductToCart(${product.id}, 'fertilizer', ${product.price})">
+                    <button class="add-to-cart-btn" onclick="addProductToCart(${product.id}, 'fertilizer', ${product.price}, event)">
                         Add to Cart
                     </button>
                 </div>
@@ -402,9 +458,15 @@ function displayProducts(data) {
     grid.innerHTML = html || '<p class="loading">No products found</p>';
 }
 
-function addProductToCart(productId, type, price) {
-    const quantityInput = event.target.parentElement.querySelector('.quantity-input');
-    const quantity = parseInt(quantityInput.value) || 1;
+function addProductToCart(productId, type, price, event) {
+    // Get the quantity input from the button's parent container
+    let quantity = 1;
+    if (event) {
+        const quantityInput = event.target.parentElement.querySelector('.quantity-input');
+        if (quantityInput) {
+            quantity = parseInt(quantityInput.value) || 1;
+        }
+    }
 
     const cartItem = {
         product_id: productId,
@@ -424,6 +486,7 @@ function addProductToCart(productId, type, price) {
     .then(data => {
         if (data.success) {
             loadCartCount(); // Update cart count
+            loadFarmerStats(); // Update dashboard stats
             showAlert(`Added ${quantity} item(s) to cart!`, 'success');
         } else {
             showAlert(data.error || 'Failed to add to cart', 'error');
@@ -441,32 +504,57 @@ function addProductToCart(productId, type, price) {
 
 function loadResearchLabs() {
     fetch('/api/farmer/research-labs')
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
         .then(data => {
-            displayResearchLabs(data.labs);
+            if (data.error) {
+                console.error('API Error:', data.error);
+                showAlert(`Error: ${data.error}`, 'error');
+                document.getElementById('labs-list').innerHTML = 
+                    '<p class="loading">Failed to load research labs. Please try again later.</p>';
+            } else if (data.labs) {
+                displayResearchLabs(data.labs);
+            } else {
+                console.error('Unexpected response format:', data);
+                showAlert('Unexpected response from server', 'error');
+            }
         })
         .catch(error => {
             console.error('Error loading research labs:', error);
             showAlert('Failed to load research labs', 'error');
+            document.getElementById('labs-list').innerHTML = 
+                '<p class="loading">Failed to load research labs. Please check your connection.</p>';
         });
 }
 
 function displayResearchLabs(labs) {
     const labsList = document.getElementById('labs-list');
     
-    if (labs.length === 0) {
-        labsList.innerHTML = '<p class="loading">No research labs found</p>';
+    if (!labs || labs.length === 0) {
+        labsList.innerHTML = '<p class="loading">No researchers registered yet. Please check back later.</p>';
         return;
     }
 
     labsList.innerHTML = labs.map(lab => `
         <div class="lab-card">
-            <h3>${lab.name}</h3>
-            <p>${lab.description}</p>
+            <h3>${lab.name || 'Researcher'}</h3>
+            <p>${lab.description || 'Research in rice diseases and stress analysis'}</p>
             <div class="lab-details">
                 <div class="lab-detail">
+                    <label>Institution</label>
+                    <value>${lab.address || lab.institution || 'N/A'}</value>
+                </div>
+                <div class="lab-detail">
                     <label>Location</label>
-                    <value>${lab.address}, ${lab.city}</value>
+                    <value>${lab.city || 'N/A'}${lab.state ? ', ' + lab.state : ''}</value>
+                </div>
+                <div class="lab-detail">
+                    <label>Specialization</label>
+                    <value>${lab.specialization || 'General Research'}</value>
                 </div>
                 <div class="lab-detail">
                     <label>Email</label>
@@ -480,14 +568,24 @@ function displayResearchLabs(labs) {
                     <label>Phone</label>
                     <value>${lab.phone_number || 'N/A'}</value>
                 </div>
-                <div class="lab-detail">
-                    <label>Specialization</label>
-                    <value>${lab.specialization || 'General'}</value>
-                </div>
-                <div class="lab-detail">
-                    <label>Website</label>
-                    <value>${lab.website || 'N/A'}</value>
-                </div>
+            </div>
+            <div class="lab-contact-buttons">
+                <a href="mailto:${lab.email || ''}" 
+                   class="contact-btn email" 
+                   ${!lab.email || lab.email === 'N/A' ? 'onclick="return false;" style="opacity:0.5;cursor:not-allowed;"' : ''}>
+                    📧 Email
+                </a>
+                <a href="https://wa.me/${(lab.whatsapp_number || '').replace(/[^0-9]/g, '')}" 
+                   target="_blank"
+                   class="contact-btn whatsapp"
+                   ${!lab.whatsapp_number || lab.whatsapp_number === 'N/A' ? 'onclick="return false;" style="opacity:0.5;cursor:not-allowed;"' : ''}>
+                    💬 WhatsApp
+                </a>
+                <a href="tel:${lab.phone_number || ''}" 
+                   class="contact-btn phone"
+                   ${!lab.phone_number || lab.phone_number === 'N/A' ? 'onclick="return false;" style="opacity:0.5;cursor:not-allowed;"' : ''}>
+                    📞 Call
+                </a>
             </div>
         </div>
     `).join('');
@@ -890,6 +988,7 @@ function removeFromCart(itemId) {
         if (data.success) {
             loadCart(); // Reload cart
             loadCartCount(); // Update cart count
+            loadFarmerStats(); // Update dashboard stats
             showAlert('Item removed from cart', 'info');
         } else {
             showAlert(data.error || 'Failed to remove item', 'error');
@@ -920,13 +1019,37 @@ function updateCartCount() {
 }
 
 function checkout() {
-    if (cartData.length === 0) {
+    const cartContent = document.getElementById('cart-content');
+    if (!cartContent || cartContent.textContent.includes('empty')) {
         showAlert('Your cart is empty', 'error');
         return;
     }
 
-    showAlert('Proceeding to checkout...', 'success');
-    // TODO: Implement checkout process
+    if (!confirm('Are you sure you want to place this order?')) {
+        return;
+    }
+
+    fetch('/api/farmer/checkout', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showAlert(`Order placed successfully! Total: ₹${data.total_amount.toFixed(2)}`, 'success');
+            loadCart(); // Refresh cart display
+            loadCartCount(); // Update cart count badge
+            loadFarmerStats(); // Update total spent
+        } else {
+            showAlert(data.error || 'Failed to place order', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error during checkout:', error);
+        showAlert('Failed to place order', 'error');
+    });
 }
 
 // =====================================================
